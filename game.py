@@ -1,17 +1,50 @@
-import pygame
+import pygame, sys
+import player
+
 
 pygame.init()
-screen = pygame.display.set_mode((1280, 720))
 clock = pygame.time.Clock()
+
+# Game Screen
+screen_width = 500
+screen_height = 250
+screen = pygame.display.set_mode((screen_width, screen_height))
+pygame.display.set_caption("PyGame Game")
 running = True
 
+# Creating Sprites and Groups
+
+moving_sprites = pygame.sprite.Group()
+player = player.Player()
+moving_sprites.add(player)
 
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        
+    keys = pygame.key.get_pressed()
+    
+    if keys[pygame.K_LEFT]:
+        player.update_position(-2, 0)
+            #x -= vel
 
-    screen.fill("black")
+    if keys[pygame.K_RIGHT]:
+        player.update_position(2, 0)
+            #x += vel
+
+    if keys[pygame.K_UP]:
+        player.update_position(0, -2)
+            #y -= vel
+
+    if keys[pygame.K_DOWN]:
+        player.update_position(0, 2)
+            #y += vel
+    player.animate()
+
+    screen.fill((255, 255, 255))
+    moving_sprites.draw(screen)
+    moving_sprites.update()
 
     pygame.display.flip()
 
