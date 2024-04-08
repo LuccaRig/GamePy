@@ -26,20 +26,25 @@ while running:
     keys = pygame.key.get_pressed()
     
     if keys[pygame.K_LEFT]:
+        player.walking = True
         player.update_position(-2, 0)
             #x -= vel
-
-    if keys[pygame.K_RIGHT]:
+    elif keys[pygame.K_RIGHT]:
+        player.walking = True
         player.update_position(2, 0)
             #x += vel
-
-    if keys[pygame.K_UP]:
+    elif keys[pygame.K_UP]:
+        player.walking = True
         player.update_position(0, -2)
             #y -= vel
-
-    if keys[pygame.K_DOWN]:
+    elif keys[pygame.K_DOWN]:
+        player.walking = True
         player.update_position(0, 2)
             #y += vel
+    else:
+        player.walking = False
+    
+
     player.animate()
 
     screen.fill((255, 255, 255))
