@@ -10,10 +10,17 @@ class Player(pygame.sprite.Sprite):
         self.sprites_moving_right = []
         self.sprites_moving_left = []
 
+        self.sprites_attacking_right = []
+        self.sprites_attacking_left = []
+
         self.is_animating = False
 
-        self.walking = True
+        self.attacking = False
+        self.walking = False
         self.direction = "right"
+
+
+        # Load All Sprites
 
         number_of_sprites_idle_right = 9
         for i in range(number_of_sprites_idle_right):
@@ -42,6 +49,20 @@ class Player(pygame.sprite.Sprite):
             # Scale the sprite
             sprite = pygame.transform.scale(sprite, (int(sprite.get_width() * scale), int(sprite.get_height() * scale)))
             self.sprites_moving_right.append(sprite)
+        
+        number_of_sprites_attack_right = 9
+        for i in range(number_of_sprites_attack_right):
+            sprite = pygame.image.load(f'CharacterSprites/assassin/attackPNG/tile00{i}.png')
+            # Scale the sprite
+            sprite = pygame.transform.scale(sprite, (int(sprite.get_width() * scale), int(sprite.get_height() * scale)))
+            self.sprites_attacking_right.append(sprite)
+
+        number_of_sprites_attack_left = 9
+        for i in range(number_of_sprites_attack_left):
+            sprite = pygame.image.load(f'CharacterSprites/assassin/attackPNGleft/tile00{i}.png')
+            # Scale the sprite
+            sprite = pygame.transform.scale(sprite, (int(sprite.get_width() * scale), int(sprite.get_height() * scale)))
+            self.sprites_attacking_left.append(sprite)
 
 
 
@@ -69,35 +90,47 @@ class Player(pygame.sprite.Sprite):
         self.is_animating = True
     
     def update(self):
-        speed = 0
+        animation_speed = 0
         if self.walking == True:
-            speed = 0.15
+            animation_speed = 0.15
         if self.walking == False:
-            speed = 0.25 
+            animation_speed = 0.25 
+        if self.attacking == True:
+            animation_speed = 0.25
 
         if  self.is_animating == True:
-            self.current_sprite += speed
+            self.current_sprite += animation_speed
 
 
             if(self.direction == "right"):
-                if self.walking == False:
+                if self.attacking == True:
+                    if self.current_sprite >= len(self.sprites_attacking_right):
+                        self.current_sprite = 0
+                        self.is_animating = False
+                    self.image = self.sprites_attacking_right[int(self.current_sprite)]
+                elif self.walking == False:
                     if self.current_sprite >= len(self.sprites_idle_right):
                         self.current_sprite = 0
                         self.is_animating = False
                     self.image = self.sprites_idle_right[int(self.current_sprite)]
-                if self.walking == True:
+                elif self.walking == True:
                     if self.current_sprite >= len(self.sprites_moving_right):
                         self.current_sprite = 0
                         self.is_animating = False
                     self.image = self.sprites_moving_right[int(self.current_sprite)]
 
             if(self.direction == "left"):
-                if self.walking == False:
+                if self.attacking == True:
+                    if self.current_sprite >= len(self.sprites_attacking_left):
+                        self.current_sprite = 0
+                        self.is_animating = False
+                    self.image = self.sprites_attacking_left[int(self.current_sprite)]
+                elif self.walking == False:
                     if self.current_sprite >= len(self.sprites_idle_left):
                         self.current_sprite = 0
                         self.is_animating = False
                     self.image = self.sprites_idle_left[int(self.current_sprite)]
-                if self.walking == True:
+                elif self.walking == True:
                     if self.current_sprite >= len(self.sprites_moving_left):
                         self.current_sprite = 0
                         self.is_animating = False
