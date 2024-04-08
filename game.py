@@ -25,24 +25,33 @@ while running:
         
     keys = pygame.key.get_pressed()
     
-    if keys[pygame.K_LEFT]:
+    if keys[pygame.K_z]:
+        player.walking = False
+        player.attacking = True
+        
+    elif keys[pygame.K_LEFT]:
+        player.attacking = False
         player.walking = True
         player.update_position(-2, 0)
             #x -= vel
     elif keys[pygame.K_RIGHT]:
+        player.attacking = False
         player.walking = True
         player.update_position(2, 0)
             #x += vel
     elif keys[pygame.K_UP]:
+        player.attacking = False
         player.walking = True
         player.update_position(0, -2)
             #y -= vel
     elif keys[pygame.K_DOWN]:
+        player.attacking = False
         player.walking = True
         player.update_position(0, 2)
             #y += vel
     else:
         player.walking = False
+        player.attacking = False
     
 
     player.animate()
