@@ -24,7 +24,7 @@ class Player(pygame.sprite.Sprite):
 
         number_of_sprites_idle_right = 9
         for i in range(number_of_sprites_idle_right):
-            sprite = pygame.image.load(f'CharacterSprites/assassin/idlePNG/tile00{i}.png')
+            sprite = pygame.image.load(f'CharacterSprites/assassin/idlePNGright/tile00{i}.png')
             # Scale the sprite
             sprite = pygame.transform.scale(sprite, (int(sprite.get_width() * scale), int(sprite.get_height() * scale)))
             self.sprites_idle_right.append(sprite)
@@ -45,14 +45,14 @@ class Player(pygame.sprite.Sprite):
 
         number_of_sprites_movement_right = 8
         for i in range(number_of_sprites_movement_right):
-            sprite = pygame.image.load(f'CharacterSprites/assassin/movementPNG/tile00{i}.png')
+            sprite = pygame.image.load(f'CharacterSprites/assassin/movementPNGright/tile00{i}.png')
             # Scale the sprite
             sprite = pygame.transform.scale(sprite, (int(sprite.get_width() * scale), int(sprite.get_height() * scale)))
             self.sprites_moving_right.append(sprite)
         
         number_of_sprites_attack_right = 9
         for i in range(number_of_sprites_attack_right):
-            sprite = pygame.image.load(f'CharacterSprites/assassin/attackPNG/tile00{i}.png')
+            sprite = pygame.image.load(f'CharacterSprites/assassin/attackPNGright/tile00{i}.png')
             # Scale the sprite
             sprite = pygame.transform.scale(sprite, (int(sprite.get_width() * scale), int(sprite.get_height() * scale)))
             self.sprites_attacking_right.append(sprite)
