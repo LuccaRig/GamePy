@@ -57,11 +57,11 @@ def main():
             player1.walking = False
             player1.attacking = False
 
+        screen.fill((128, 128, 128))
 
         myMap.renderVisibleLayers(screen)
         player1.draw_collision_rect(screen)
 
-        screen.fill((128, 128, 128))
         moving_sprites.draw(screen)
         moving_sprites.update()
 

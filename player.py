@@ -73,8 +73,8 @@ class Player(pygame.sprite.Sprite):
         # Position and movement
         self.pos_x = 400
         self.pos_y = 400
-        self.width = 110
-        self.height = 80   
+        self.width = 200
+        self.height = 77   
         self.rect = pygame.Rect(self.pos_x, self.pos_y,  self.width, self.height)
         self.rect.topleft = [self.pos_x, self.pos_y]
 
@@ -95,11 +95,11 @@ class Player(pygame.sprite.Sprite):
     def update(self):
         animation_speed = 0
         if self.walking == True:
-            animation_speed = 0.15
+            animation_speed = 0.10
         if self.walking == False:
-            animation_speed = 0.25 
+            animation_speed = 0.20 
         if self.attacking == True:
-            animation_speed = 0.25
+            animation_speed = 0.20
 
         if  self.is_animating == True:
             self.current_sprite += animation_speed
