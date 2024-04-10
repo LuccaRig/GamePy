@@ -1,67 +1,81 @@
 import pygame, sys
 import player
+import map
+
+def main():
+    pygame.init()
+    clock = pygame.time.Clock()
+
+    # Game Screen
+    screen_width = 1280
+    screen_height = 800
+    screen = pygame.display.set_mode((screen_width, screen_height))
+    pygame.display.set_caption("PyGame Game")
+    running = True
+
+    # Creating Sprites and Groups
+    player1 = player.Player()
+    moving_sprites = pygame.sprite.Group()
+    moving_sprites.add(player1)
 
 
-pygame.init()
-clock = pygame.time.Clock()
+    myMap = map.Map("Tiled/Map1.tmx")
 
-# Game Screen
-screen_width = 500
-screen_height = 250
-screen = pygame.display.set_mode((screen_width, screen_height))
-pygame.display.set_caption("PyGame Game")
-running = True
-
-# Creating Sprites and Groups
-
-moving_sprites = pygame.sprite.Group()
-player = player.Player()
-moving_sprites.add(player)
-
-while running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            
+        keys = pygame.key.get_pressed()
         
-    keys = pygame.key.get_pressed()
-    
-    if keys[pygame.K_z]:
-        player.walking = False
-        player.attacking = True
-        
-    elif keys[pygame.K_LEFT]:
-        player.attacking = False
-        player.walking = True
-        player.update_position(-2, 0)
-            #x -= vel
-    elif keys[pygame.K_RIGHT]:
-        player.attacking = False
-        player.walking = True
-        player.update_position(2, 0)
-            #x += vel
-    elif keys[pygame.K_UP]:
-        player.attacking = False
-        player.walking = True
-        player.update_position(0, -2)
-            #y -= vel
-    elif keys[pygame.K_DOWN]:
-        player.attacking = False
-        player.walking = True
-        player.update_position(0, 2)
-            #y += vel
-    else:
-        player.walking = False
-        player.attacking = False
-    
+        if keys[pygame.K_z]:
+            player1.walking = False
+            player1.attacking = True
+            
+        elif keys[pygame.K_LEFT]:
+            player1.attacking = False
+            player1.walking = True
+            player1.update_position(-2, 0)
+                #x -= vel
+        elif keys[pygame.K_RIGHT]:
+            player1.attacking = False
+            player1.walking = True
+            player1.update_position(2, 0)
+                #x += vel
+        elif keys[pygame.K_UP]:
+            player1.attacking = False
+            player1.walking = True
+            player1.update_position(0, -2)
+                #y -= vel
+        elif keys[pygame.K_DOWN]:
+            if myMap.check_collision(player1.rect) == False:
+                player1.attacking = False
+                player1.walking = True
+                player1.update_position(0, 2)
+                    #y += vel
+        else:
+            player1.walking = False
+            player1.attacking = False
 
-    player.animate()
 
-    screen.fill((128, 128, 128))
-    moving_sprites.draw(screen)
-    moving_sprites.update()
+        myMap.renderVisibleLayers(screen)
+        player1.draw_collision_rect(screen)
 
-    pygame.display.flip()
+        screen.fill((128, 128, 128))
+        moving_sprites.draw(screen)
+        moving_sprites.update()
 
-    clock.tick(60)
 
-pygame.quit()
+        myMap.check_collision(player1.rect)
+
+        player1.animate()
+
+        moving_sprites.draw(screen)
+        moving_sprites.update()
+
+        pygame.display.flip()
+
+        clock.tick(60)
+
+    pygame.quit()
+main()
