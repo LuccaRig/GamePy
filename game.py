@@ -56,7 +56,7 @@ while running:
 
     player.animate()
 
-    screen.fill((255, 255, 255))
+    screen.fill((128, 128, 128))
     moving_sprites.draw(screen)
     moving_sprites.update()
 
