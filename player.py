@@ -71,9 +71,11 @@ class Player(pygame.sprite.Sprite):
 
 
         # Position and movement
-        self.pos_x = 300
+        self.pos_x = 400
         self.pos_y = 400
-        self.rect = self.image.get_rect()
+        self.width = 110
+        self.height = 80   
+        self.rect = pygame.Rect(self.pos_x, self.pos_y,  self.width, self.height)
         self.rect.topleft = [self.pos_x, self.pos_y]
 
     def update_position(self, new_pos_x, new_pos_y):
@@ -137,3 +139,8 @@ class Player(pygame.sprite.Sprite):
                         self.current_sprite = 0
                         self.is_animating = False
                     self.image = self.sprites_moving_left[int(self.current_sprite)]
+
+
+    def draw_collision_rect(self, screen):
+        # Desenha um retângulo vermelho em torno do retângulo do jogador
+        pygame.draw.rect(screen, (255, 0, 0), self.rect, 1)

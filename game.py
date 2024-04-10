@@ -48,10 +48,11 @@ def main():
             player1.update_position(0, -2)
                 #y -= vel
         elif keys[pygame.K_DOWN]:
-            player1.attacking = False
-            player1.walking = True
-            player1.update_position(0, 2)
-                #y += vel
+            if myMap.check_collision(player1.rect) == False:
+                player1.attacking = False
+                player1.walking = True
+                player1.update_position(0, 2)
+                    #y += vel
         else:
             player1.walking = False
             player1.attacking = False
@@ -59,6 +60,9 @@ def main():
         screen.fill((255, 255, 255))
 
         myMap.renderVisibleLayers(screen)
+        player1.draw_collision_rect(screen)
+
+        myMap.check_collision(player1.rect)
 
         player1.animate()
 
