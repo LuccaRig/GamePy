@@ -1,9 +1,10 @@
 import pygame
+import map
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, scale=4) -> None:
         super().__init__()
-        # Sprites Import and Set Scale
+        # Sprites Vectors
         self.sprites_idle_right = []
         self.sprites_idle_left = []
 
@@ -13,70 +14,40 @@ class Player(pygame.sprite.Sprite):
         self.sprites_attacking_right = []
         self.sprites_attacking_left = []
 
-        self.is_animating = False
+        # Load All Sprites
+        self.import_sprites(9,'CharacterSprites/assassin/idlePNGright', self.sprites_idle_right)
+        self.import_sprites(9,'CharacterSprites/assassin/idlePNGleft', self.sprites_idle_left)
+        self.import_sprites(8,'CharacterSprites/assassin/movementPNGright', self.sprites_moving_right)
+        self.import_sprites(8,'CharacterSprites/assassin/movementPNGleft', self.sprites_moving_left)
+        self.import_sprites(9,'CharacterSprites/assassin/attackPNGright', self.sprites_attacking_right)
+        self.import_sprites(9,'CharacterSprites/assassin/attackPNGleft', self.sprites_attacking_left)
 
+        # Default Boolean and Character States
+        self.is_animating = False
         self.attacking = False
         self.walking = False
+        self.grounded = False
         self.direction = "right"
-
-
-        # Load All Sprites
-
-        number_of_sprites_idle_right = 9
-        for i in range(number_of_sprites_idle_right):
-            sprite = pygame.image.load(f'CharacterSprites/assassin/idlePNGright/tile00{i}.png')
-            # Scale the sprite
-            sprite = pygame.transform.scale(sprite, (int(sprite.get_width() * scale), int(sprite.get_height() * scale)))
-            self.sprites_idle_right.append(sprite)
-
-        number_of_sprites_idle_left = 9
-        for i in range(number_of_sprites_idle_left):
-            sprite = pygame.image.load(f'CharacterSprites/assassin/idlePNGleft/tile00{i}.png')
-            # Scale the sprite
-            sprite = pygame.transform.scale(sprite, (int(sprite.get_width() * scale), int(sprite.get_height() * scale)))
-            self.sprites_idle_left.append(sprite)
-
-        number_of_sprites_movement_left = 8
-        for i in range(number_of_sprites_movement_left):
-            sprite = pygame.image.load(f'CharacterSprites/assassin/movementPNGleft/tile00{i}.png')
-            # Scale the sprite
-            sprite = pygame.transform.scale(sprite, (int(sprite.get_width() * scale), int(sprite.get_height() * scale)))
-            self.sprites_moving_left.append(sprite)
-
-        number_of_sprites_movement_right = 8
-        for i in range(number_of_sprites_movement_right):
-            sprite = pygame.image.load(f'CharacterSprites/assassin/movementPNGright/tile00{i}.png')
-            # Scale the sprite
-            sprite = pygame.transform.scale(sprite, (int(sprite.get_width() * scale), int(sprite.get_height() * scale)))
-            self.sprites_moving_right.append(sprite)
-        
-        number_of_sprites_attack_right = 9
-        for i in range(number_of_sprites_attack_right):
-            sprite = pygame.image.load(f'CharacterSprites/assassin/attackPNGright/tile00{i}.png')
-            # Scale the sprite
-            sprite = pygame.transform.scale(sprite, (int(sprite.get_width() * scale), int(sprite.get_height() * scale)))
-            self.sprites_attacking_right.append(sprite)
-
-        number_of_sprites_attack_left = 9
-        for i in range(number_of_sprites_attack_left):
-            sprite = pygame.image.load(f'CharacterSprites/assassin/attackPNGleft/tile00{i}.png')
-            # Scale the sprite
-            sprite = pygame.transform.scale(sprite, (int(sprite.get_width() * scale), int(sprite.get_height() * scale)))
-            self.sprites_attacking_left.append(sprite)
-
-
-
         self.current_sprite = 0
-        self.image = self.sprites_idle_right[self.current_sprite]
+        self.current_sprite_attack = 0
+        self.image = self.sprites_idle_right[self.current_sprite]     
 
-
-        # Position and movement
+        # Default Position and movement
+        self.speed = [0, 0]
         self.pos_x = 400
         self.pos_y = 400
         self.width = 200
-        self.height = 77   
+        self.height = 77
+        self.rect_ground = pygame.Rect(self.pos_x+85, self.pos_y+70,  30, 10)   
         self.rect = pygame.Rect(self.pos_x, self.pos_y,  self.width, self.height)
         self.rect.topleft = [self.pos_x, self.pos_y]
+
+    def import_sprites(self, number_of_sprites=0, arquive='0', sprites_vector= [], scale=4):
+        for i in range(number_of_sprites):
+            sprite = pygame.image.load(f'{arquive}/tile00{i}.png')
+            # Scale the sprite
+            sprite = pygame.transform.scale(sprite, (int(sprite.get_width() * scale), int(sprite.get_height() * scale)))
+            sprites_vector.append(sprite)
 
     def update_position(self, new_pos_x, new_pos_y):
         if self.walking == True:
@@ -87,6 +58,30 @@ class Player(pygame.sprite.Sprite):
             self.pos_x += new_pos_x
             self.pos_y += new_pos_y
             self.rect.topleft = [self.pos_x, self.pos_y]
+            self.rect_ground.topleft = [self.pos_x+85, self.pos_y+70]
+
+    def isGrounded(self, Map):
+        return Map.check_collision(self.rect_ground)
+
+    
+    def animate_attack(self):
+        animation_speed = 0.15
+        self.current_sprite_attack += animation_speed
+        if self.direction == "right":
+            if self.current_sprite_attack >= len(self.sprites_attacking_right):
+                self.current_sprite_attack = 0
+                self.is_animating = False
+                self.attacking = False
+            else:
+                self.image = self.sprites_attacking_right[int(self.current_sprite_attack)]
+
+        elif self.direction == "left":
+            if self.current_sprite_attack >= len(self.sprites_attacking_left):
+                self.current_sprite_attack = 0
+                self.is_animating = False
+                self.attacking = False
+            else:
+                self.image = self.sprites_attacking_left[int(self.current_sprite_attack)]
 
 
     def animate(self):
@@ -98,8 +93,6 @@ class Player(pygame.sprite.Sprite):
             animation_speed = 0.10
         if self.walking == False:
             animation_speed = 0.20 
-        if self.attacking == True:
-            animation_speed = 0.20
 
         if  self.is_animating == True:
             self.current_sprite += animation_speed
@@ -107,10 +100,7 @@ class Player(pygame.sprite.Sprite):
 
             if(self.direction == "right"):
                 if self.attacking == True:
-                    if self.current_sprite >= len(self.sprites_attacking_right):
-                        self.current_sprite = 0
-                        self.is_animating = False
-                    self.image = self.sprites_attacking_right[int(self.current_sprite)]
+                    self.animate_attack()
 
                 elif self.walking == False:
                     if self.current_sprite >= len(self.sprites_idle_right):
@@ -125,10 +115,8 @@ class Player(pygame.sprite.Sprite):
 
             if(self.direction == "left"):
                 if self.attacking == True:
-                    if self.current_sprite >= len(self.sprites_attacking_left):
-                        self.current_sprite = 0
-                        self.is_animating = False
-                    self.image = self.sprites_attacking_left[int(self.current_sprite)]
+                    self.animate_attack()
+
                 elif self.walking == False:
                     if self.current_sprite >= len(self.sprites_idle_left):
                         self.current_sprite = 0
@@ -144,3 +132,4 @@ class Player(pygame.sprite.Sprite):
     def draw_collision_rect(self, screen):
         # Desenha um retângulo vermelho em torno do retângulo do jogador
         pygame.draw.rect(screen, (255, 0, 0), self.rect, 1)
+        pygame.draw.rect(screen, (0, 255, 0), self.rect_ground, 1)
