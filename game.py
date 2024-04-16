@@ -44,7 +44,7 @@ def main():
                 #x += vel
         elif keys[pygame.K_UP]:
             if (player_character.attacking == False) and (player_character.isGrounded(myMap)):
-                player_character.walking = True
+                player_character.jumping = True
                 player_character.update_position(0, -20)
                     #y -= vel
         elif keys[pygame.K_DOWN]:

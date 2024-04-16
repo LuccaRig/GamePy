@@ -42,9 +42,11 @@ class Player(pygame.sprite.Sprite):
         self.attacking = False
         self.walking = False
         self.grounded = False
+        self.jumping = False
         self.direction = "right"
         self.current_sprite = 0
         self.current_sprite_attack = 0
+        self.current_sprite_jump = 0
         self.image = self.sprites_idle_right[self.current_sprite]     
 
         # Default Position and movement
@@ -65,7 +67,7 @@ class Player(pygame.sprite.Sprite):
             sprites_vector.append(sprite)
 
     def update_position(self, new_pos_x, new_pos_y):
-        if self.walking == True:
+        if self.walking == True or self.jumping == True:
             if(new_pos_x < 0):
                 self.direction = "left"
             if(new_pos_x > 0):
@@ -98,6 +100,25 @@ class Player(pygame.sprite.Sprite):
             else:
                 self.image = self.sprites_attacking_left[int(self.current_sprite_attack)]
 
+    def animate_jump(self):
+        animation_speed = 0.10
+        self.current_sprite_jump += animation_speed
+        if self.direction == "right":
+            if self.current_sprite_jump >= len(self.sprites_jumping_right):
+                self.current_sprite_jump = 0
+                self.is_animating = False
+                self.jumping = False
+            else:
+                self.image = self.sprites_jumping_right[int(self.current_sprite_jump)]
+
+        elif self.direction == "left":
+            if self.current_sprite_jump >= len(self.sprites_jumping_left):
+                self.current_sprite_jump = 0
+                self.is_animating = False
+                self.jumping = False
+            else:
+                self.image = self.sprites_jumping_left[int(self.current_sprite_jump)]
+
 
     def animate(self):
         self.is_animating = True
@@ -117,6 +138,9 @@ class Player(pygame.sprite.Sprite):
                 if self.attacking == True:
                     self.animate_attack()
 
+                elif self.jumping == True:
+                    self.animate_jump()
+
                 elif self.walking == False:
                     if self.current_sprite >= len(self.sprites_idle_right):
                         self.current_sprite = 0
@@ -132,6 +156,9 @@ class Player(pygame.sprite.Sprite):
                 if self.attacking == True:
                     self.animate_attack()
 
+                elif self.jumping == True:
+                    self.animate_jump()
+
                 elif self.walking == False:
                     if self.current_sprite >= len(self.sprites_idle_left):
                         self.current_sprite = 0
@@ -141,7 +168,7 @@ class Player(pygame.sprite.Sprite):
                     if self.current_sprite >= len(self.sprites_moving_left):
                         self.current_sprite = 0
                         self.is_animating = False
-                    self.image = self.sprites_moving_left[int(self.current_sprite)]
+                    self.image = self.sprites_moving_left[int(self.current_sprite)]             
 
 
     def draw_collision_rect(self, screen):
