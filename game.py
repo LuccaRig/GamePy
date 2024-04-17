@@ -1,5 +1,6 @@
 import pygame, sys
 import player
+import enemy
 import map
 
 def main():
@@ -15,9 +16,9 @@ def main():
 
     # Creating Sprites and Groups
     player_character = player.Player()
+    enemy1 = enemy.Mobs()
     moving_sprites = pygame.sprite.Group()
-    moving_sprites.add(player_character)
-
+    moving_sprites.add(player_character, enemy1)
 
     myMap = map.Map("Tiled/Map1.tmx")
 
@@ -52,18 +53,38 @@ def main():
                 player_character.walking = True
                 player_character.update_position(0, 2)
                     #y += vel
+        elif keys[pygame.K_a]:
+            enemy1.walking = True
+            enemy1.update_position(-2, 0)
+                #x -= vel
+        elif keys[pygame.K_d]:
+            enemy1.walking = True
+            enemy1.update_position(2, 0)
+                #x += vel
+        elif keys[pygame.K_w]:
+            enemy1.walking = True
+            enemy1.update_position(0, -2)
+                #y -= vel
+        elif keys[pygame.K_s]:
+            if not enemy1.isGrounded(myMap):
+                enemy1.walking = True
+                enemy1.update_position(0, 2)
+                    #y += vel
         else:
             player_character.walking = False
+            enemy1.walking = False
 
         screen.fill((128, 128, 128))
 
         myMap.renderVisibleLayers(screen)
         player_character.draw_collision_rect(screen)
+        enemy1.draw_collision_rect(screen)
 
         moving_sprites.draw(screen)
         moving_sprites.update()
 
         player_character.animate()
+        enemy1.animate()
 
         moving_sprites.draw(screen)
         moving_sprites.update()
