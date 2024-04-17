@@ -30,12 +30,12 @@ class Player(pygame.sprite.Sprite):
         self.import_sprites(8,'CharacterSprites/assassin/movementPNGleft', self.sprites_moving_left)
         self.import_sprites(9,'CharacterSprites/assassin/attackPNGright', self.sprites_attacking_right)
         self.import_sprites(9,'CharacterSprites/assassin/attackPNGleft', self.sprites_attacking_left)
-        self.import_sprites(4, 'CharacterSprites/assassin/jumpPNGright', self.sprites_jumping_right)
-        self.import_sprites(4, 'CharacterSprites/assassin/jumpPNGleft', self.sprites_jumping_left)
-        self.import_sprites(4, 'CharacterSprites/assassin/fallPNGright', self.sprites_falling_right)
-        self.import_sprites(4, 'CharacterSprites/assassin/fallPNGleft', self.sprites_falling_left)
-        self.import_sprites(4, 'CharacterSprites/assassin/landPNGright', self.sprites_landing_right)
-        self.import_sprites(4, 'CharacterSprites/assassin/fallPNGleft', self.sprites_falling_left)
+        self.import_sprites(4,'CharacterSprites/assassin/jumpPNGright', self.sprites_jumping_right)
+        self.import_sprites(4,'CharacterSprites/assassin/jumpPNGleft', self.sprites_jumping_left)
+        self.import_sprites(4,'CharacterSprites/assassin/fallPNGright', self.sprites_falling_right)
+        self.import_sprites(4,'CharacterSprites/assassin/fallPNGleft', self.sprites_falling_left)
+        self.import_sprites(4,'CharacterSprites/assassin/landPNGright', self.sprites_landing_right)
+        self.import_sprites(4,'CharacterSprites/assassin/fallPNGleft', self.sprites_falling_left)
 
         # Default Boolean and Character States
         self.is_animating = False
