@@ -1,5 +1,6 @@
 import pygame, sys
 import player
+import enemy
 import map
 
 def main():
@@ -15,9 +16,9 @@ def main():
 
     # Creating Sprites and Groups
     player_character = player.Player()
+    enemy1 = enemy.Mobs()
     moving_sprites = pygame.sprite.Group()
-    moving_sprites.add(player_character)
-
+    moving_sprites.add(player_character, enemy1)
 
     myMap = map.Map("Tiled/Map1.tmx")
 
@@ -35,6 +36,7 @@ def main():
         keys = pygame.key.get_pressed()
         
         if keys[pygame.K_z]:
+
             if player_character.landing == False or not(player_character.isGrounded(myMap)): #TODO: Adicionar a variavel que se o player tiver caindo nao pode atacar
                 player_character.walking = False
                 player_character.attacking = True
@@ -63,17 +65,27 @@ def main():
                 player_character.update_position(0, -10)
                 player_character.set_vertical_speed(45)
                     #y -= vel
-            
+
+        if keys[pygame.K_a]:
+            enemy1.walking = True
+            enemy1.update_position(-2, 0)
+                #x -= vel
+        if keys[pygame.K_d]:
+            enemy1.walking = True
+            enemy1.update_position(2, 0)
+                #x += vel
 
         screen.fill((128, 128, 128))
 
         myMap.renderVisibleLayers(screen)
         player_character.draw_collision_rect(screen)
+        enemy1.draw_collision_rect(screen)
 
         moving_sprites.draw(screen)
         moving_sprites.update()
 
         player_character.animate()
+        enemy1.animate()
 
         moving_sprites.draw(screen)
         moving_sprites.update()
