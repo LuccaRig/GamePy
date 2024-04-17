@@ -35,32 +35,34 @@ def main():
         keys = pygame.key.get_pressed()
         
         if keys[pygame.K_z]:
+            if player_character.landing == False or not(player_character.isGrounded(myMap)): #TODO: Adicionar a variavel que se o player tiver caindo nao pode atacar
+                player_character.walking = False
+                player_character.attacking = True
+        else:
             player_character.walking = False
-            player_character.attacking = True
+            if player_character.isGrounded(myMap) and not(player_character.attacking):
+                player_character.animate_land()
+                player_character.jumping = False
             
-        elif keys[pygame.K_LEFT]:
-            if player_character.attacking == False:
+        if keys[pygame.K_LEFT]:
+            if player_character.attacking == False and (player_character.landing == False or not(player_character.isGrounded(myMap))):
                 player_character.walking = True
                 player_character.update_position(-3, 0)
                 #x -= vel
-        elif keys[pygame.K_RIGHT]:
-            if player_character.attacking == False:
+
+        if keys[pygame.K_RIGHT]:
+            if player_character.attacking == False and (player_character.landing == False or not(player_character.isGrounded(myMap))):
                 player_character.walking = True
                 player_character.update_position(3, 0)
                 #x += vel
-        elif keys[pygame.K_UP]:
-            if (player_character.attacking == False) and (player_character.isGrounded(myMap)):
+
+        if keys[pygame.K_UP]:
+            if (player_character.attacking == False) and (player_character.isGrounded(myMap)) and (player_character.landing == False or not(player_character.isGrounded(myMap))):
+                player_character.landing = True
                 player_character.jumping = True
                 player_character.update_position(0, -10)
                 player_character.set_vertical_speed(45)
                     #y -= vel
-        elif keys[pygame.K_DOWN]:
-            if (not player_character.isGrounded(myMap)) and (player_character.attacking == False):
-                player_character.walking = True
-                player_character.update_position(0, 2)
-                    #y += vel
-        else:
-            player_character.walking = False
             
 
         screen.fill((128, 128, 128))

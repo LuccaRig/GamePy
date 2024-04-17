@@ -36,7 +36,7 @@ class Player(pygame.sprite.Sprite):
         self.import_sprites(4, 'CharacterSprites/assassin/fallPNGright', self.sprites_falling_right)
         self.import_sprites(4, 'CharacterSprites/assassin/fallPNGleft', self.sprites_falling_left)
         self.import_sprites(4, 'CharacterSprites/assassin/landPNGright', self.sprites_landing_right)
-        self.import_sprites(4, 'CharacterSprites/assassin/fallPNGleft', self.sprites_falling_left)
+        self.import_sprites(4, 'CharacterSprites/assassin/landPNGleft', self.sprites_landing_left)
 
         # Default Boolean and Character States
         self.is_animating = False
@@ -44,10 +44,12 @@ class Player(pygame.sprite.Sprite):
         self.walking = False
         self.grounded = False
         self.jumping = False
+        self.landing = False
         self.direction = "right"
         self.current_sprite = 0
         self.current_sprite_attack = 0
         self.current_sprite_jump = 0
+        self.current_sprite_land = 0
         self.image = self.sprites_idle_right[self.current_sprite]     
 
         # Default Position and movement
@@ -55,7 +57,7 @@ class Player(pygame.sprite.Sprite):
         self.vertical_speed_ = 0
         self.gravity_ = 10
         self.pos_x = 400
-        self.pos_y = 400
+        self.pos_y = 402
         self.width = 200
         self.height = 77
         self.rect_ground = pygame.Rect(self.pos_x+85, self.pos_y+70,  30, 10)   
@@ -86,14 +88,14 @@ class Player(pygame.sprite.Sprite):
         modifica a posição vertical do jogador de acordo com as leis da gravidade no tempo delta_t
         delta_t: tempo que determina o delta posição 
         """
-        print("gravidade")
+        #print("gravidade")
         time.sleep(0.01)
         delta_pos_y = self.vertical_speed_*delta_t - self.gravity_*delta_t*delta_t/2 
         #delta(X) = Vot - g(t^2)/2
         self.vertical_speed_ -= self.gravity_*delta_t
         #V = Vo - gt
 
-        print(delta_pos_y)
+        #print(delta_pos_y)
         self.update_position(0, -delta_pos_y)
 
     def sum_vertical_speed(self, speed_change):
@@ -135,24 +137,25 @@ class Player(pygame.sprite.Sprite):
             else:
                 self.image = self.sprites_attacking_left[int(self.current_sprite_attack)]
 
-    def animate_jump(self):
-        animation_speed = 0.10
-        self.current_sprite_jump += animation_speed
-        if self.direction == "right":
-            if self.current_sprite_jump >= len(self.sprites_jumping_right):
-                self.current_sprite_jump = 0
-                self.is_animating = False
-                self.jumping = False
-            else:
-                self.image = self.sprites_jumping_right[int(self.current_sprite_jump)]
+    def animate_land(self):
+        if self.landing == True:    
+            animation_speed = 0.3
+            self.current_sprite_land += animation_speed
+            if self.direction == "right":
+                if self.current_sprite_land >= len(self.sprites_landing_right):
+                    self.current_sprite_land = 0
+                    self.is_animating = False
+                    self.landing = False
+                else:
+                    self.image = self.sprites_landing_right[int(self.current_sprite_land)]
 
-        elif self.direction == "left":
-            if self.current_sprite_jump >= len(self.sprites_jumping_left):
-                self.current_sprite_jump = 0
-                self.is_animating = False
-                self.jumping = False
-            else:
-                self.image = self.sprites_jumping_left[int(self.current_sprite_jump)]
+            elif self.direction == "left":
+                if self.current_sprite_land >= len(self.sprites_landing_left):
+                    self.current_sprite_land = 0
+                    self.is_animating = False
+                    self.landing = False
+                else:
+                    self.image = self.sprites_landing_left[int(self.current_sprite_land)]
 
 
     def animate(self):
@@ -172,38 +175,48 @@ class Player(pygame.sprite.Sprite):
             if(self.direction == "right"):
                 if self.attacking == True:
                     self.animate_attack()
-
-                # elif self.jumping == True:
-                #     self.animate_jump()
-
-                elif self.walking == False:
-                    if self.current_sprite >= len(self.sprites_idle_right):
+                
+                elif self.jumping == True:
+                    if self.current_sprite >= len(self.sprites_jumping_right):
                         self.current_sprite = 0
                         self.is_animating = False
-                    self.image = self.sprites_idle_right[int(self.current_sprite)]
-                elif self.walking == True:
+                    self.image = self.sprites_jumping_right[int(self.current_sprite)]
+
+                elif self.walking == True and self.landing == False:
                     if self.current_sprite >= len(self.sprites_moving_right):
                         self.current_sprite = 0
                         self.is_animating = False
                     self.image = self.sprites_moving_right[int(self.current_sprite)]
+
+                elif self.walking == False and self.landing == False:
+                    if self.current_sprite >= len(self.sprites_idle_right):
+                        self.current_sprite = 0
+                        self.is_animating = False
+                    self.image = self.sprites_idle_right[int(self.current_sprite)]
+
 
             if(self.direction == "left"):
                 if self.attacking == True:
                     self.animate_attack()
 
                 elif self.jumping == True:
-                    self.animate_jump()
+                    if self.current_sprite >= len(self.sprites_jumping_left):
+                        self.current_sprite = 0
+                        self.is_animating = False
+                    self.image = self.sprites_jumping_left[int(self.current_sprite)]
 
-                elif self.walking == False:
+                elif self.walking == True and self.landing == False:
+                    if self.current_sprite >= len(self.sprites_moving_left):
+                        self.current_sprite = 0
+                        self.is_animating = False
+                    self.image = self.sprites_moving_left[int(self.current_sprite)]
+
+                elif self.walking == False and self.landing == False:
                     if self.current_sprite >= len(self.sprites_idle_left):
                         self.current_sprite = 0
                         self.is_animating = False
                     self.image = self.sprites_idle_left[int(self.current_sprite)]
-                elif self.walking == True:
-                    if self.current_sprite >= len(self.sprites_moving_left):
-                        self.current_sprite = 0
-                        self.is_animating = False
-                    self.image = self.sprites_moving_left[int(self.current_sprite)]             
+                
 
 
     def draw_collision_rect(self, screen):

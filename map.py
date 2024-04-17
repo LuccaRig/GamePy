@@ -19,7 +19,8 @@ class Map():
                         if tile is not None:
                             scaled_x = x * self.tile_width * self.scale_factor + self.x_correction
                             scaled_y = y * self.tile_height * self.scale_factor
-                            scaled_image = pygame.transform.scale(tile, (self.tile_width * self.scale_factor, self.tile_height * self.scale_factor))
+                            scaled_image = pygame.transform.scale(tile, (self.tile_width * self.scale_factor, 
+                                                                         self.tile_height * self.scale_factor))
                             screen.blit(scaled_image, (scaled_x, scaled_y))
                 elif isinstance(layer, pytmx.TiledObjectGroup):
                 # Se é um grupo de objetos, renderize os objetos
@@ -38,9 +39,10 @@ class Map():
             if isinstance(layer, pytmx.TiledObjectGroup):
                 for obj in layer:
                     if obj.name == "Collision":
-                        rect = pygame.Rect(obj.x * self.scale_factor + self.x_correction, obj.y * self.scale_factor, obj.width * self.scale_factor, obj.height * self.scale_factor)
+                        rect = pygame.Rect(obj.x * self.scale_factor + self.x_correction, obj.y * self.scale_factor, 
+                                           obj.width * self.scale_factor, obj.height * self.scale_factor)
                         if player_rect.colliderect(rect):
-                            print("Colisão detectada")
+                            #print("Colisão detectada")
                             return True
-        print("Colisão não detectada")
+        #print("Colisão não detectada")
         return False
