@@ -1,5 +1,6 @@
 import pygame
 import map
+import time
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, scale=4) -> None:
@@ -50,7 +51,9 @@ class Player(pygame.sprite.Sprite):
         self.image = self.sprites_idle_right[self.current_sprite]     
 
         # Default Position and movement
-        self.speed = [0, 0]
+        self.jumping_speed_ = 4
+        self.vertical_speed_ = 0
+        self.gravity_ = 10
         self.pos_x = 400
         self.pos_y = 400
         self.width = 200
@@ -76,6 +79,38 @@ class Player(pygame.sprite.Sprite):
             self.pos_y += new_pos_y
             self.rect.topleft = [self.pos_x, self.pos_y]
             self.rect_ground.topleft = [self.pos_x+85, self.pos_y+70]
+    
+
+    def applyDeltaGravityEffect(self, delta_t):
+        """
+        modifica a posição vertical do jogador de acordo com as leis da gravidade no tempo delta_t
+        delta_t: tempo que determina o delta posição 
+        """
+        print("gravidade")
+        time.sleep(0.01)
+        delta_pos_y = self.vertical_speed_*delta_t - self.gravity_*delta_t*delta_t/2 
+        #delta(X) = Vot - g(t^2)/2
+        self.vertical_speed_ -= self.gravity_*delta_t
+        #V = Vo - gt
+
+        print(delta_pos_y)
+        self.update_position(0, -delta_pos_y)
+
+    def sum_vertical_speed(self, speed_change):
+        """
+        soma speed_change ao valor atual de self.vertical_speed_
+        """
+        self.vertical_speed_ += speed_change
+
+    def set_vertical_speed(self, new_vertical_speed):
+        """
+        iguala self.vertical_speed_ a new_value
+        """
+        #print("vertical_speed_ zerada")
+        self.vertical_speed_ = new_vertical_speed
+
+    def get_jumping_speed(self):
+        return self.jumping_speed_
 
     def isGrounded(self, Map):
         return Map.check_collision(self.rect_ground)
@@ -138,8 +173,8 @@ class Player(pygame.sprite.Sprite):
                 if self.attacking == True:
                     self.animate_attack()
 
-                elif self.jumping == True:
-                    self.animate_jump()
+                # elif self.jumping == True:
+                #     self.animate_jump()
 
                 elif self.walking == False:
                     if self.current_sprite >= len(self.sprites_idle_right):

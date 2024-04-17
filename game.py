@@ -22,6 +22,12 @@ def main():
     myMap = map.Map("Tiled/Map1.tmx")
 
     while running:
+
+        if not player_character.isGrounded(myMap):
+            player_character.applyDeltaGravityEffect(0.2)
+        if (player_character.isGrounded(myMap)):
+            player_character.set_vertical_speed(0)
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -35,17 +41,18 @@ def main():
         elif keys[pygame.K_LEFT]:
             if player_character.attacking == False:
                 player_character.walking = True
-                player_character.update_position(-2, 0)
+                player_character.update_position(-3, 0)
                 #x -= vel
         elif keys[pygame.K_RIGHT]:
             if player_character.attacking == False:
                 player_character.walking = True
-                player_character.update_position(2, 0)
+                player_character.update_position(3, 0)
                 #x += vel
         elif keys[pygame.K_UP]:
             if (player_character.attacking == False) and (player_character.isGrounded(myMap)):
                 player_character.jumping = True
-                player_character.update_position(0, -20)
+                player_character.update_position(0, -10)
+                player_character.set_vertical_speed(45)
                     #y -= vel
         elif keys[pygame.K_DOWN]:
             if (not player_character.isGrounded(myMap)) and (player_character.attacking == False):
@@ -54,6 +61,7 @@ def main():
                     #y += vel
         else:
             player_character.walking = False
+            
 
         screen.fill((128, 128, 128))
 
