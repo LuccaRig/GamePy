@@ -24,10 +24,10 @@ def main():
 
     while running:
 
-        if not player_character.isGrounded(myMap):
-            player_character.applyDeltaGravityEffect(0.2)
-        if (player_character.isGrounded(myMap)):
-            player_character.set_vertical_speed(0)
+        if not player_character.is_grounded(myMap):
+            player_character.apply_delta_gravity_effect(0.2)
+        if (player_character.is_grounded(myMap)):
+            player_character.vertical_speed = 0
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -37,33 +37,34 @@ def main():
         
         if keys[pygame.K_z]:
 
-            if player_character.landing == False or not(player_character.isGrounded(myMap)): #TODO: Adicionar a variavel que se o player tiver caindo nao pode atacar
+            if not player_character.landing or not(player_character.is_grounded(myMap)):
+                #TODO: Adicionar a variavel que se o player tiver caindo nao pode atacar. Ps: pedrinho achou a ideia paia
                 player_character.walking = False
                 player_character.attacking = True
         else:
             player_character.walking = False
-            if player_character.isGrounded(myMap) and not(player_character.attacking):
+            if player_character.is_grounded(myMap) and not(player_character.attacking):
                 player_character.animate_land()
                 player_character.jumping = False
             
         if keys[pygame.K_LEFT]:
-            if player_character.attacking == False and (player_character.landing == False or not(player_character.isGrounded(myMap))):
+            if not player_character.attacking and (not player_character.landing or not(player_character.is_grounded(myMap))):
                 player_character.walking = True
                 player_character.update_position(-3, 0)
                 #x -= vel
 
         if keys[pygame.K_RIGHT]:
-            if player_character.attacking == False and (player_character.landing == False or not(player_character.isGrounded(myMap))):
+            if not player_character.attacking and (not player_character.landing or not(player_character.is_grounded(myMap))):
                 player_character.walking = True
                 player_character.update_position(3, 0)
                 #x += vel
 
         if keys[pygame.K_UP]:
-            if (player_character.attacking == False) and (player_character.isGrounded(myMap)) and (player_character.landing == False or not(player_character.isGrounded(myMap))):
+            if (not player_character.attacking) and (player_character.is_grounded(myMap)) and (not player_character.landing or not(player_character.is_grounded(myMap))):
                 player_character.landing = True
                 player_character.jumping = True
                 player_character.update_position(0, -10)
-                player_character.set_vertical_speed(45)
+                player_character.vertical_speed += player_character.jumping_speed
                     #y -= vel
 
         if keys[pygame.K_a]:
@@ -77,7 +78,7 @@ def main():
 
         screen.fill((128, 128, 128))
 
-        myMap.renderVisibleLayers(screen)
+        myMap.render_visible_layers(screen)
         player_character.draw_collision_rect(screen)
         enemy1.draw_collision_rect(screen)
 

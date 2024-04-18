@@ -2,7 +2,20 @@ import pygame
 import map
 import time
 
+#TODO: fazer docstring da classe
 class Player(pygame.sprite.Sprite):
+    """A one-line summary of the module or program, terminated by a period.
+
+Leave one blank line.  The rest of this docstring should contain an
+overall description of the module or program.  Optionally, it may also
+contain a brief description of exported classes and functions and/or usage
+examples.
+
+Typical usage example:
+
+  foo = ClassFoo()
+  bar = foo.FunctionBar()
+    """
     def __init__(self, scale=4) -> None:
         super().__init__()
         # Sprites Vectors
@@ -53,8 +66,8 @@ class Player(pygame.sprite.Sprite):
         self.image = self.sprites_idle_right[self.current_sprite]     
 
         # Default Position and movement
-        self.jumping_speed_ = 4
-        self.vertical_speed_ = 0
+        self.jumping_speed = 45
+        self.vertical_speed = 0
         self.gravity_ = 10
         self.pos_x = 400
         self.pos_y = 402
@@ -64,15 +77,24 @@ class Player(pygame.sprite.Sprite):
         self.rect = pygame.Rect(self.pos_x, self.pos_y,  self.width, self.height)
         self.rect.topleft = [self.pos_x, self.pos_y]
 
-    def import_sprites(self, number_of_sprites=0, arquive='0', sprites_vector= [], scale=4):
+    #TODO: fazer docstring
+    def import_sprites(self, number_of_sprites=0, arquive='0', sprites_vector= [], scale=4) -> None:
+        """
+        """
         for i in range(number_of_sprites):
             sprite = pygame.image.load(f'{arquive}/tile00{i}.png')
             # Scale the sprite
             sprite = pygame.transform.scale(sprite, (int(sprite.get_width() * scale), int(sprite.get_height() * scale)))
             sprites_vector.append(sprite)
 
-    def update_position(self, new_pos_x, new_pos_y):
-        if self.walking == True or self.jumping == True:
+    #TODO: fazer docstring
+    def update_position(self, new_pos_x: int, new_pos_y: int) -> None:
+        """(descrição).
+        Args:
+            new_pos_x:
+            new_pos_y:
+        """
+        if self.walking or self.jumping:
             if(new_pos_x < 0):
                 self.direction = "left"
             if(new_pos_x > 0):
@@ -83,42 +105,35 @@ class Player(pygame.sprite.Sprite):
             self.rect_ground.topleft = [self.pos_x+85, self.pos_y+70]
     
 
-    def applyDeltaGravityEffect(self, delta_t):
+    def apply_delta_gravity_effect(self, delta_t: float) -> None:
+        """ modifica a posição vertical do jogador de acordo com as leis da gravidade no tempo delta_t.
+
+        Args:
+            delta_t: tempo que determina o delta posição 
         """
-        modifica a posição vertical do jogador de acordo com as leis da gravidade no tempo delta_t
-        delta_t: tempo que determina o delta posição 
-        """
-        #print("gravidade")
         time.sleep(0.01)
-        delta_pos_y = self.vertical_speed_*delta_t - self.gravity_*delta_t*delta_t/2 
+        delta_pos_y = self.vertical_speed*delta_t - self.gravity_*delta_t*delta_t/2 
         #delta(X) = Vot - g(t^2)/2
-        self.vertical_speed_ -= self.gravity_*delta_t
+        self.vertical_speed -= self.gravity_*delta_t
         #V = Vo - gt
 
-        #print(delta_pos_y)
         self.update_position(0, -delta_pos_y)
 
-    def sum_vertical_speed(self, speed_change):
-        """
-        soma speed_change ao valor atual de self.vertical_speed_
-        """
-        self.vertical_speed_ += speed_change
-
-    def set_vertical_speed(self, new_vertical_speed):
-        """
-        iguala self.vertical_speed_ a new_value
-        """
-        #print("vertical_speed_ zerada")
-        self.vertical_speed_ = new_vertical_speed
-
     def get_jumping_speed(self):
-        return self.jumping_speed_
+        return self.jumping_speed
 
-    def isGrounded(self, Map):
-        return Map.check_collision(self.rect_ground)
+    def is_grounded(self, map: map) -> bool:
+        """Retorna True se o player estiver tocando o chão
+        
+        Args:
+            map: objeto que contém função capaz de checar se o player está colidindo com o chão ou não
+        """
+        return map.check_collision(self.rect_ground)
 
-    
-    def animate_attack(self):
+    #TODO: fazer docstring
+    def animate_attack(self) -> None:
+        """
+        """
         animation_speed = 0.15
         self.current_sprite_attack += animation_speed
         if self.direction == "right":
@@ -137,8 +152,11 @@ class Player(pygame.sprite.Sprite):
             else:
                 self.image = self.sprites_attacking_left[int(self.current_sprite_attack)]
 
-    def animate_land(self):
-        if self.landing == True:    
+    #TODO: fazer docstring
+    def animate_land(self) -> None:
+        """
+        """
+        if self.landing:    
             animation_speed = 0.3
             self.current_sprite_land += animation_speed
             if self.direction == "right":
@@ -157,38 +175,41 @@ class Player(pygame.sprite.Sprite):
                 else:
                     self.image = self.sprites_landing_left[int(self.current_sprite_land)]
 
-
-    def animate(self):
+    #sugestão: tratar is_animating como atributo público e apagar essa função 
+    def animate(self) -> None:
         self.is_animating = True
     
-    def update(self):
+    #TODO: fazer a docstring
+    def update(self) -> None:
+        """
+        """
         animation_speed = 0
-        if self.walking == True:
+        if self.walking:
             animation_speed = 0.10
-        if self.walking == False:
+        if not self.walking:
             animation_speed = 0.20 
 
-        if  self.is_animating == True:
+        if  self.is_animating:
             self.current_sprite += animation_speed
 
 
             if(self.direction == "right"):
-                if self.attacking == True:
+                if self.attacking:
                     self.animate_attack()
                 
-                elif self.jumping == True:
+                elif self.jumping:
                     if self.current_sprite >= len(self.sprites_jumping_right):
                         self.current_sprite = 0
                         self.is_animating = False
                     self.image = self.sprites_jumping_right[int(self.current_sprite)]
 
-                elif self.walking == True and self.landing == False:
+                elif self.walking and not self.landing:
                     if self.current_sprite >= len(self.sprites_moving_right):
                         self.current_sprite = 0
                         self.is_animating = False
                     self.image = self.sprites_moving_right[int(self.current_sprite)]
 
-                elif self.walking == False and self.landing == False:
+                elif not self.walking and not self.landing:
                     if self.current_sprite >= len(self.sprites_idle_right):
                         self.current_sprite = 0
                         self.is_animating = False
@@ -196,30 +217,58 @@ class Player(pygame.sprite.Sprite):
 
 
             if(self.direction == "left"):
-                if self.attacking == True:
+                if self.attacking:
                     self.animate_attack()
 
-                elif self.jumping == True:
+                elif self.jumping:
                     if self.current_sprite >= len(self.sprites_jumping_left):
                         self.current_sprite = 0
                         self.is_animating = False
                     self.image = self.sprites_jumping_left[int(self.current_sprite)]
 
-                elif self.walking == True and self.landing == False:
+                elif self.walking and not self.landing:
                     if self.current_sprite >= len(self.sprites_moving_left):
                         self.current_sprite = 0
                         self.is_animating = False
                     self.image = self.sprites_moving_left[int(self.current_sprite)]
 
-                elif self.walking == False and self.landing == False:
+                elif not self.walking and not self.landing:
                     if self.current_sprite >= len(self.sprites_idle_left):
                         self.current_sprite = 0
                         self.is_animating = False
                     self.image = self.sprites_idle_left[int(self.current_sprite)]
                 
 
-
-    def draw_collision_rect(self, screen):
+    #TODO: fazer a docstring
+    def draw_collision_rect(self, screen) -> None:
         # Desenha um retângulo vermelho em torno do retângulo do jogador
         pygame.draw.rect(screen, (255, 0, 0), self.rect, 1)
         pygame.draw.rect(screen, (0, 255, 0), self.rect_ground, 1)
+
+    #docstring exemplo de função:
+    """Fetches rows from a Smalltable.
+
+    Retrieves rows pertaining to the given keys from the Table instance
+    represented by table_handle.  String keys will be UTF-8 encoded.
+
+    Args:
+        table_handle: An open smalltable.Table instance.
+        keys: A sequence of strings representing the key of each table
+          row to fetch.  String keys will be UTF-8 encoded.
+        require_all_keys: If True only rows with values set for all keys will be
+          returned.
+
+    Returns:
+        A dict mapping keys to the corresponding table row data
+        fetched. Each row is represented as a tuple of strings. For
+        example:
+
+        {b'Serak': ('Rigel VII', 'Preparer'),
+         b'Zim': ('Irk', 'Invader'),
+         b'Lrrr': ('Omicron Persei 8', 'Emperor')}
+
+        Returned keys are always bytes.  If a key from the keys argument is
+        missing from the dictionary, then that row was not found in the
+        table (and require_all_keys must have been False).
+
+    """
