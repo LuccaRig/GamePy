@@ -20,7 +20,7 @@ def main():
     moving_sprites = pygame.sprite.Group()
     moving_sprites.add(player_character, enemy1)
 
-    myMap = map.Map("Tiled/Map1.tmx")
+    myMap = map.Map("Tiled/mapateste.tmx")
 
     while running:
 
@@ -45,6 +45,7 @@ def main():
                 player_character.attacking = True
         else:
             player_character.walking = False
+            enemy1.walking = False
             if player_character.is_grounded(myMap) and not(player_character.attacking):
                 player_character.animate_land()
                 player_character.jumping = False
