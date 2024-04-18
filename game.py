@@ -25,7 +25,7 @@ def main():
     while running:
 
         if not player_character.is_grounded(myMap):
-            player_character.apply_delta_gravity_effect(0.2)
+            player_character.apply_delta_gravity_effect(0.05)
         if (player_character.is_grounded(myMap)):
             player_character.vertical_speed = 0
 
@@ -52,13 +52,13 @@ def main():
         if keys[pygame.K_LEFT]:
             if not player_character.attacking and (not player_character.landing or not(player_character.is_grounded(myMap))):
                 player_character.walking = True
-                player_character.update_position(-3, 0)
+                player_character.update_position(-4, 0)
                 #x -= vel
 
         if keys[pygame.K_RIGHT]:
             if not player_character.attacking and (not player_character.landing or not(player_character.is_grounded(myMap))):
                 player_character.walking = True
-                player_character.update_position(3, 0)
+                player_character.update_position(4, 0)
                 #x += vel
 
         if keys[pygame.K_UP]:
