@@ -27,15 +27,15 @@ class Enemy(pygame.sprite.Sprite):
         self.current_sprite = 0
         self.image = self.sprites_idle_right[self.current_sprite] 
 
-    def import_sprites(self, number_of_sprites=0, arquive='0', sprites_vector= [], scale=4):
+    def import_sprites(self, number_of_sprites=0, arquive='0', sprites_vector= [], scale=4) -> None:
         for i in range(number_of_sprites):
             sprite = pygame.image.load(f'{arquive}/tile00{i}.png')
             # Scale the sprite
             sprite = pygame.transform.scale(sprite, (int(sprite.get_width() * scale), int(sprite.get_height() * scale)))
             sprites_vector.append(sprite)
 
-    def update_position(self, new_pos_x, new_pos_y):
-        if self.walking == True:
+    def update_position(self, new_pos_x, new_pos_y) -> None:
+        if self.walking:
             if(new_pos_x < 0):
                 self.direction = "left"
             if(new_pos_x > 0):
@@ -44,42 +44,42 @@ class Enemy(pygame.sprite.Sprite):
             self.pos_y += new_pos_y
             self.rect.topleft = [self.pos_x, self.pos_y]
 
-    def isGrounded(self, Map):
+    def is_grounded(self, Map) -> None:
         return Map.check_collision(self.rect)
 
-    def animate(self):
+    def animate(self) -> None:
         self.is_animating = True 
 
-    def update(self):
+    def update(self) -> None:
         animation_speed = 0
-        if self.walking == True:
+        if self.walking:
             animation_speed = 0.10
-        if self.walking == False:
+        if not self.walking:
             animation_speed = 0.20 
 
-        if  self.is_animating == True:
+        if  self.is_animating:
             self.current_sprite += animation_speed
 
 
             if(self.direction == "right"):
-                if self.walking == False:
+                if not self.walking:
                     if self.current_sprite >= len(self.sprites_idle_right):
                         self.current_sprite = 0
                         self.is_animating = False
                     self.image = self.sprites_idle_right[int(self.current_sprite)]
-                elif self.walking == True:
+                elif self.walking:
                     if self.current_sprite >= len(self.sprites_moving_right):
                         self.current_sprite = 0
                         self.is_animating = False
                     self.image = self.sprites_moving_right[int(self.current_sprite)]
 
             if(self.direction == "left"):
-                if self.walking == False:
+                if not self.walking:
                     if self.current_sprite >= len(self.sprites_idle_left):
                         self.current_sprite = 0
                         self.is_animating = False
                     self.image = self.sprites_idle_left[int(self.current_sprite)]
-                elif self.walking == True:
+                elif self.walking:
                     if self.current_sprite >= len(self.sprites_moving_left):
                         self.current_sprite = 0
                         self.is_animating = False
@@ -97,6 +97,6 @@ class Mobs(Enemy):
         self.rect = pygame.Rect(self.pos_x, self.pos_y,  self.width, self.height)
         self.rect.topleft = [self.pos_x, self.pos_y]
 
-    def draw_collision_rect(self, screen):
+    def draw_collision_rect(self, screen) -> None:
         # Desenha um retângulo vermelho em torno do retângulo do jogador
         pygame.draw.rect(screen, (255, 0, 0), self.rect, 1)
