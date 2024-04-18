@@ -10,7 +10,8 @@ class Map():
         self.x_correction = 300
         pass
 
-    def renderVisibleLayers(self, screen):
+    #TODO: fazer docstring
+    def render_visible_layers(self, screen):
             for layer in self.tmx_map.visible_layers:
                 if isinstance(layer, pytmx.TiledTileLayer):
                     # Se é uma camada de tile, renderize os tiles
@@ -34,7 +35,8 @@ class Map():
                             # Desenha um retângulo vermelho para representar a área de colisão, com uma borda de 1 pixel
                             pygame.draw.rect(screen, (255, 0, 0), rect, 1) 
 
-    def check_collision(self, player_rect):
+    #TODO: fazer docstring
+    def check_collision(self, player_rect) -> bool:
         for layer in self.tmx_map.visible_layers:
             if isinstance(layer, pytmx.TiledObjectGroup):
                 for obj in layer:
