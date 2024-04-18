@@ -58,6 +58,7 @@ Typical usage example:
         self.grounded = False
         self.jumping = False
         self.landing = False
+        self.falling = False
         self.direction = "right"
         self.current_sprite = 0
         self.current_sprite_attack = 0
@@ -198,10 +199,20 @@ Typical usage example:
         if  self.is_animating:
             self.current_sprite += animation_speed
 
+            if self.vertical_speed < 0:
+                    self.falling = True
+
 
             if(self.direction == "right"):
+                
                 if self.attacking:
                     self.animate_attack()
+
+                elif self.falling:
+                    if self.current_sprite >= len(self.sprites_falling_right):
+                        self.current_sprite = 0
+                        self.is_animating = False
+                    self.image = self.sprites_falling_right[int(self.current_sprite)]
                 
                 elif self.jumping:
                     if self.current_sprite >= len(self.sprites_jumping_right):
@@ -225,6 +236,12 @@ Typical usage example:
             if(self.direction == "left"):
                 if self.attacking:
                     self.animate_attack()
+
+                elif self.falling:
+                    if self.current_sprite >= len(self.sprites_falling_left):
+                        self.current_sprite = 0
+                        self.is_animating = False
+                    self.image = self.sprites_falling_left[int(self.current_sprite)]
 
                 elif self.jumping:
                     if self.current_sprite >= len(self.sprites_jumping_left):
