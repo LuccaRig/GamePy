@@ -79,7 +79,12 @@ Typical usage example:
 
     #TODO: fazer docstring
     def import_sprites(self, number_of_sprites=0, arquive='0', sprites_vector= [], scale=4) -> None:
-        """
+        """ Acessa a pasta selecionada {arquive} e guarda os PNG em um vetores de PNG {sprites_vector}
+
+        Args:
+            number_of_sprites:
+            arquive:
+            sprites_vector:
         """
         for i in range(number_of_sprites):
             sprite = pygame.image.load(f'{arquive}/tile00{i}.png')
@@ -89,12 +94,13 @@ Typical usage example:
 
     #TODO: fazer docstring
     def update_position(self, new_pos_x: int, new_pos_y: int) -> None:
-        """(descrição).
+        """ Muda a posicao do Rect do player e a posicao do rect_ground
+
         Args:
             new_pos_x:
             new_pos_y:
         """
-        if self.walking or self.jumping:
+        if self.walking or self.jumping or not self.grounded:
             if(new_pos_x < 0):
                 self.direction = "left"
             if(new_pos_x > 0):
