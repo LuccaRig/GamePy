@@ -11,7 +11,7 @@ class Map():
         pass
 
     #TODO: fazer docstring
-    def render_visible_layers(self, screen):
+    def render_visible_layers(self, screen: pygame.display):
             for layer in self.tmx_map.visible_layers:
                 if isinstance(layer, pytmx.TiledTileLayer):
                     # Se é uma camada de tile, renderize os tiles
@@ -36,7 +36,7 @@ class Map():
                             pygame.draw.rect(screen, (255, 0, 0), rect, 1) 
 
     #TODO: fazer docstring
-    def check_collision(self, player_rect) -> bool:
+    def check_collision(self, player_rect: pygame.rect) -> bool:
         for layer in self.tmx_map.visible_layers:
             if isinstance(layer, pytmx.TiledObjectGroup):
                 for obj in layer:

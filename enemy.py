@@ -1,7 +1,7 @@
 import pygame
 
 class Enemy(pygame.sprite.Sprite):
-    def __init__(self, scale=4) -> None:
+    def __init__(self) -> None:
         super().__init__()
         # Atributos dos inimigos
         hp = 0
@@ -86,8 +86,8 @@ class Enemy(pygame.sprite.Sprite):
                     self.image = self.sprites_moving_left[int(self.current_sprite)]  
 
 class Mobs(Enemy):
-    def __init__(self, scale=4) -> None:
-        super().__init__(scale) 
+    def __init__(self) -> None:
+        super().__init__() 
         # Default Position and movement
         self.speed = [0, 0]
         self.pos_x = 700
