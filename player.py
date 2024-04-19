@@ -70,8 +70,8 @@ Typical usage example:
         self.jumping_speed = 160
         self.vertical_speed = 0
         self.gravity_ = 90
-        self.pos_x = 400
-        self.pos_y = 200
+        self.pos_x = 60
+        self.pos_y = 300
         self.width = 200
         self.height = 77
         self.rect_ground = pygame.Rect(self.pos_x+85, self.pos_y+70,  30, 10)   

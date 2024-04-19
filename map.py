@@ -8,7 +8,7 @@ class Map():
         self.tile_height = self.tmx_map.tileheight
         self.scale_factor = 10
         self.x_correction = 0
-        self.y_correction = 700
+        self.y_correction = 0
         pass
 
     #TODO: fazer docstring
