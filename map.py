@@ -12,7 +12,7 @@ class Map():
         pass
 
     #TODO: fazer docstring
-    def render_visible_layers(self, screen: pygame.display):
+    def render_visible_layers(self, screen: pygame.display, off_set_x, off_set_y):
             for layer in self.tmx_map.visible_layers:
                 if isinstance(layer, pytmx.TiledTileLayer):
                     # Se é uma camada de tile, renderize os tiles
@@ -23,7 +23,7 @@ class Map():
                             scaled_y = y * self.tile_height * self.scale_factor - self.y_correction
                             scaled_image = pygame.transform.scale(tile, (self.tile_width * self.scale_factor, 
                                                                          self.tile_height * self.scale_factor))
-                            screen.blit(scaled_image, (scaled_x, scaled_y))
+                            screen.blit(scaled_image, (scaled_x + off_set_x, scaled_y - off_set_y))
                 elif isinstance(layer, pytmx.TiledObjectGroup):
                 # Se é um grupo de objetos, renderize os objetos
                     for obj in layer:
@@ -32,7 +32,7 @@ class Map():
                             scaled_y = obj.y * self.scale_factor - self.y_correction
                             scaled_width = obj.width * self.scale_factor
                             scaled_height = obj.height * self.scale_factor
-                            rect = pygame.Rect(scaled_x, scaled_y, scaled_width, scaled_height)
+                            rect = pygame.Rect(scaled_x + off_set_x, scaled_y - off_set_y, scaled_width, scaled_height)
                             # Desenha um retângulo vermelho para representar a área de colisão, com uma borda de 1 pixel
                             pygame.draw.rect(screen, (255, 0, 0), rect, 1) 
 
