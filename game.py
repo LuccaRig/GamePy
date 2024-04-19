@@ -20,7 +20,7 @@ def main():
     moving_sprites = pygame.sprite.Group()
     moving_sprites.add(player_character, enemy1)
 
-    myMap = map.Map("Tiled/mapateste.tmx")
+    myMap = map.Map("Tiled/Mapateste.tmx")
 
     while running:
 
