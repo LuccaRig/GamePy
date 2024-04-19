@@ -38,18 +38,18 @@ Typical usage example:
         self.sprites_landing_left = []
 
         # Load All Sprites
-        self.import_sprites(9,'CharacterSprites/assassin/idlePNGright', self.sprites_idle_right)
-        self.import_sprites(9,'CharacterSprites/assassin/idlePNGleft', self.sprites_idle_left)    
-        self.import_sprites(8,'CharacterSprites/assassin/movementPNGright', self.sprites_moving_right)
-        self.import_sprites(8,'CharacterSprites/assassin/movementPNGleft', self.sprites_moving_left)
-        self.import_sprites(9,'CharacterSprites/assassin/attackPNGright', self.sprites_attacking_right)
-        self.import_sprites(9,'CharacterSprites/assassin/attackPNGleft', self.sprites_attacking_left)
-        self.import_sprites(4, 'CharacterSprites/assassin/jumpPNGright', self.sprites_jumping_right)
-        self.import_sprites(4, 'CharacterSprites/assassin/jumpPNGleft', self.sprites_jumping_left)
-        self.import_sprites(4, 'CharacterSprites/assassin/fallPNGright', self.sprites_falling_right)
-        self.import_sprites(4, 'CharacterSprites/assassin/fallPNGleft', self.sprites_falling_left)
-        self.import_sprites(4, 'CharacterSprites/assassin/landPNGright', self.sprites_landing_right)
-        self.import_sprites(4, 'CharacterSprites/assassin/landPNGleft', self.sprites_landing_left)
+        self._import_sprites(9,'CharacterSprites/assassin/idlePNGright', self.sprites_idle_right)
+        self._import_sprites(9,'CharacterSprites/assassin/idlePNGleft', self.sprites_idle_left)    
+        self._import_sprites(8,'CharacterSprites/assassin/movementPNGright', self.sprites_moving_right)
+        self._import_sprites(8,'CharacterSprites/assassin/movementPNGleft', self.sprites_moving_left)
+        self._import_sprites(9,'CharacterSprites/assassin/attackPNGright', self.sprites_attacking_right)
+        self._import_sprites(9,'CharacterSprites/assassin/attackPNGleft', self.sprites_attacking_left)
+        self._import_sprites(4, 'CharacterSprites/assassin/jumpPNGright', self.sprites_jumping_right)
+        self._import_sprites(4, 'CharacterSprites/assassin/jumpPNGleft', self.sprites_jumping_left)
+        self._import_sprites(4, 'CharacterSprites/assassin/fallPNGright', self.sprites_falling_right)
+        self._import_sprites(4, 'CharacterSprites/assassin/fallPNGleft', self.sprites_falling_left)
+        self._import_sprites(4, 'CharacterSprites/assassin/landPNGright', self.sprites_landing_right)
+        self._import_sprites(4, 'CharacterSprites/assassin/landPNGleft', self.sprites_landing_left)
 
         # Default Boolean and Character States
         self.is_animating = False
@@ -58,6 +58,7 @@ Typical usage example:
         self.grounded = False
         self.jumping = False
         self.landing = False
+        self.falling = False
         self.direction = "right"
         self.current_sprite = 0
         self.current_sprite_attack = 0
@@ -66,9 +67,9 @@ Typical usage example:
         self.image = self.sprites_idle_right[self.current_sprite]     
 
         # Default Position and movement
-        self.jumping_speed = 45
+        self.jumping_speed = 160
         self.vertical_speed = 0
-        self.gravity_ = 10
+        self.gravity_ = 90
         self.pos_x = 400
         self.pos_y = 200
         self.width = 200
@@ -78,7 +79,7 @@ Typical usage example:
         self.rect.topleft = [self.pos_x, self.pos_y]
 
     #TODO: fazer docstring
-    def import_sprites(self, number_of_sprites=0, arquive='0', sprites_vector= [], scale=4) -> None:
+    def _import_sprites(self, number_of_sprites: int, arquive: str, sprites_vector= []) -> None:
         """ Acessa a pasta selecionada {arquive} e guarda os PNG em um vetores de PNG {sprites_vector}
 
         Args:
@@ -86,6 +87,7 @@ Typical usage example:
             arquive:
             sprites_vector:
         """
+        scale = 4
         for i in range(number_of_sprites):
             sprite = pygame.image.load(f'{arquive}/tile00{i}.png')
             # Scale the sprite
@@ -94,7 +96,7 @@ Typical usage example:
 
     #TODO: fazer docstring
     def update_position(self, new_pos_x: int, new_pos_y: int) -> None:
-        """ Muda a posicao do Rect do player e a posicao do rect_ground
+        """ Muda a posição do Rect do player e a posição do rect_ground
 
         Args:
             new_pos_x:
@@ -112,7 +114,7 @@ Typical usage example:
     
 
     def apply_delta_gravity_effect(self, delta_t: float) -> None:
-        """ modifica a posição vertical do jogador de acordo com as leis da gravidade no tempo delta_t.
+        """Modifica a posição vertical do jogador de acordo com as leis da gravidade no tempo delta_t.
 
         Args:
             delta_t: tempo que determina o delta posição 
@@ -198,10 +200,20 @@ Typical usage example:
         if  self.is_animating:
             self.current_sprite += animation_speed
 
+            if self.vertical_speed < 0:
+                    self.falling = True
+
 
             if(self.direction == "right"):
+                
                 if self.attacking:
                     self.animate_attack()
+
+                elif self.falling:
+                    if self.current_sprite >= len(self.sprites_falling_right):
+                        self.current_sprite = 0
+                        self.is_animating = False
+                    self.image = self.sprites_falling_right[int(self.current_sprite)]
                 
                 elif self.jumping:
                     if self.current_sprite >= len(self.sprites_jumping_right):
@@ -226,6 +238,12 @@ Typical usage example:
                 if self.attacking:
                     self.animate_attack()
 
+                elif self.falling:
+                    if self.current_sprite >= len(self.sprites_falling_left):
+                        self.current_sprite = 0
+                        self.is_animating = False
+                    self.image = self.sprites_falling_left[int(self.current_sprite)]
+
                 elif self.jumping:
                     if self.current_sprite >= len(self.sprites_jumping_left):
                         self.current_sprite = 0
@@ -246,9 +264,11 @@ Typical usage example:
                 
 
     #TODO: fazer a docstring
-    def draw_collision_rect(self, screen) -> None:
+    def draw_collision_rect(self, screen: pygame.display) -> None:
         # Desenha um retângulo vermelho em torno do retângulo do jogador
-        pygame.draw.rect(screen, (255, 0, 0), self.rect, 1)
+        red = (255, 0, 0)
+        yellow = (255, 255, 0)
+        pygame.draw.rect(screen, yellow, self.rect, 1)
         pygame.draw.rect(screen, (0, 255, 0), self.rect_ground, 1)
 
     #docstring exemplo de função:
