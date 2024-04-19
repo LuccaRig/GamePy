@@ -2,6 +2,7 @@ import pygame, sys
 import player
 import enemy
 import map
+import camera
 
 def main():
     pygame.init()
@@ -21,6 +22,7 @@ def main():
     moving_sprites.add(player_character, enemy1)
 
     myMap = map.Map("Tiled/Mapateste.tmx")
+    my_camera = camera.Camera(myMap, player_character, screen)
 
     while running:
 
@@ -80,7 +82,7 @@ def main():
 
         screen.fill((128, 128, 128))
 
-        myMap.render_visible_layers(screen)
+        my_camera.follow_player()
         player_character.draw_collision_rect(screen)
         enemy1.draw_collision_rect(screen)
 
