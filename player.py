@@ -67,9 +67,9 @@ Typical usage example:
         self.image = self.sprites_idle_right[self.current_sprite]     
 
         # Default Position and movement
-        self.jumping_speed = 160
+        self.jumping_speed = 3000
         self.vertical_speed = 0
-        self.gravity_ = 90
+        self.gravity_ = 25000
         self.pos_x = 60
         self.pos_y = 300
         self.width = 200
