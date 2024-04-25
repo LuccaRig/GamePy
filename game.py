@@ -43,6 +43,11 @@ def main():
                 #TODO: Adicionar a variavel que se o player tiver caindo nao pode atacar. Ps: pedrinho achou a ideia paia
                 player_character.walking = False
                 player_character.attacking = True
+            else:
+                player_character.animate_land()
+                player_character.jumping = False
+                player_character.falling = False
+
         else:
             player_character.walking = False
             enemy1.walking = False
