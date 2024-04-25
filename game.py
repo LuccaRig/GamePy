@@ -27,7 +27,7 @@ def main():
     while running:
 
         if not player_character.is_grounded(myMap):
-            player_character.apply_delta_gravity_effect(0.05)
+            player_character.apply_delta_gravity_effect(0.003)
         if (player_character.is_grounded(myMap)):
             player_character.vertical_speed = 0
 
@@ -67,7 +67,7 @@ def main():
             if (not player_character.attacking) and (player_character.is_grounded(myMap)) and (not player_character.landing or not(player_character.is_grounded(myMap))):
                 player_character.landing = True
                 player_character.jumping = True
-                player_character.update_position(0, -10)
+                player_character.update_position(0, -25)
                 player_character.vertical_speed += player_character.jumping_speed
                     #y -= vel
 
