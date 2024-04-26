@@ -81,6 +81,7 @@ Typical usage example:
         self.rect = pygame.Rect(self.pos_x, self.pos_y,  self.width, self.height)
         self.rect.topleft = [self.pos_x, self.pos_y]
         self.horizontal_speed = [0.0, 0.0]
+        self.delta_pos_y = 0
 
     #TODO: fazer docstring
     def _import_sprites(self, number_of_sprites: int, arquive: str, sprites_vector= []) -> None:
@@ -113,9 +114,10 @@ Typical usage example:
                 self.direction = "left"
             if(new_pos_x > 0):
                 self.direction = "right"
-            if not(((self.rect.topleft[0] <= 20) and self.direction == "left") or ((self.rect.topleft[0] >= 1100) and self.direction == "right")):
+            if not(((self.rect.topleft[0] <= 400) and self.direction == "left") or ((self.rect.topleft[0] >= 720) and self.direction == "right")):
                 self.pos_x += self.horizontal_speed[0]
-            self.pos_y += self.horizontal_speed[1]
+            if not(((self.rect.topleft[1] >= 350) and self.falling) or (self.rect.topleft[1] <= 200 and self.vertical_speed > 0)):
+                self.pos_y += self.horizontal_speed[1]
             self.rect.topleft = [self.pos_x, self.pos_y]
             self.rect_down.topleft = [self.pos_x+85, self.pos_y+70]
             self.rect_up.topleft = [self.pos_x+85, self.pos_y]
@@ -130,7 +132,7 @@ Typical usage example:
             delta_t: tempo que determina o delta posição 
         """
         time.sleep(0.01)
-        delta_pos_y = self.vertical_speed*delta_t - self.gravity_*delta_t*delta_t/2 
+        self.delta_pos_y = self.vertical_speed*delta_t - self.gravity_*delta_t*delta_t/2 
         #delta(X) = Vot - g(t^2)/2
         self.vertical_speed -= self.gravity_*delta_t
          #V = Vo - gt
@@ -138,7 +140,7 @@ Typical usage example:
             self.vertical_speed = 0
             self.update_position(0, 5)
         else:
-            self.update_position(0, -delta_pos_y)
+            self.update_position(0, -self.delta_pos_y)
 
     def get_jumping_speed(self):
         return self.jumping_speed
