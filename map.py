@@ -44,7 +44,7 @@ class Map():
             if isinstance(layer, pytmx.TiledObjectGroup):
                 for obj in layer:
                     if obj.name == "Collision":
-                        rect = pygame.Rect(obj.x * self.scale_factor + self.x_correction + self.off_set_x, obj.y * self.scale_factor - self.y_correction, 
+                        rect = pygame.Rect(obj.x * self.scale_factor + self.x_correction + self.off_set_x, obj.y * self.scale_factor - self.y_correction - self.off_set_y, 
                                            obj.width * self.scale_factor, obj.height * self.scale_factor)
                         if player_rect.colliderect(rect):
                             #print("Colisão detectada")

@@ -11,7 +11,6 @@ class Camera():
         self.boundede_screen = screen
         self.off_set_x = 0
         self.off_set_y = 0
-        self.moving = False
 
 
     def off_set_map(self, off_set_x : int, off_set_y : int) -> None:
@@ -22,12 +21,13 @@ class Camera():
         self.bounded_map.render_visible_layers(self.boundede_screen)
 
     def follow_player(self) -> None:
-        if self.bounded_character.rect.topleft[0] <= 20 and self.bounded_character.horizontal_speed[0] < 0:
-            self.moving = True
+        if self.bounded_character.rect.topleft[0] <= 400 and self.bounded_character.horizontal_speed[0] < 0:
             self.off_set_map(4, 0)
-        elif self.bounded_character.rect.topleft[0] >= 1100 and self.bounded_character.horizontal_speed[0] > 0:
-            self.moving = True
+        elif self.bounded_character.rect.topleft[0] >= 720 and self.bounded_character.horizontal_speed[0] > 0:
             self.off_set_map(-4, 0)
+        if self.bounded_character.rect.topleft[1] <= 200 and self.bounded_character.vertical_speed > 0:
+            self.off_set_map(0, -self.bounded_character.delta_pos_y)
+        elif self.bounded_character.rect.topleft[1] >= 350 and self.bounded_character.falling:
+            self.off_set_map(0, -self.bounded_character.delta_pos_y)
         else:
             self.off_set_map(0, 0)
-            self.moving = False
