@@ -77,6 +77,7 @@ Typical usage example:
         self.rect_ground = pygame.Rect(self.pos_x+85, self.pos_y+70,  30, 10)   
         self.rect = pygame.Rect(self.pos_x, self.pos_y,  self.width, self.height)
         self.rect.topleft = [self.pos_x, self.pos_y]
+        self.horizontal_speed = [0.0, 0.0]
 
     #TODO: fazer docstring
     def _import_sprites(self, number_of_sprites: int, arquive: str, sprites_vector= []) -> None:
@@ -102,16 +103,18 @@ Typical usage example:
             new_pos_x:
             new_pos_y:
         """
-        if self.walking or self.jumping or not self.grounded:
-            if(new_pos_x < 0):
+        self.horizontal_speed[0] = new_pos_x
+        self.horizontal_speed[1] = new_pos_y
+        if self.walking or self.jumping or not self.grounded :
+            if(new_pos_x < 0 ):
                 self.direction = "left"
             if(new_pos_x > 0):
                 self.direction = "right"
-            self.pos_x += new_pos_x
-            self.pos_y += new_pos_y
+            if not(((self.rect.topleft[0] <= 20) and self.direction == "left") or ((self.rect.topleft[0] >= 1100) and self.direction == "right")):
+                self.pos_x += self.horizontal_speed[0]
+            self.pos_y += self.horizontal_speed[1]
             self.rect.topleft = [self.pos_x, self.pos_y]
             self.rect_ground.topleft = [self.pos_x+85, self.pos_y+70]
-    
 
     def apply_delta_gravity_effect(self, delta_t: float) -> None:
         """Modifica a posição vertical do jogador de acordo com as leis da gravidade no tempo delta_t.
@@ -201,7 +204,7 @@ Typical usage example:
             self.current_sprite += animation_speed
 
             if self.vertical_speed < 0:
-                    self.falling = True
+                self.falling = True
 
 
             if(self.direction == "right"):
@@ -209,7 +212,7 @@ Typical usage example:
                 if self.attacking:
                     self.animate_attack()
 
-                elif self.falling:
+                elif self.falling and not self.attacking:
                     if self.current_sprite >= len(self.sprites_falling_right):
                         self.current_sprite = 0
                         self.is_animating = False
@@ -238,7 +241,7 @@ Typical usage example:
                 if self.attacking:
                     self.animate_attack()
 
-                elif self.falling:
+                elif self.falling and not self.attacking:
                     if self.current_sprite >= len(self.sprites_falling_left):
                         self.current_sprite = 0
                         self.is_animating = False

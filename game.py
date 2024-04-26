@@ -38,6 +38,8 @@ def main():
         keys = pygame.key.get_pressed()
         
         if keys[pygame.K_z]:
+            player_character.horizontal_speed[0] = 0
+            player_character.horizontal_speed[1] = 0 
 
             if not player_character.landing or not(player_character.is_grounded(myMap)):
                 #TODO: Adicionar a variavel que se o player tiver caindo nao pode atacar. Ps: pedrinho achou a ideia paia
@@ -46,7 +48,9 @@ def main():
         else:
             player_character.walking = False
             enemy1.walking = False
-            if player_character.is_grounded(myMap) and not(player_character.attacking):
+            player_character.horizontal_speed[0] = 0
+            player_character.horizontal_speed[1] = 0    
+            if player_character.is_grounded(myMap):
                 player_character.animate_land()
                 player_character.jumping = False
                 player_character.falling = False
@@ -57,7 +61,7 @@ def main():
                 player_character.update_position(-4, 0)
                 #x -= vel
 
-        if keys[pygame.K_RIGHT]:
+        elif keys[pygame.K_RIGHT]:
             if not player_character.attacking and (not player_character.landing or not(player_character.is_grounded(myMap))):
                 player_character.walking = True
                 player_character.update_position(4, 0)
