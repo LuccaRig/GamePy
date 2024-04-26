@@ -27,7 +27,7 @@ class Camera():
             self.off_set_map(-4, 0)
         if self.bounded_character.rect.topleft[1] <= 200 and self.bounded_character.vertical_speed > 0:
             self.off_set_map(0, -self.bounded_character.delta_pos_y)
-        elif self.bounded_character.rect.topleft[1] >= 350 and self.bounded_character.falling:
+        elif self.bounded_character.rect.topleft[1] >= 350 and self.bounded_character.falling and not self.bounded_character.is_colliding(self.bounded_map, "down"):
             self.off_set_map(0, -self.bounded_character.delta_pos_y)
         else:
             self.off_set_map(0, 0)
