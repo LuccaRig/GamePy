@@ -67,14 +67,17 @@ Typical usage example:
         self.image = self.sprites_idle_right[self.current_sprite]     
 
         # Default Position and movement
-        self.jumping_speed = 160
+        self.jumping_speed = 2750
         self.vertical_speed = 0
-        self.gravity_ = 90
+        self.gravity_ = 25000
         self.pos_x = 60
         self.pos_y = 300
         self.width = 200
         self.height = 77
-        self.rect_ground = pygame.Rect(self.pos_x+85, self.pos_y+70,  30, 10)   
+        self.rect_down = pygame.Rect(self.pos_x+85, self.pos_y+70,  30, 10)
+        self.rect_up = pygame.Rect(self.pos_x+85, self.pos_y,  30, 10)
+        self.rect_right = pygame.Rect(self.pos_x+120, self.pos_y, 2, 65)  
+        self.rect_left = pygame.Rect(self.pos_x+80, self.pos_y, 2, 65)  
         self.rect = pygame.Rect(self.pos_x, self.pos_y,  self.width, self.height)
         self.rect.topleft = [self.pos_x, self.pos_y]
         self.horizontal_speed = [0.0, 0.0]
@@ -97,7 +100,7 @@ Typical usage example:
 
     #TODO: fazer docstring
     def update_position(self, new_pos_x: int, new_pos_y: int) -> None:
-        """ Muda a posição do Rect do player e a posição do rect_ground
+        """ Muda a posição do Rect do player e a posição do rect_down
 
         Args:
             new_pos_x:
@@ -114,9 +117,13 @@ Typical usage example:
                 self.pos_x += self.horizontal_speed[0]
             self.pos_y += self.horizontal_speed[1]
             self.rect.topleft = [self.pos_x, self.pos_y]
-            self.rect_ground.topleft = [self.pos_x+85, self.pos_y+70]
+            self.rect_down.topleft = [self.pos_x+85, self.pos_y+70]
+            self.rect_up.topleft = [self.pos_x+85, self.pos_y]
+            self.rect_right.topleft = [self.pos_x+120, self.pos_y]
+            self.rect_left.topleft = [self.pos_x+80, self.pos_y]
+    
 
-    def apply_delta_gravity_effect(self, delta_t: float) -> None:
+    def apply_delta_gravity_effect(self, delta_t: float, map: map) -> None:
         """Modifica a posição vertical do jogador de acordo com as leis da gravidade no tempo delta_t.
 
         Args:
@@ -126,20 +133,31 @@ Typical usage example:
         delta_pos_y = self.vertical_speed*delta_t - self.gravity_*delta_t*delta_t/2 
         #delta(X) = Vot - g(t^2)/2
         self.vertical_speed -= self.gravity_*delta_t
-        #V = Vo - gt
-
-        self.update_position(0, -delta_pos_y)
+         #V = Vo - gt
+        if self.is_colliding(map, "up"):
+            self.vertical_speed = 0
+            self.update_position(0, 5)
+        else:
+            self.update_position(0, -delta_pos_y)
 
     def get_jumping_speed(self):
         return self.jumping_speed
-
-    def is_grounded(self, map: map) -> bool:
-        """Retorna True se o player estiver tocando o chão
+    
+    def is_colliding(self, map: map, direction: str) -> bool:
+        """Retorna True se o player estiver colidindo na direção enviada
         
         Args:
-            map: objeto que contém função capaz de checar se o player está colidindo com o chão ou não
+            map: objeto que contém função capaz de checar colisões 
+            direction: determina em que direção deve ser testada a colisão. Envie "right", "left", "up" ou "down".
         """
-        return map.check_collision(self.rect_ground)
+        if direction == "right":
+            return map.check_collision(self.rect_right)
+        elif direction == "left":
+            return map.check_collision(self.rect_left)
+        elif direction == "up":
+            return map.check_collision(self.rect_up)
+        elif direction == "down":
+            return map.check_collision(self.rect_down)
 
     #TODO: fazer docstring
     def animate_attack(self) -> None:
@@ -269,10 +287,14 @@ Typical usage example:
     #TODO: fazer a docstring
     def draw_collision_rect(self, screen: pygame.display) -> None:
         # Desenha um retângulo vermelho em torno do retângulo do jogador
-        red = (255, 0, 0)
+        green = (0, 255, 0)
         yellow = (255, 255, 0)
+        white = (255, 255, 255)
         pygame.draw.rect(screen, yellow, self.rect, 1)
-        pygame.draw.rect(screen, (0, 255, 0), self.rect_ground, 1)
+        pygame.draw.rect(screen, green, self.rect_down, 1)
+        pygame.draw.rect(screen, green, self.rect_up, 1)
+        pygame.draw.rect(screen, white, self.rect_right, 1)
+        pygame.draw.rect(screen, white, self.rect_left, 1)
 
     #docstring exemplo de função:
     """Fetches rows from a Smalltable.
