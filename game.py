@@ -38,6 +38,8 @@ def main():
         keys = pygame.key.get_pressed()
         
         if keys[pygame.K_z]:
+            player_character.horizontal_speed[0] = 0
+            player_character.horizontal_speed[1] = 0 
 
             if not (player_character.landing) or not(player_character.is_colliding(myMap, "down")):
                 player_character.walking = False
@@ -50,6 +52,8 @@ def main():
         else:
             player_character.walking = False
             enemy1.walking = False
+            player_character.horizontal_speed[0] = 0
+            player_character.horizontal_speed[1] = 0
             if player_character.is_colliding(myMap, "down") and not(player_character.attacking):
                 player_character.animate_land()
                 player_character.jumping = False
