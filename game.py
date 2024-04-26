@@ -27,7 +27,7 @@ def main():
     while running:
 
         if not player_character.is_colliding(myMap, "down"):
-            player_character.apply_delta_gravity_effect(0.003)
+            player_character.apply_delta_gravity_effect(0.003, myMap)
         if (player_character.is_colliding(myMap, "down")):
             player_character.vertical_speed = 0
 
@@ -40,7 +40,6 @@ def main():
         if keys[pygame.K_z]:
 
             if not (player_character.landing) or not(player_character.is_colliding(myMap, "down")):
-                #TODO: Adicionar a variavel que se o player tiver caindo nao pode atacar. Ps: pedrinho achou a ideia paia
                 player_character.walking = False
                 player_character.attacking = True
             else:
@@ -57,19 +56,25 @@ def main():
                 player_character.falling = False
             
         if keys[pygame.K_LEFT]:
-            if not player_character.attacking and (not player_character.landing or not(player_character.is_colliding(myMap, "down"))) and not (player_character.is_colliding(myMap, "left")):
+            if not player_character.attacking \
+                and (not player_character.landing or not(player_character.is_colliding(myMap, "down"))) \
+                and not (player_character.is_colliding(myMap, "left")):
                 player_character.walking = True
                 player_character.update_position(-4, 0)
                 #x -= vel
 
         if keys[pygame.K_RIGHT]:
-            if not player_character.attacking and (not player_character.landing or not(player_character.is_colliding(myMap, "down"))) and not (player_character.is_colliding(myMap, "right")):
+            if not player_character.attacking \
+                and (not player_character.landing or not(player_character.is_colliding(myMap, "down"))) \
+                and not (player_character.is_colliding(myMap, "right")):
                 player_character.walking = True
                 player_character.update_position(4, 0)
                 #x += vel
 
         if keys[pygame.K_UP]:
-            if (not player_character.attacking) and (player_character.is_colliding(myMap, "down")) and (not player_character.landing or not(player_character.is_colliding(myMap, "down"))):
+            if (not player_character.attacking) \
+                and (player_character.is_colliding(myMap, "down")) \
+                and (not player_character.landing or not(player_character.is_colliding(myMap, "down"))):
                 player_character.landing = True
                 player_character.jumping = True
                 player_character.update_position(0, -25)

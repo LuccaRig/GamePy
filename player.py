@@ -76,8 +76,8 @@ Typical usage example:
         self.height = 77
         self.rect_down = pygame.Rect(self.pos_x+85, self.pos_y+70,  30, 10)
         self.rect_up = pygame.Rect(self.pos_x+85, self.pos_y,  30, 10)
-        self.rect_right = pygame.Rect(self.pos_x+120, self.pos_y, 2, 70)  
-        self.rect_left = pygame.Rect(self.pos_x+80, self.pos_y, 2, 70)  
+        self.rect_right = pygame.Rect(self.pos_x+120, self.pos_y, 2, 65)  
+        self.rect_left = pygame.Rect(self.pos_x+80, self.pos_y, 2, 65)  
         self.rect = pygame.Rect(self.pos_x, self.pos_y,  self.width, self.height)
         self.rect.topleft = [self.pos_x, self.pos_y]
 
@@ -120,7 +120,7 @@ Typical usage example:
 
     
 
-    def apply_delta_gravity_effect(self, delta_t: float) -> None:
+    def apply_delta_gravity_effect(self, delta_t: float, map: map) -> None:
         """Modifica a posição vertical do jogador de acordo com as leis da gravidade no tempo delta_t.
 
         Args:
@@ -130,9 +130,12 @@ Typical usage example:
         delta_pos_y = self.vertical_speed*delta_t - self.gravity_*delta_t*delta_t/2 
         #delta(X) = Vot - g(t^2)/2
         self.vertical_speed -= self.gravity_*delta_t
-        #V = Vo - gt
-
-        self.update_position(0, -delta_pos_y)
+         #V = Vo - gt
+        if self.is_colliding(map, "up"):
+            self.vertical_speed = 0
+            self.update_position(0, 5)
+        else:
+            self.update_position(0, -delta_pos_y)
 
     def get_jumping_speed(self):
         return self.jumping_speed
