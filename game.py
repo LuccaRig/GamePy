@@ -8,6 +8,10 @@ class Game():
     def __init__(self) -> None:
         self.clock = pygame.time.Clock()
 
+        pygame.mixer.init()
+        pygame.mixer.music.load("assets/Before It Ends.mp3")
+        pygame.mixer.music.play()
+
         # Game Screen
         screen_width = 1280
         screen_height = 720
