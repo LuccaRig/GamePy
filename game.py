@@ -4,114 +4,115 @@ import enemy
 import map
 import camera
 
-def main():
-    pygame.init()
-    clock = pygame.time.Clock()
+class Game():
+    def __init__(self) -> None:
+        self.clock = pygame.time.Clock()
 
-    # Game Screen
-    screen_width = 1280
-    screen_height = 600
-    screen = pygame.display.set_mode((screen_width, screen_height))
-    pygame.display.set_caption("PyGame Game")
-    running = True
+        # Game Screen
+        screen_width = 1280
+        screen_height = 720
+        self.screen = pygame.display.set_mode((screen_width, screen_height))
+        pygame.display.set_caption("PyGame Game")
+        self.running = True
 
-    # Creating Sprites and Groups
-    player_character = player.Player()
-    enemy1 = enemy.Mobs()
-    moving_sprites = pygame.sprite.Group()
-    moving_sprites.add(player_character, enemy1)
+        # Creating Sprites and Groups
+        self.player_character = player.Player()
+        self.enemy1 = enemy.Mobs()
+        self.moving_sprites = pygame.sprite.Group()
+        self.moving_sprites.add(self.player_character, self.enemy1)
 
-    myMap = map.Map("Tiled/Mapateste.tmx")
-    my_camera = camera.Camera(myMap, player_character, screen)
+        self.myMap = map.Map("Tiled/Mapateste.tmx")
+        self.my_camera = camera.Camera(self.myMap, self.player_character, self.screen)
 
-    while running:
+    def game_run(self):
 
-        if not player_character.is_colliding(myMap, "down"):
-            player_character.apply_delta_gravity_effect(0.003, myMap)
-        if (player_character.is_colliding(myMap, "down")):
-            player_character.vertical_speed = 0
+        while self.running:
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
+            if not self.player_character.is_colliding(self.myMap, "down"):
+                self.player_character.apply_delta_gravity_effect(0.003, self.myMap)
+            if (self.player_character.is_colliding(self.myMap, "down")):
+                self.player_character.vertical_speed = 0
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.running = False
+                
+            keys = pygame.key.get_pressed()
             
-        keys = pygame.key.get_pressed()
-        
-        if keys[pygame.K_z]:
-            player_character.horizontal_speed[0] = 0
-            player_character.horizontal_speed[1] = 0 
+            if keys[pygame.K_z]:
+                self.player_character.horizontal_speed[0] = 0
+                self.player_character.horizontal_speed[1] = 0 
 
-            if not (player_character.landing) or not(player_character.is_colliding(myMap, "down")):
-                player_character.walking = False
-                player_character.attacking = True
+                if not (self.player_character.landing) or not(self.player_character.is_colliding(self.myMap, "down")):
+                    self.player_character.walking = False
+                    self.player_character.attacking = True
+                else:
+                    self.player_character.animate_land()
+                    self.player_character.jumping = False
+                    self.player_character.falling = False
+
             else:
-                player_character.animate_land()
-                player_character.jumping = False
-                player_character.falling = False
+                self.player_character.walking = False
+                self.enemy1.walking = False
+                self.player_character.horizontal_speed[0] = 0
+                self.player_character.horizontal_speed[1] = 0
+                if self.player_character.is_colliding(self.myMap, "down") and not(self.player_character.attacking):
+                    self.player_character.animate_land()
+                    self.player_character.jumping = False
+                    self.player_character.falling = False
+                
+            if keys[pygame.K_LEFT]:
+                if not self.player_character.attacking \
+                    and (not self.player_character.landing or not(self.player_character.is_colliding(self.myMap, "down"))) \
+                    and not (self.player_character.is_colliding(self.myMap, "left")):
+                    self.player_character.walking = True
+                    self.player_character.update_position(-4, 0)
+                    #x -= vel
 
-        else:
-            player_character.walking = False
-            enemy1.walking = False
-            player_character.horizontal_speed[0] = 0
-            player_character.horizontal_speed[1] = 0
-            if player_character.is_colliding(myMap, "down") and not(player_character.attacking):
-                player_character.animate_land()
-                player_character.jumping = False
-                player_character.falling = False
-            
-        if keys[pygame.K_LEFT]:
-            if not player_character.attacking \
-                and (not player_character.landing or not(player_character.is_colliding(myMap, "down"))) \
-                and not (player_character.is_colliding(myMap, "left")):
-                player_character.walking = True
-                player_character.update_position(-4, 0)
-                #x -= vel
+            if keys[pygame.K_RIGHT]:
+                if not self.player_character.attacking \
+                    and (not self.player_character.landing or not(self.player_character.is_colliding(self.myMap, "down"))) \
+                    and not (self.player_character.is_colliding(self.myMap, "right")):
+                    self.player_character.walking = True
+                    self.player_character.update_position(4, 0)
+                    #x += vel
 
-        if keys[pygame.K_RIGHT]:
-            if not player_character.attacking \
-                and (not player_character.landing or not(player_character.is_colliding(myMap, "down"))) \
-                and not (player_character.is_colliding(myMap, "right")):
-                player_character.walking = True
-                player_character.update_position(4, 0)
-                #x += vel
+            if keys[pygame.K_UP]:
+                if (not self.player_character.attacking) \
+                    and (self.player_character.is_colliding(self.myMap, "down")) \
+                    and (not self.player_character.landing or not(self.player_character.is_colliding(self.myMap, "down"))):
+                    self.player_character.landing = True
+                    self.player_character.jumping = True
+                    self.player_character.update_position(0, -25)
+                    self.player_character.vertical_speed += self.player_character.jumping_speed
+                        #y -= vel
 
-        if keys[pygame.K_UP]:
-            if (not player_character.attacking) \
-                and (player_character.is_colliding(myMap, "down")) \
-                and (not player_character.landing or not(player_character.is_colliding(myMap, "down"))):
-                player_character.landing = True
-                player_character.jumping = True
-                player_character.update_position(0, -25)
-                player_character.vertical_speed += player_character.jumping_speed
-                    #y -= vel
+            if keys[pygame.K_a]:
+                self.enemy1.walking = True
+                self.enemy1.update_position(-2, 0)
+                    #x -= vel
+            if keys[pygame.K_d]:
+                self.enemy1.walking = True
+                self.enemy1.update_position(2, 0)
+                    #x += vel
 
-        if keys[pygame.K_a]:
-            enemy1.walking = True
-            enemy1.update_position(-2, 0)
-                #x -= vel
-        if keys[pygame.K_d]:
-            enemy1.walking = True
-            enemy1.update_position(2, 0)
-                #x += vel
+            self.screen.fill((128, 128, 128))
 
-        screen.fill((128, 128, 128))
+            self.my_camera.follow_player()
+            self.player_character.draw_collision_rect(self.screen)
+            self.enemy1.draw_collision_rect(self.screen)
 
-        my_camera.follow_player()
-        player_character.draw_collision_rect(screen)
-        enemy1.draw_collision_rect(screen)
+            self.moving_sprites.draw(self.screen)
+            self.moving_sprites.update()
 
-        moving_sprites.draw(screen)
-        moving_sprites.update()
+            self.player_character.animate()
+            self.enemy1.animate()
 
-        player_character.animate()
-        enemy1.animate()
+            self.moving_sprites.draw(self.screen)
+            self.moving_sprites.update()
 
-        moving_sprites.draw(screen)
-        moving_sprites.update()
+            pygame.display.flip()
 
-        pygame.display.flip()
+            self.clock.tick(60)
 
-        clock.tick(60)
-
-    pygame.quit()
-main()
+        pygame.quit()
