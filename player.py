@@ -76,8 +76,8 @@ Typical usage example:
         self.height = 77
         self.rect_down = pygame.Rect(self.pos_x+85, self.pos_y+70,  30, 10)
         self.rect_up = pygame.Rect(self.pos_x+85, self.pos_y,  30, 10)
-        self.rect_right = pygame.Rect(self.pos_x+120, self.pos_y, 2, 65)  
-        self.rect_left = pygame.Rect(self.pos_x+80, self.pos_y, 2, 65)  
+        self.rect_right = pygame.Rect(self.pos_x+121, self.pos_y, 2, 65)  
+        self.rect_left = pygame.Rect(self.pos_x+77, self.pos_y, 2, 65)  
         self.rect = pygame.Rect(self.pos_x, self.pos_y,  self.width, self.height)
         self.rect.topleft = [self.pos_x, self.pos_y]
         self.horizontal_speed = [0.0, 0.0]
@@ -121,8 +121,8 @@ Typical usage example:
             self.rect.topleft = [self.pos_x, self.pos_y]
             self.rect_down.topleft = [self.pos_x+85, self.pos_y+70]
             self.rect_up.topleft = [self.pos_x+85, self.pos_y]
-            self.rect_right.topleft = [self.pos_x+120, self.pos_y]
-            self.rect_left.topleft = [self.pos_x+80, self.pos_y]
+            self.rect_right.topleft = [self.pos_x+121, self.pos_y]
+            self.rect_left.topleft = [self.pos_x+77, self.pos_y]
     
 
     def apply_delta_gravity_effect(self, delta_t: float, map: map) -> None:
