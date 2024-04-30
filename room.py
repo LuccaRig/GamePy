@@ -26,5 +26,10 @@ class Room():
         
         """
         self.current_map_position += 1
+
+    def return_room(self) -> None:
+        """Diminui o índice do vetor de mapas
         
+        """
+        self.current_map_position -= 1
 

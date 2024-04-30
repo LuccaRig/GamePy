@@ -100,8 +100,14 @@ Typical usage example:
             sprites_vector.append(sprite)
 
     def reinitialize_position(self):
-        self.pos_x = 60
-        self.pos_y = 300
+       self.pos_x = 60
+       self.pos_y = 300
+       # self.pos_x = map.pos_x_previous_room + 45
+       # self.pos_y = map.pos_y_previous_room + 50
+
+    def reinitialize_position_returning(self, map: map) -> None:
+        self.pos_x = map.pos_x_new_room - 200
+        self.pos_y = map.pos_y_new_room + 50
 
     #TODO: fazer docstring
     def update_position(self, new_pos_x: int, new_pos_y: int) -> None:
@@ -172,6 +178,14 @@ Typical usage example:
             map: objeto que contém função capaz de checar colisões
         """
         return map.check_new_room(self.rect)
+    
+    def is_returning_room(self, map: map) -> bool:
+        """Retorna True se o player estiver voltando para a sala anterior
+        
+        Args:
+            map: objeto que contém função capaz de checar colisões
+        """
+        return map.check_previous_room(self.rect)
 
     #TODO: fazer docstring
     def animate_attack(self) -> None:
