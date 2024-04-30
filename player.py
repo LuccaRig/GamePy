@@ -99,6 +99,10 @@ Typical usage example:
             sprite = pygame.transform.scale(sprite, (int(sprite.get_width() * scale), int(sprite.get_height() * scale)))
             sprites_vector.append(sprite)
 
+    def reinitialize_position(self):
+        self.pos_x = 60
+        self.pos_y = 300
+
     #TODO: fazer docstring
     def update_position(self, new_pos_x: int, new_pos_y: int) -> None:
         """ Muda a posição do Rect do player e a posição do rect_down
@@ -160,6 +164,14 @@ Typical usage example:
             return map.check_collision(self.rect_up)
         elif direction == "down":
             return map.check_collision(self.rect_down)
+        
+    def is_changing_room(self, map: map) -> bool:
+        """Retorna True se o player estiver mudando de sala
+        
+        Args:
+            map: objeto que contém função capaz de checar colisões
+        """
+        return map.check_new_room(self.rect)
 
     #TODO: fazer docstring
     def animate_attack(self) -> None:
