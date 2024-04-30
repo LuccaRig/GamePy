@@ -21,8 +21,8 @@ class Room():
     def current_room(self) -> map:
         return self.my_maps[self.current_map_position]
     
-    def change_room(self) -> None:
-        """Atualiza o índice do vetor de mapas
+    def advance_room(self) -> None:
+        """Aumenta o índice do vetor de mapas
         
         """
         self.current_map_position += 1

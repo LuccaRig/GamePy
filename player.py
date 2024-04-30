@@ -99,15 +99,23 @@ Typical usage example:
             sprite = pygame.transform.scale(sprite, (int(sprite.get_width() * scale), int(sprite.get_height() * scale)))
             sprites_vector.append(sprite)
 
-    def reinitialize_position(self):
-       self.pos_x = 60
-       self.pos_y = 300
-       # self.pos_x = map.pos_x_previous_room + 45
-       # self.pos_y = map.pos_y_previous_room + 50
+    def reinitialize_position_advancing(self, map: map) -> None:
+        """Ajusta a posição do player para a nova sala
+
+        Args:
+            map: objeto que contém os blocos de colisão para ajuste do player
+        """
+        self.pos_x = map.pos_x_previous_room + 45
+        self.pos_y = map.pos_y_previous_room + 80
 
     def reinitialize_position_returning(self, map: map) -> None:
+        """Ajusta a posição do player para a sala anterior
+
+        Args:
+            map: objeto que contém os blocos de colisão para ajuste do player
+        """
         self.pos_x = map.pos_x_new_room - 200
-        self.pos_y = map.pos_y_new_room + 50
+        self.pos_y = map.pos_y_new_room + 180
 
     #TODO: fazer docstring
     def update_position(self, new_pos_x: int, new_pos_y: int) -> None:
@@ -171,8 +179,8 @@ Typical usage example:
         elif direction == "down":
             return map.check_collision(self.rect_down)
         
-    def is_changing_room(self, map: map) -> bool:
-        """Retorna True se o player estiver mudando de sala
+    def is_advancing_room(self, map: map) -> bool:
+        """Retorna True se o player estiver avançando para a próxima sala
         
         Args:
             map: objeto que contém função capaz de checar colisões

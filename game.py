@@ -33,17 +33,17 @@ class Game():
         while self.running:
 
             #Teste se o player está mudando de sala, e se estiver, atualiza o mapa no vetor de mapas e reinicializa a posição do player e da câmera
-            if self.player_character.is_changing_room(self.myRoom.current_room()):
-                self.myRoom.change_room()
+            if self.player_character.is_advancing_room(self.myRoom.current_room()):
+                self.myRoom.advance_room()
+                self.player_character.reinitialize_position_advancing(self.myRoom.current_room())
                 self.my_camera = camera.Camera(self.myRoom.current_room(), self.player_character, self.screen)
-                self.player_character.reinitialize_position()
 
             #Teste se o player está voltando para a sala anterior, e se estiver
             #atualiza o mapa no vetor de mapas e reinicializa a posição do player e da câmera
             if self.player_character.is_returning_room(self.myRoom.current_room()):
                 self.myRoom.return_room()
-                self.my_camera = camera.Camera(self.myRoom.current_room(), self.player_character, self.screen)
                 self.player_character.reinitialize_position_returning(self.myRoom.current_room())
+                self.my_camera = camera.Camera(self.myRoom.current_room(), self.player_character, self.screen)
 
             if not self.player_character.is_colliding(self.myRoom.current_room(), "down"):
                 self.player_character.apply_delta_gravity_effect(0.003, self.myRoom.current_room())
