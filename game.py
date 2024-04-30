@@ -21,9 +21,9 @@ class Game():
 
         # Creating Sprites and Groups
         self.player_character = player.Player()
-        self.enemy1 = enemy.Mobs()
+        self.enemies = enemy.Enemy_Group(0)
         self.moving_sprites = pygame.sprite.Group()
-        self.moving_sprites.add(self.player_character, self.enemy1)
+        self.moving_sprites.add(self.player_character)
 
         self.myRoom = room.Room()
         self.my_camera = camera.Camera(self.myRoom.current_room(), self.player_character, self.screen)
@@ -63,7 +63,6 @@ class Game():
 
             else:
                 self.player_character.walking = False
-                self.enemy1.walking = False
                 self.player_character.horizontal_speed[0] = 0
                 self.player_character.horizontal_speed[1] = 0
                 if self.player_character.is_colliding(self.myRoom.current_room(), "down") and not(self.player_character.attacking):
@@ -97,26 +96,21 @@ class Game():
                     self.player_character.vertical_speed += self.player_character.jumping_speed
                         #y -= vel
 
-            if keys[pygame.K_a]:
-                self.enemy1.walking = True
-                self.enemy1.update_position(-2, 0)
-                    #x -= vel
-            if keys[pygame.K_d]:
-                self.enemy1.walking = True
-                self.enemy1.update_position(2, 0)
-                    #x += vel
-
             self.screen.fill((128, 128, 128))
 
             self.my_camera.follow_player()
             self.player_character.draw_collision_rect(self.screen)
-            self.enemy1.draw_collision_rect(self.screen)
+
 
             self.moving_sprites.draw(self.screen)
             self.moving_sprites.update()
 
             self.player_character.animate()
-            self.enemy1.animate()
+            self.enemies.set_move_sets()
+            self.my_camera.keep_enemy_pos(self.screen, self.enemies)
+            self.enemies.update_enemies_sprites()
+            self.enemies.draw_collisions_rects(self.screen)
+
 
             self.moving_sprites.draw(self.screen)
             self.moving_sprites.update()
@@ -126,3 +120,9 @@ class Game():
             self.clock.tick(60)
 
         pygame.quit()
+
+
+# Apenas existe para ser possivel rodar a Game Sem utilizar o menu
+if __name__ ==  '__main__':
+    my_game = Game()
+    my_game.game_run()
