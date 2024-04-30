@@ -1,7 +1,6 @@
 import player
-import pytmx
+import enemy
 import map
-import pygame
 
 
 class Camera():
@@ -11,6 +10,7 @@ class Camera():
         self.boundede_screen = screen
         self.off_set_x = 0
         self.off_set_y = 0
+        self.camera_is_moving = False
 
 
     def off_set_map(self, off_set_x : int, off_set_y : int) -> None:
@@ -31,3 +31,7 @@ class Camera():
             self.off_set_map(0, -self.bounded_character.delta_pos_y)
         else:
             self.off_set_map(0, 0)
+
+    def keep_enemy_pos(self, screen , enemies : enemy.Enemy_Group):
+        enemies.draw_enemies(screen, self.off_set_x, self.off_set_y)
+        enemies.define_pos_group(self.off_set_x, self.off_set_y)
