@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="git" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="8" tileheight="8" infinite="0" nextlayerid="3" nextobjectid="31">
+<map version="1.10" tiledversion="git" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="8" tileheight="8" infinite="0" nextlayerid="3" nextobjectid="33">
  <tileset firstgid="1" source="Blood Temple Tileset.tsx"/>
  <layer id="1" name="Camada de Blocos 1" width="32" height="32">
   <data encoding="csv">
@@ -38,7 +38,8 @@
 </data>
  </layer>
  <objectgroup id="2" name="Camada de Objetos 1">
-  <object id="1" name="Collision" x="0" y="0" width="8" height="256"/>
+  <object id="1" name="Collision" x="0" y="0" width="8" height="120"/>
+  <object id="31" name="Collision" x="0" y="152" width="8" height="104"/>
   <object id="11" name="Collision" x="248" y="0" width="8" height="256"/>
   <object id="9" name="Collision" x="112" y="7" width="24" height="64"/>
   <object id="14" name="Collision" x="112" y="152" width="32" height="24"/>
@@ -60,5 +61,6 @@
   <object id="23" name="Collision" x="40" y="216" width="96" height="16"/>
   <object id="5" name="Collision" x="8" y="48" width="104" height="24"/>
   <object id="13" name="Collision" x="8" y="152" width="104" height="56"/>
+  <object id="32" name="Previous Room" x="0" y="120" width="8" height="32"/>
  </objectgroup>
 </map>
