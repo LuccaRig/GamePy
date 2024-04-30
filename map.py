@@ -37,6 +37,14 @@ class Map():
                             rect = pygame.Rect(scaled_x + self.off_set_x, scaled_y - self.off_set_y, scaled_width, scaled_height)
                             # Desenha um retângulo vermelho para representar a área de colisão, com uma borda de 1 pixel
                             pygame.draw.rect(screen, (255, 0, 0), rect, 2) 
+                        elif obj.name == "New Room":
+                            scaled_x = obj.x * self.scale_factor + self.x_correction
+                            scaled_y = obj.y * self.scale_factor - self.y_correction
+                            scaled_width = obj.width * self.scale_factor
+                            scaled_height = obj.height * self.scale_factor
+                            rect = pygame.Rect(scaled_x + self.off_set_x, scaled_y - self.off_set_y, scaled_width, scaled_height)
+                            # Desenha um retângulo vermelho para representar a área de colisão, com uma borda de 1 pixel
+                            pygame.draw.rect(screen, (0, 255, 0), rect, 2) 
 
     #TODO: fazer docstring
     def check_collision(self, player_rect: pygame.rect) -> bool:
@@ -50,4 +58,20 @@ class Map():
                             #print("Colisão detectada")
                             return True
         #print("Colisão não detectada")
+        return False
+    
+    def check_new_room(self, player_rect: pygame.rect) -> bool:
+        """Retorna True se o retângulo do player estiver colidindo com um objeto "New Room" do map
+        
+        Args:
+            player_rect: retângulo que permite a localização e identificação de colisões do player
+        """
+        for layer in self.tmx_map.visible_layers:
+            if isinstance(layer, pytmx.TiledObjectGroup):
+                for obj in layer:
+                    if obj.name == "New Room":
+                        rect = pygame.Rect(obj.x * self.scale_factor + self.x_correction + self.off_set_x, obj.y * self.scale_factor - self.y_correction - self.off_set_y, 
+                                           obj.width * self.scale_factor, obj.height * self.scale_factor)
+                        if player_rect.colliderect(rect):
+                            return True
         return False
