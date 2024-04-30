@@ -105,7 +105,7 @@ Typical usage example:
         Args:
             map: objeto que contém os blocos de colisão para ajuste do player
         """
-        self.pos_x = map.pos_x_previous_room + 45
+        self.pos_x = map.pos_x_previous_room - 36
         self.pos_y = map.pos_y_previous_room + 80
 
     def reinitialize_position_returning(self, map: map) -> None:
@@ -114,8 +114,8 @@ Typical usage example:
         Args:
             map: objeto que contém os blocos de colisão para ajuste do player
         """
-        self.pos_x = map.pos_x_new_room - 200
-        self.pos_y = map.pos_y_new_room + 180
+        self.pos_x = map.pos_x_new_room - 125
+        self.pos_y = map.pos_y_new_room + 200
 
     #TODO: fazer docstring
     def update_position(self, new_pos_x: int, new_pos_y: int) -> None:
@@ -185,7 +185,10 @@ Typical usage example:
         Args:
             map: objeto que contém função capaz de checar colisões
         """
-        return map.check_new_room(self.rect)
+        if(self.direction == "right"):
+            return map.check_new_room(self.rect_right)
+        elif(self.direction == "left"):
+            return map.check_new_room(self.rect_left)
     
     def is_returning_room(self, map: map) -> bool:
         """Retorna True se o player estiver voltando para a sala anterior
@@ -193,7 +196,10 @@ Typical usage example:
         Args:
             map: objeto que contém função capaz de checar colisões
         """
-        return map.check_previous_room(self.rect)
+        if(self.direction == "left"):
+            return map.check_previous_room(self.rect_left)
+        elif(self.direction == "right"):
+            return map.check_previous_room(self.rect_right)
 
     #TODO: fazer docstring
     def animate_attack(self) -> None:

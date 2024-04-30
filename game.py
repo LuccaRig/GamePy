@@ -32,13 +32,14 @@ class Game():
 
         while self.running:
 
-            #Teste se o player está mudando de sala, e se estiver, atualiza o mapa no vetor de mapas e reinicializa a posição do player e da câmera
+            #Testa se o player está avançando para a nova sala, e se estiver
+            # atualiza o mapa no vetor de mapas e reinicializa a posição do player e da câmera
             if self.player_character.is_advancing_room(self.myRoom.current_room()):
                 self.myRoom.advance_room()
                 self.my_camera = camera.Camera(self.myRoom.current_room(), self.player_character, self.screen)
                 self.player_character.reinitialize_position_advancing(self.myRoom.current_room())
 
-            #Teste se o player está voltando para a sala anterior, e se estiver
+            #Testa se o player está voltando para a sala anterior, e se estiver
             #atualiza o mapa no vetor de mapas e reinicializa a posição do player e da câmera
             if self.player_character.is_returning_room(self.myRoom.current_room()):
                 self.myRoom.return_room()
