@@ -86,6 +86,9 @@ class Little_Spider(Enemy):
         self.actual_pos = 0
 
     def move_set(self):
+        """ 
+        Garante uma movimentacao fixa do objeto Little_Spider
+        """
         right_limit = 30
         left_limit = -30
         self.actual_pos = self.actual_pos + self.speed
@@ -100,6 +103,11 @@ class Little_Spider(Enemy):
 
 
 class Enemy_Group(Enemy):
+    """
+    Essa classe agrupa os inimigos criados em um vetor, e seus metodos chamam metodos de cada entidade 
+    dentro desse vetor, um exemplo eh atualizar a animacao de todos os inimigos ao mesmo tempo
+
+    """
     def __init__(self, enemy_group_number : int) -> None:
         super().__init__()
         self.enemy_vector = []
@@ -116,6 +124,15 @@ class Enemy_Group(Enemy):
             enemy.update()
 
     def draw_enemies(self, screen, off_set_x, off_set_y):
+        """
+        Desenha os inimigos na tela e muda a posicao com o valor dos off_sets
+
+        Args:
+            off_set_x : Modifica a posicao do desenho do inimigo no eixo x (Obs: esse valor preferencialmente deve ser
+            o off_set_x do mapa, para que o desenho do inimigo sempre esteja alinhado com as imagens do mapa)
+            off_set_y : idem para a posicao y, segue a mesma observacao 
+        """
+
         for enemy in self.enemy_vector:
             screen.blit(enemy.image, (enemy.rect.x + off_set_x, enemy.rect.y - off_set_y))
 
@@ -125,6 +142,13 @@ class Enemy_Group(Enemy):
             pygame.draw.rect(screen, green, enemy.rect_down, 1)
     
     def define_pos_group(self, delta_x, delta_y):
+        """
+        Atualiza a posicao do conjunto de inimigos 
+
+        Args:
+            delta_x: O quanto o valor de posicao em x vai se modificar
+            delta_y: idem para a posicao em y
+        """
         for enemy in self.enemy_vector:
             new_pos_x = enemy.rect.x + delta_x
             new_pos_y = enemy.rect.y - delta_y
