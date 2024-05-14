@@ -4,7 +4,7 @@ import map
 class Room():
     def __init__(self) -> None:
         self.my_maps = []
-        self.import_maps(2, self.my_maps)
+        self.import_maps(3, self.my_maps)
         self.current_map_position = 0
 
     def import_maps(self, number_of_maps: int, maps_vector= []) -> None:

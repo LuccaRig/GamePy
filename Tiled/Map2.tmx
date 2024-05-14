@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="git" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="8" tileheight="8" infinite="0" nextlayerid="3" nextobjectid="4">
+<map version="1.10" tiledversion="git" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="8" tileheight="8" infinite="0" nextlayerid="3" nextobjectid="3">
  <tileset firstgid="1" source="Blood Temple Tileset.tsx"/>
  <layer id="1" name="Camada de Blocos 1" width="32" height="32">
   <data encoding="csv">
@@ -39,6 +39,6 @@
  </layer>
  <objectgroup id="2" name="Camada de Objetos 1">
   <object id="1" name="Collision" x="0" y="152" width="256" height="8"/>
-  <object id="3" name="New Room" x="248" y="120" width="8" height="32"/>
+  <object id="2" name="Previous Room" x="0" y="120" width="8" height="32"/>
  </objectgroup>
 </map>

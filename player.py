@@ -115,7 +115,7 @@ Typical usage example:
             map: objeto que contém os blocos de colisão para ajuste do player
         """
         self.pos_x = map.pos_x_new_room - 125
-        self.pos_y = map.pos_y_new_room + 200
+        self.pos_y = map.pos_y_new_room + 80
 
     #TODO: fazer docstring
     def update_position(self, new_pos_x: int, new_pos_y: int) -> None:
