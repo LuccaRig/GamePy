@@ -6,7 +6,7 @@ class Map():
         self.tmx_map = pytmx.load_pygame(map_folder)
         self.tile_width = self.tmx_map.tilewidth
         self.tile_height = self.tmx_map.tileheight
-        self.scale_factor = 5
+        self.scale_factor = 3
         self.x_correction = 0
         self.y_correction = 350
         self.off_set_x = 0
