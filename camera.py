@@ -21,9 +21,9 @@ class Camera():
         self.bounded_map.render_visible_layers(self.boundede_screen)
 
     def follow_player(self) -> None:
-        if self.bounded_character.rect.topleft[0] <= 400 and self.bounded_character.horizontal_speed[0] < 0:
+        if self.bounded_character.rect.topleft[0] <= 400 and self.bounded_character.speed[0] < 0:
             self.off_set_map(4, 0)
-        elif self.bounded_character.rect.topleft[0] >= 720 and self.bounded_character.horizontal_speed[0] > 0:
+        elif self.bounded_character.rect.topleft[0] >= 720 and self.bounded_character.speed[0] > 0:
             self.off_set_map(-4, 0)
         if self.bounded_character.rect.topleft[1] <= 200 and self.bounded_character.vertical_speed > 0:
             self.off_set_map(0, -self.bounded_character.delta_pos_y)

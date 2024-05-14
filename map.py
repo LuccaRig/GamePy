@@ -16,7 +16,6 @@ class Map():
         self.pos_y_new_room = 0
         self.pos_x_previous_room = 0
         self.pos_y_previous_room = 0
-        pass
 
     #TODO: fazer docstring
     def render_visible_layers(self, screen: pygame.display):
@@ -72,6 +71,19 @@ class Map():
                             return True
         #print("Colisão não detectada")
         return False
+    
+    #TODO: fazer docstring
+    def return_ground_intersection(self, player_down_rect: pygame.rect) -> pygame.rect:
+        for layer in self.tmx_map.visible_layers:
+            if isinstance(layer, pytmx.TiledObjectGroup):
+                for obj in layer:
+                    if obj.name == "Collision":
+                        rect = pygame.Rect(obj.x * self.scale_factor + self.x_correction + self.off_set_x, obj.y * self.scale_factor - self.y_correction - self.off_set_y, 
+                                           obj.width * self.scale_factor, obj.height * self.scale_factor)
+                        if player_down_rect.colliderect(rect):
+                            intersection = rect.clip(player_down_rect)
+                            return intersection
+       
     
     def check_new_room(self, player_rect: pygame.rect) -> bool:
         """Retorna True se o retângulo do player estiver colidindo com um objeto "New Room" do map
