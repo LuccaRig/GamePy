@@ -70,8 +70,8 @@ Typical usage example:
         self.jumping_speed = 2750
         self.vertical_speed = 0
         self.gravity_ = 25000
-        self.pos_x = 60
-        self.pos_y = 210
+        self.pos_x = 0
+        self.pos_y = 360
         self.width = 200
         self.height = 77
         self.rect_down = pygame.Rect(self.pos_x+85, self.pos_y+47,  30, 30)
@@ -106,7 +106,7 @@ Typical usage example:
             map: objeto que contém os blocos de colisão para ajuste do player
         """
         self.pos_x = map.pos_x_previous_room - 36
-        self.pos_y = map.pos_y_previous_room + 80
+        self.pos_y = map.pos_y_previous_room
 
     def reinitialize_position_returning(self, map: map) -> None:
         """Ajusta a posição do player para a sala anterior
@@ -115,7 +115,7 @@ Typical usage example:
             map: objeto que contém os blocos de colisão para ajuste do player
         """
         self.pos_x = map.pos_x_new_room - 125
-        self.pos_y = map.pos_y_new_room + 80
+        self.pos_y = map.pos_y_new_room
 
     #TODO: fazer docstring
     def update_position(self, new_pos_x: int, new_pos_y: int) -> None:

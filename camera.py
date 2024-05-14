@@ -9,7 +9,7 @@ class Camera():
         self.bounded_map = map
         self.boundede_screen = screen
         self.off_set_x = 0
-        self.off_set_y = 0
+        self.off_set_y = -380
         self.camera_is_moving = False
 
 
