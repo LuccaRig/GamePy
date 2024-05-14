@@ -71,7 +71,7 @@ Typical usage example:
         self.vertical_speed = 0
         self.gravity_ = 25000
         self.pos_x = 60
-        self.pos_y = 300
+        self.pos_y = 210
         self.width = 200
         self.height = 77
         self.rect_down = pygame.Rect(self.pos_x+85, self.pos_y+70,  30, 10)
