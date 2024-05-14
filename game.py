@@ -10,7 +10,7 @@ class Game():
 
         pygame.mixer.init()
         pygame.mixer.music.load("assets/Before It Ends.mp3")
-        pygame.mixer.music.play()
+        #pygame.mixer.music.play()
 
         # Game Screen
         screen_width = 1280
@@ -50,6 +50,8 @@ class Game():
 
             if not self.player_character.is_colliding(self.myRoom.current_room(), "down"):
                 self.player_character.apply_delta_gravity_effect(0.003, self.myRoom.current_room())
+            else:
+                self.player_character.correct_ground_intersection(self.myRoom.current_room())
             if (self.player_character.is_colliding(self.myRoom.current_room(), "down")):
                 self.player_character.vertical_speed = 0
 
@@ -60,8 +62,8 @@ class Game():
             keys = pygame.key.get_pressed()
             
             if keys[pygame.K_z]:
-                self.player_character.horizontal_speed[0] = 0
-                self.player_character.horizontal_speed[1] = 0 
+                self.player_character.speed[0] = 0
+                self.player_character.speed[1] = 0 
 
                 if not (self.player_character.landing) or not(self.player_character.is_colliding(self.myRoom.current_room(), "down")):
                     self.player_character.walking = False
@@ -73,8 +75,8 @@ class Game():
 
             else:
                 self.player_character.walking = False
-                self.player_character.horizontal_speed[0] = 0
-                self.player_character.horizontal_speed[1] = 0
+                self.player_character.speed[0] = 0
+                self.player_character.speed[1] = 0
                 if self.player_character.is_colliding(self.myRoom.current_room(), "down") and not(self.player_character.attacking):
                     self.player_character.animate_land()
                     self.player_character.jumping = False

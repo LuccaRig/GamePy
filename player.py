@@ -16,7 +16,7 @@ Typical usage example:
   foo = ClassFoo()
   bar = foo.FunctionBar()
     """
-    def __init__(self, scale=4) -> None:
+    def __init__(self) -> None:
         super().__init__()
         # Sprites Vectors
         self.sprites_idle_right = []
@@ -74,13 +74,13 @@ Typical usage example:
         self.pos_y = 300
         self.width = 200
         self.height = 77
-        self.rect_down = pygame.Rect(self.pos_x+85, self.pos_y+70,  30, 10)
+        self.rect_down = pygame.Rect(self.pos_x+85, self.pos_y+47,  30, 30)
         self.rect_up = pygame.Rect(self.pos_x+85, self.pos_y,  30, 10)
-        self.rect_right = pygame.Rect(self.pos_x+121, self.pos_y, 2, 65)  
-        self.rect_left = pygame.Rect(self.pos_x+77, self.pos_y, 2, 65)  
+        self.rect_right = pygame.Rect(self.pos_x+121, self.pos_y, 2, 75)  
+        self.rect_left = pygame.Rect(self.pos_x+77, self.pos_y, 2, 75)  
         self.rect = pygame.Rect(self.pos_x, self.pos_y,  self.width, self.height)
         self.rect.topleft = [self.pos_x, self.pos_y]
-        self.horizontal_speed = [0.0, 0.0]
+        self.speed = [0.0, 0.0]
         self.delta_pos_y = 0
 
     #TODO: fazer docstring
@@ -125,19 +125,19 @@ Typical usage example:
             new_pos_x:
             new_pos_y:
         """
-        self.horizontal_speed[0] = new_pos_x
-        self.horizontal_speed[1] = new_pos_y
+        self.speed[0] = new_pos_x
+        self.speed[1] = new_pos_y
         if self.walking or self.jumping or not self.grounded :
             if(new_pos_x < 0 ):
                 self.direction = "left"
             if(new_pos_x > 0):
                 self.direction = "right"
             if not(((self.rect.topleft[0] <= 400) and self.direction == "left") or ((self.rect.topleft[0] >= 720) and self.direction == "right")):
-                self.pos_x += self.horizontal_speed[0]
+                self.pos_x += self.speed[0]
             if not(((self.rect.topleft[1] >= 350) and self.falling) or (self.rect.topleft[1] <= 200 and self.vertical_speed > 0)):
-                self.pos_y += self.horizontal_speed[1]
+                self.pos_y += self.speed[1]
             self.rect.topleft = [self.pos_x, self.pos_y]
-            self.rect_down.topleft = [self.pos_x+85, self.pos_y+70]
+            self.rect_down.topleft = [self.pos_x+85, self.pos_y+47]
             self.rect_up.topleft = [self.pos_x+85, self.pos_y]
             self.rect_right.topleft = [self.pos_x+121, self.pos_y]
             self.rect_left.topleft = [self.pos_x+77, self.pos_y]
@@ -159,6 +159,12 @@ Typical usage example:
             self.update_position(0, 5)
         else:
             self.update_position(0, -self.delta_pos_y)
+
+    def correct_ground_intersection(self, map: map):
+        intersection_rect = map.return_ground_intersection(self.rect_down)
+        if intersection_rect.height > 1:
+            print("corrigindo pulo: ", intersection_rect.height)
+            self.update_position(0, -intersection_rect.height+1)
 
     def get_jumping_speed(self):
         return self.jumping_speed
@@ -332,11 +338,12 @@ Typical usage example:
         green = (0, 255, 0)
         yellow = (255, 255, 0)
         white = (255, 255, 255)
-        pygame.draw.rect(screen, yellow, self.rect, 1)
-        pygame.draw.rect(screen, green, self.rect_down, 1)
-        pygame.draw.rect(screen, green, self.rect_up, 1)
-        pygame.draw.rect(screen, white, self.rect_right, 1)
-        pygame.draw.rect(screen, white, self.rect_left, 1)
+        black = (0,0,0)
+        #pygame.draw.rect(screen, yellow, self.rect, 1)
+        pygame.draw.rect(screen, black, self.rect_down, 1)
+        #pygame.draw.rect(screen, invisible, self.rect_up, 1)
+        #pygame.draw.rect(screen, white, self.rect_right, 1)
+        #pygame.draw.rect(screen, white, self.rect_left, 1)
 
     #docstring exemplo de função:
     """Fetches rows from a Smalltable.
