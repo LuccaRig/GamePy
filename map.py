@@ -44,19 +44,19 @@ class Map():
                             pygame.draw.rect(screen, (255, 0, 0), rect, 2) 
                         elif obj.name == "New Room":
                             self.pos_x_new_room = obj.x * self.scale_factor + self.x_correction
-                            self.pos_y_new_room = obj.y * self.scale_factor - self.y_correction
+                            self.pos_y_new_room = obj.y * self.scale_factor - self.y_correction - self.off_set_y
                             scaled_width = obj.width * self.scale_factor
                             scaled_height = obj.height * self.scale_factor
-                            rect = pygame.Rect(self.pos_x_new_room + self.off_set_x, self.pos_y_new_room - self.off_set_y, scaled_width, scaled_height)
+                            rect = pygame.Rect(self.pos_x_new_room + self.off_set_x, self.pos_y_new_room, scaled_width, scaled_height)
                             # Desenha um retângulo verde para representar a área de colisão, com uma borda de 1 pixel
                             pygame.draw.rect(screen, (0, 255, 0), rect, 2) 
                         elif obj.name == "Previous Room":
                             self.pos_x_previous_room = obj.x * self.scale_factor + self.x_correction
-                            self.pos_y_previous_room = obj.y * self.scale_factor - self.y_correction
+                            self.pos_y_previous_room = obj.y * self.scale_factor - self.y_correction - self.off_set_y
                             scaled_width = obj.width * self.scale_factor
                             scaled_height = obj.height * self.scale_factor
-                            rect = pygame.Rect(self.pos_x_previous_room + self.off_set_x, self.pos_y_previous_room - self.off_set_y, scaled_width, scaled_height)
-                            # Desenha um retângulo verde para representar a área de colisão, com uma borda de 1 pixel
+                            rect = pygame.Rect(self.pos_x_previous_room + self.off_set_x, self.pos_y_previous_room, scaled_width, scaled_height)
+                            # Desenha um retângulo azul para representar a área de colisão, com uma borda de 1 pixel
                             pygame.draw.rect(screen, (0, 0, 255), rect, 2) 
 
     #TODO: fazer docstring
