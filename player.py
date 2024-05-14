@@ -99,7 +99,7 @@ Typical usage example:
             sprite = pygame.transform.scale(sprite, (int(sprite.get_width() * scale), int(sprite.get_height() * scale)))
             sprites_vector.append(sprite)
 
-    def reinitialize_position_advancing(self, map: map, off_set_map =[]) -> None:
+    def reinitialize_position_advancing(self, map: map) -> None:
         """Ajusta a posição do player para a nova sala
 
         Args:
@@ -108,14 +108,14 @@ Typical usage example:
         self.pos_x = map.pos_x_previous_room - 36
         self.pos_y = map.pos_y_previous_room + 80
 
-    def reinitialize_position_returning(self, map: map, off_set_map =[]) -> None:
+    def reinitialize_position_returning(self, map: map) -> None:
         """Ajusta a posição do player para a sala anterior
 
         Args:
             map: objeto que contém os blocos de colisão para ajuste do player
         """
         self.pos_x = map.pos_x_new_room - 125
-        self.pos_y = map.pos_y_new_room + 80 + off_set_map[1]
+        self.pos_y = map.pos_y_new_room + 80
 
     #TODO: fazer docstring
     def update_position(self, new_pos_x: int, new_pos_y: int) -> None:
