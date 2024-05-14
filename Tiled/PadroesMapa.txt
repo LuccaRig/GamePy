@@ -1,0 +1,7 @@
+Padrão tamanho do mapa:
+Altura: 32px
+Largura: 64px
+
+Altura padrão para passagem de mapa: y = 16px 
+Objeto previus Room: ficará nos pixels 15, 14, 13, 12 em y com x = 0
+Objeto next Room: ficará nos pixels 15, 14, 13, 12 em y com x = 63   
