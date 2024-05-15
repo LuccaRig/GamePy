@@ -110,13 +110,13 @@ Typical usage example:
         self.pos_x = map.pos_x_previous_room - 50
         self.pos_y = map.pos_y_previous_room + 85
 
-    def reinitialize_position_returning(self, map: map) -> None:
+    def reinitialize_position_returning(self, map: map, off_set_x: int) -> None:
         """Ajusta a posição do player para a sala anterior
 
         Args:
             map: objeto que contém os blocos de colisão para ajuste do player
         """
-        self.pos_x = map.pos_x_new_room - 125 + self.pos_x_returning_room
+        self.pos_x = map.pos_x_new_room - 125 + off_set_x
         self.pos_y = map.pos_y_new_room + 85
 
     #TODO: fazer docstring
