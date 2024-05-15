@@ -27,26 +27,34 @@ class Game():
 
         self.myRoom = room.Room()
         self.my_camera = camera.Camera(self.myRoom.current_room(), self.player_character, self.screen)
+        self.my_camera_off_set = {}
 
     def game_run(self):
 
         while self.running:
 
             #print(self.player_character.pos_x, self.player_character.pos_y)
-
+            #print(self.my_camera_off_set)
+            
             #Testa se o player está avançando para a nova sala, e se estiver
             # atualiza o mapa no vetor de mapas e reinicializa a posição do player e da câmera
             if self.player_character.is_advancing_room(self.myRoom.current_room()):
+                self.player_character.pos_x_returning_room = self.my_camera.off_set_x
+                self.player_character.pos_y_returning_room = self.my_camera.off_set_y
+                self.my_camera_off_set[self.myRoom.current_map_position] = [self.player_character.pos_x_returning_room,
+                                                                                self.player_character.pos_y_returning_room]
                 self.myRoom.advance_room()
-                self.player_character.reinitialize_position_advancing(self.myRoom.current_room())
                 self.my_camera = camera.Camera(self.myRoom.current_room(), self.player_character, self.screen)
+                self.player_character.reinitialize_position_advancing(self.myRoom.current_room())
 
             #Testa se o player está voltando para a sala anterior, e se estiver
             #atualiza o mapa no vetor de mapas e reinicializa a posição do player e da câmera
             if self.player_character.is_returning_room(self.myRoom.current_room()):
                 self.myRoom.return_room()
-                self.player_character.reinitialize_position_returning(self.myRoom.current_room())
                 self.my_camera = camera.Camera(self.myRoom.current_room(), self.player_character, self.screen)
+                self.my_camera.off_set_map(self.my_camera_off_set[self.myRoom.current_map_position][0], 
+                                           self.my_camera_off_set[self.myRoom.current_map_position][1] + 380)
+                self.player_character.reinitialize_position_returning(self.myRoom.current_room(), self.my_camera_off_set[self.myRoom.current_map_position][0])
 
             if not self.player_character.is_colliding(self.myRoom.current_room(), "down"):
                 self.player_character.apply_delta_gravity_effect(0.003, self.myRoom.current_room())

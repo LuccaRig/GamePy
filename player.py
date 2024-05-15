@@ -72,6 +72,8 @@ Typical usage example:
         self.gravity_ = 25000
         self.pos_x = 0
         self.pos_y = 360
+        self.pos_x_returning_room = 0
+        self.pos_y_returning_room = 0
         self.width = 200
         self.height = 77
         self.rect_down = pygame.Rect(self.pos_x+85, self.pos_y+47,  30, 30)
@@ -105,17 +107,17 @@ Typical usage example:
         Args:
             map: objeto que contém os blocos de colisão para ajuste do player
         """
-        self.pos_x = map.pos_x_previous_room - 36
-        self.pos_y = map.pos_y_previous_room
+        self.pos_x = map.pos_x_previous_room - 50
+        self.pos_y = map.pos_y_previous_room + 85
 
-    def reinitialize_position_returning(self, map: map) -> None:
+    def reinitialize_position_returning(self, map: map, off_set_x: int) -> None:
         """Ajusta a posição do player para a sala anterior
 
         Args:
             map: objeto que contém os blocos de colisão para ajuste do player
         """
-        self.pos_x = map.pos_x_new_room - 125
-        self.pos_y = map.pos_y_new_room
+        self.pos_x = map.pos_x_new_room - 125 + off_set_x
+        self.pos_y = map.pos_y_new_room + 85
 
     #TODO: fazer docstring
     def update_position(self, new_pos_x: int, new_pos_y: int) -> None:
