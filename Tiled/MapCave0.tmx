@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.8" tiledversion="1.8.0" orientation="orthogonal" renderorder="right-down" width="64" height="32" tilewidth="8" tileheight="8" infinite="0" nextlayerid="3" nextobjectid="16">
+<map version="1.8" tiledversion="1.8.0" orientation="orthogonal" renderorder="right-down" width="64" height="32" tilewidth="8" tileheight="8" infinite="0" nextlayerid="4" nextobjectid="26">
  <tileset firstgid="1" source="Caverna.tsx"/>
  <layer id="1" name="Tile Layer 1" width="64" height="32">
   <data encoding="csv">
@@ -38,14 +38,20 @@
 </data>
  </layer>
  <objectgroup id="2" name="Collision">
-  <object id="5" x="0" y="0" width="512" height="8"/>
-  <object id="6" x="0" y="8" width="8" height="88"/>
-  <object id="8" x="8" y="40" width="40" height="24"/>
-  <object id="9" x="8" y="64" width="32" height="8"/>
-  <object id="11" x="8" y="72" width="24" height="8"/>
-  <object id="12" x="64" y="48" width="32" height="16"/>
-  <object id="13" x="119.776" y="47.8806" width="32" height="16"/>
-  <object id="14" x="176" y="56" width="32" height="16"/>
-  <object id="15" x="231.255" y="71.8954" width="32" height="16"/>
+  <object id="5" name="Collision" x="1.5" y="129" width="512" height="8"/>
+  <object id="6" name="Collision" x="0" y="8" width="8" height="88"/>
+  <object id="8" name="Collision" x="8" y="40" width="40" height="24"/>
+  <object id="9" name="Collision" x="8" y="64" width="32" height="8"/>
+  <object id="11" name="Collision" x="8" y="72" width="24" height="8"/>
+  <object id="12" name="Collision" x="64" y="48" width="32" height="16"/>
+  <object id="13" name="Collision" x="119.776" y="47.8806" width="32" height="16"/>
+  <object id="14" name="Collision" x="176" y="56" width="32" height="16"/>
+  <object id="15" name="Collision" x="231.255" y="71.8954" width="32" height="16"/>
+  <object id="16" name="Collision" x="264" y="112" width="32" height="16"/>
+  <object id="17" name="Collision" x="312" y="80" width="32" height="16"/>
+  <object id="18" name="Collision" x="504" y="8" width="8" height="88"/>
+  <object id="20" name="Collision" x="376" y="136" width="40" height="24"/>
+  <object id="21" name="New Room" x="504" y="96" width="8" height="32"/>
+  <object id="25" name="Previous Room" x="0" y="96" width="8" height="32"/>
  </objectgroup>
 </map>
