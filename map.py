@@ -8,7 +8,7 @@ class Map():
         self.tile_height = self.tmx_map.tileheight
         self.scale_factor = 3
         self.x_correction = 0
-        self.y_correction = 350
+        self.y_correction = 151
         self.off_set_x = 0
         self.off_set_y = 0
 
