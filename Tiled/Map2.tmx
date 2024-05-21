@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="git" orientation="orthogonal" renderorder="right-down" width="64" height="32" tilewidth="8" tileheight="8" infinite="0" nextlayerid="4" nextobjectid="9">
+<map version="1.10" tiledversion="git" orientation="orthogonal" renderorder="right-down" width="64" height="32" tilewidth="8" tileheight="8" infinite="0" nextlayerid="4" nextobjectid="10">
  <tileset firstgid="1" source="Matinho Tileset.tsx"/>
  <layer id="1" name="Camada de Blocos 1" width="64" height="32">
   <data encoding="csv">
@@ -40,5 +40,6 @@
  <objectgroup id="3" name="Camada de Objetos 1">
   <object id="5" name="Previous Room" x="0" y="96" width="8" height="32"/>
   <object id="8" name="Collision" x="0" y="128" width="512" height="128"/>
+  <object id="9" name="New Room" x="504" y="96" width="8" height="32"/>
  </objectgroup>
 </map>
