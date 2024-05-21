@@ -71,7 +71,7 @@ Typical usage example:
         self.vertical_speed = 0
         self.gravity_ = 25000
         self.pos_x = 0
-        self.pos_y = 350
+        self.pos_y = 413
         self.width = 200
         self.height = 77
         self.rect_down = pygame.Rect(self.pos_x+85, self.pos_y+47,  30, 30)
@@ -82,6 +82,8 @@ Typical usage example:
         self.rect.topleft = [self.pos_x, self.pos_y]
         self.speed = [0.0, 0.0]
         self.delta_pos_y = 0
+        self.x_limit_reached = False
+        self.y_limit_reached = False
 
     #TODO: fazer docstring
     def _import_sprites(self, number_of_sprites: int, arquive: str, sprites_vector= []) -> None:
@@ -128,13 +130,14 @@ Typical usage example:
         self.speed[0] = new_pos_x
         self.speed[1] = new_pos_y
         if self.walking or self.jumping or not self.grounded :
+            print(self.x_limit_reached)
             if(new_pos_x < 0 ):
                 self.direction = "left"
             if(new_pos_x > 0):
                 self.direction = "right"
-            if not(((self.rect.topleft[0] <= 400) and self.direction == "left") or ((self.rect.topleft[0] >= 720) and self.direction == "right")):
+            if not(((self.rect.topleft[0] <= 400) and self.direction == "left") or ((self.rect.topleft[0] >= 720) and self.direction == "right")) or (self.x_limit_reached):
                 self.pos_x += self.speed[0]
-            if not(((self.rect.topleft[1] >= 350) and self.falling) or (self.rect.topleft[1] <= 200 and self.vertical_speed > 0)):
+            if not(((self.rect.topleft[1] >= 350) and self.falling) or (self.rect.topleft[1] <= 200 and self.vertical_speed > 0)) or (self.y_limit_reached):
                 self.pos_y += self.speed[1]
             self.rect.topleft = [self.pos_x, self.pos_y]
             self.rect_down.topleft = [self.pos_x+85, self.pos_y+47]
