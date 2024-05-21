@@ -34,7 +34,7 @@ class Game():
         while self.running:
 
             #print(self.player_character.pos_x, self.player_character.pos_y)
-            print(self.my_camera_off_set)
+            #print(self.my_camera_off_set)
             
             #Testa se o player está avançando para a nova sala, e se estiver
             # atualiza o mapa no vetor de mapas e reinicializa a posição do player e da câmera

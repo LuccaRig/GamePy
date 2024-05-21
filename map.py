@@ -40,7 +40,7 @@ class Map():
                             scaled_height = obj.height * self.scale_factor
                             rect = pygame.Rect(scaled_x + self.off_set_x, scaled_y - self.off_set_y, scaled_width, scaled_height)
                             # Desenha um retângulo vermelho para representar a área de colisão, com uma borda de 1 pixel
-                            pygame.draw.rect(screen, (255, 0, 0), rect, 2) 
+                            # pygame.draw.rect(screen, (255, 0, 0), rect, 2) 
                         elif obj.name == "New Room":
                             self.pos_x_new_room = obj.x * self.scale_factor + self.x_correction
                             self.pos_y_new_room = obj.y * self.scale_factor - self.y_correction - self.off_set_y
