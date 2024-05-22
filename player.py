@@ -101,14 +101,14 @@ Typical usage example:
             sprite = pygame.transform.scale(sprite, (int(sprite.get_width() * scale), int(sprite.get_height() * scale)))
             sprites_vector.append(sprite)
 
-    def reinitialize_position_advancing(self, map: map) -> None:
+    def reinitialize_position_advancing(self, map: map, off_set_y: int) -> None:
         """Ajusta a posição do player para a nova sala
 
         Args:
             map: objeto que contém os blocos de colisão para ajuste do player
         """
         self.pos_x = map.pos_x_previous_room - 40
-        self.pos_y = map.pos_y_previous_room + 110
+        self.pos_y = map.pos_y_previous_room + 110 + off_set_y
 
     def reinitialize_position_returning(self, map: map, off_set_x: int) -> None:
         """Ajusta a posição do player para a sala anterior
@@ -130,7 +130,7 @@ Typical usage example:
         self.speed[0] = new_pos_x
         self.speed[1] = new_pos_y
         if self.walking or self.jumping or not self.grounded :
-            print(self.x_limit_reached)
+            #print(self.x_limit_reached)
             if(new_pos_x < 0 ):
                 self.direction = "left"
             if(new_pos_x > 0):
@@ -166,7 +166,7 @@ Typical usage example:
     def correct_ground_intersection(self, map: map):
         intersection_rect = map.return_ground_intersection(self.rect_down)
         if intersection_rect.height > 1:
-            print("corrigindo pulo: ", intersection_rect.height)
+            #print("corrigindo pulo: ", intersection_rect.height)
             self.update_position(0, -intersection_rect.height+1)
 
     def get_jumping_speed(self):
