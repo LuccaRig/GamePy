@@ -21,6 +21,9 @@ class Camera():
         self.bounded_map.render_visible_layers(self.boundede_screen)
 
     def follow_player(self) -> None:
+        """ Garante o posicionamento da camera proximo ao player, movendo a camera sempre que o player permanecer em posicoes especiais
+
+        """
         if (self.off_set_x > -4) or (self.off_set_x < -1276):
             self.bounded_character.x_limit_reached = True
         else:
