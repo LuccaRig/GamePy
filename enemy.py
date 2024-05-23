@@ -42,18 +42,71 @@ class Enemy(pygame.sprite.Sprite):
 
 
             if(self.direction == "right"):
-                if self.current_sprite >= len(self.sprites_moving_right):
-                    self.current_sprite = 0
-                    self.is_animating = False
-                self.image = self.sprites_moving_right[int(self.current_sprite)]
+                if self.walking:
+                    if self.current_sprite >= len(self.sprites_moving_right):
+                        self.current_sprite = 0
+                        self.is_animating = False
+                    self.image = self.sprites_moving_right[int(self.current_sprite)]
+                else:
+                    if self.current_sprite >= len(self.sprites_idle_right):
+                        self.current_sprite = 0
+                        self.is_animating = False
+                    self.image = self.sprites_idle_right[int(self.current_sprite)]
 
             if(self.direction == "left"):
-                if self.current_sprite >= len(self.sprites_moving_left):
-                    self.current_sprite = 0
-                    self.is_animating = False
-                self.image = self.sprites_moving_left[int(self.current_sprite)]
+                if self.walking:
+                    if self.current_sprite >= len(self.sprites_moving_left):
+                        self.current_sprite = 0
+                        self.is_animating = False
+                    self.image = self.sprites_moving_left[int(self.current_sprite)]
+                else:
+                    if self.current_sprite >= len(self.sprites_idle_right):
+                        self.current_sprite = 0
+                        self.is_animating = False
+                    self.image = self.sprites_idle_right[int(self.current_sprite)]
+            
 
 
+class Shooter(Enemy):
+    def __init__(self, inital_pos : list) -> None:
+        super().__init__()
+        #Sprites and animation
+        #TODO: Change walking to waking
+        
+        self.sprites_idle_right = []
+        self.sprites_idle_left = []
+
+        self.sprites_moving_right = []
+        self.sprites_moving_left = []
+
+        self.import_sprites(1,'CharacterSprites/shooter/idlePNGright', self.sprites_idle_right)
+        self.import_sprites(1,'CharacterSprites/shooter/idlePNGleft', self.sprites_idle_left)
+        self.import_sprites(5,'CharacterSprites/shooter/wakePNGright', self.sprites_moving_right)
+        self.import_sprites(5,'CharacterSprites/shooter/wakePNGleft', self.sprites_moving_left)
+
+        self.current_sprite = 0
+        self.image = self.sprites_idle_right[self.current_sprite]
+
+
+        # Default Position and movement
+        self.pos_x = inital_pos[0]
+        self.pos_y = inital_pos[1]
+        self.width = 55
+        self.height = 65
+        self.rect = pygame.Rect(self.pos_x, self.pos_y,  self.width, self.height)
+        self.rect.topleft = [self.pos_x, self.pos_y]
+        self.rect_down = pygame.Rect(self.pos_x+85, self.pos_y+10,  30, 10)
+        self.speed = 1
+        self.actual_pos = 0
+
+    def move_set(self):
+        """ 
+        Garante uma movimentacao fixa do objeto Little_Spider
+        """
+
+        self.update_position(0, 0)
+
+    
 class Little_Spider(Enemy):
     def __init__(self, inital_pos : list) -> None:
         super().__init__()
@@ -65,14 +118,13 @@ class Little_Spider(Enemy):
         self.sprites_moving_right = []
         self.sprites_moving_left = []
 
-        self.import_sprites(1,'CharacterSprites/enemy1/idlePNGright', self.sprites_idle_right)
-        self.import_sprites(1,'CharacterSprites/enemy1/idlePNGleft', self.sprites_idle_left)
-        self.import_sprites(6,'CharacterSprites/enemy1/movementPNGright', self.sprites_moving_right)
-        self.import_sprites(6,'CharacterSprites/enemy1/movementPNGleft', self.sprites_moving_left)
+        self.import_sprites(1,'CharacterSprites/little_spider/idlePNGright', self.sprites_idle_right)
+        self.import_sprites(1,'CharacterSprites/little_spider/idlePNGleft', self.sprites_idle_left)
+        self.import_sprites(6,'CharacterSprites/little_spider/movementPNGright', self.sprites_moving_right)
+        self.import_sprites(6,'CharacterSprites/little_spider/movementPNGleft', self.sprites_moving_left)
 
         self.current_sprite = 0
         self.image = self.sprites_idle_right[self.current_sprite]
-
 
         # Default Position and movement
         self.pos_x = inital_pos[0]
@@ -114,9 +166,9 @@ class Enemy_Group(Enemy):
         self.enemy_group_number = enemy_group_number
 
         if enemy_group_number == 0:
-            enemy1 = Little_Spider([400, 500])
-            enemy2 = Little_Spider([200, 500])
-            self.enemy_vector = [enemy1, enemy2]
+            little_spider = Little_Spider([400, 500])
+            enemy2 = Shooter([250, 360])
+            self.enemy_vector = [little_spider, enemy2]
 
     def update_enemies_sprites(self):
         for enemy in self.enemy_vector:
