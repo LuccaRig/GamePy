@@ -119,7 +119,6 @@ Typical usage example:
         self.pos_x = map.pos_x_new_room - 125 + off_set_x
         self.pos_y = map.pos_y_new_room + 110
 
-    #TODO: fazer docstring
     def update_position(self, new_pos_x: int, new_pos_y: int) -> None:
         """ Muda a posição do Rect do player e a posição do rect_down
 
