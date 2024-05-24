@@ -40,9 +40,11 @@ class Game():
             #Testa se o player está avançando para a nova sala, e se estiver
             # atualiza o mapa no vetor de mapas e reinicializa a posição do player e da câmera
             if self.player_character.is_advancing_room(self.myRoom.current_room()):
+                #Armazena o quanto a câmera se deslocou, para a reinicialização dessa quando retornando para a sala
                 self.player_character.pos_x_returning_room = self.my_camera.off_set_x
                 self.player_character.pos_y_returning_room = self.my_camera.off_set_y
                 self.my_camera_off_set[self.myRoom.current_map_position] = [self.my_camera.off_set_x, self.my_camera.off_set_y]
+
                 self.myRoom.advance_room()
                 self.my_camera = camera.Camera(self.myRoom.current_room(), self.player_character, self.screen)
                 self.my_camera.off_set_map(0, 0)
