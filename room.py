@@ -5,8 +5,8 @@ class Room():
     def __init__(self) -> None:
         self.my_maps = []
         self.is_first_time = {}
-        self.import_maps(4, self.my_maps)
-        self.first_time_in_room(4, self.is_first_time)
+        self.import_maps(5, self.my_maps)
+        self.first_time_in_room(5, self.is_first_time)
         self.current_map_position = 0
 
     def import_maps(self, number_of_maps: int, maps_vector= []) -> None:
