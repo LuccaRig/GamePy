@@ -1,6 +1,4 @@
-import pygame
 import map
-import npcs
 
 class Room():
     def __init__(self) -> None:

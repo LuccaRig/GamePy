@@ -1,7 +1,6 @@
 import player
 import enemy
 import map
-import npcs
 
 
 class Camera():
@@ -53,3 +52,4 @@ class Camera():
 
     def keep_npc_pos(self, screen, npc):
         npc.draw_npc(screen,  self.off_set_x, self.off_set_y)
+        npc.draw_interact_rect(screen,  self.off_set_x, self.off_set_y)

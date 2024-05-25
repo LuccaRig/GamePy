@@ -1,14 +1,14 @@
-import pygame, sys
+import pygame
 import player
 import enemy
 import camera
 import room
-import npcs
 
 class Game():
     def __init__(self) -> None:
         self.clock = pygame.time.Clock()
 
+        pygame.font.init()
         pygame.mixer.init()
         pygame.mixer.music.load("assets/Before It Ends.mp3")
         #pygame.mixer.music.play()
@@ -137,6 +137,7 @@ class Game():
 
             if self.myRoom.current_room_npc() != None:
                 self.my_camera.keep_npc_pos(self.screen, self.myRoom.current_room_npc())
+                self.myRoom.current_room_npc().talk_to_player(self.player_character, self.screen)
                 self.myRoom.current_room_npc().animate()
                 self.myRoom.current_room_npc().update()
 
