@@ -3,6 +3,7 @@ import player
 import enemy
 import camera
 import room
+import npcs
 
 class Game():
     def __init__(self) -> None:
@@ -133,6 +134,11 @@ class Game():
             self.my_camera.keep_enemy_pos(self.screen, self.enemies)
             self.enemies.update_enemies_sprites()
             self.enemies.draw_collisions_rects(self.screen)
+
+            if self.myRoom.current_room_npc() != None:
+                self.my_camera.keep_npc_pos(self.screen, self.myRoom.current_room_npc())
+                self.myRoom.current_room_npc().animate()
+                self.myRoom.current_room_npc().update()
 
 
             self.moving_sprites.draw(self.screen)

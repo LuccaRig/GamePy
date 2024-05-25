@@ -1,6 +1,7 @@
 import player
 import enemy
 import map
+import npcs
 
 
 class Camera():
@@ -49,3 +50,6 @@ class Camera():
     def keep_enemy_pos(self, screen , enemies : enemy.Enemy_Group):
         enemies.draw_enemies(screen, self.off_set_x, self.off_set_y)
         enemies.define_pos_group(self.off_set_x, self.off_set_y)
+
+    def keep_npc_pos(self, screen, npc):
+        npc.draw_npc(screen,  self.off_set_x, self.off_set_y)
