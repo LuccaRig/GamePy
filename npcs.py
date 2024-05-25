@@ -54,6 +54,8 @@ class Traveler(Npc):
         self.text_color = (255, 255, 255)
         self.font_size = 36
         self.dialogue_font = pygame.font.Font(None, self.font_size)
+        self.text_index = 0
+        self.last_letter_time = 0
 
 
 
@@ -62,10 +64,18 @@ class Traveler(Npc):
         pygame.draw.rect(screen, (0,255,0), self.interact_rect, 1)
         
     def talk_to_player(self, player, screen):
+        current_time = pygame.time.get_ticks()
+        letter_interval = 100
+
         if(self.check_player_interaction(player) and self.talk_number == 0):
             text_pos = (50, 50)
-            text = "Ola jogador"
-            text_render = self.dialogue_font.render(text, True, self.text_color)
+            text = "Olá, Jogador!"
+
+            if self.text_index < len(text) and current_time - self.last_letter_time > letter_interval:
+                self.text_index += 1
+                self.last_letter_time = current_time
+            
+            text_render = self.dialogue_font.render(text[:self.text_index], True, self.text_color)
             screen.blit(text_render, text_pos)
         else: 
             pass
