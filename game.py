@@ -47,7 +47,7 @@ class Game():
 
                 self.myRoom.advance_room()
                 self.my_camera = camera.Camera(self.myRoom.current_room(), self.player_character, self.screen)
-                self.my_camera.off_set_map(0, 0)
+                self.my_camera.off_set_map(0, self.my_camera_off_set[self.myRoom.current_map_position-1][1])
                 self.player_character.reinitialize_position_advancing(self.myRoom.current_room())
 
             #Testa se o player está voltando para a sala anterior, e se estiver
