@@ -1,5 +1,6 @@
 import pygame
 import pytmx
+import npcs
 
 class Map():
     def __init__(self, map_folder) -> None:
@@ -16,6 +17,8 @@ class Map():
         self.pos_y_new_room = 0
         self.pos_x_previous_room = 0
         self.pos_y_previous_room = 0
+
+        self.map_number = 0
 
     def render_visible_layers(self, screen: pygame.display, off_set_x: float, off_set_y: float) -> None:
         """Itera sobre a matriz do mapa para renderizar os tiles do mapas, assim como os objetos de colisão e de mudança de sala
@@ -134,3 +137,7 @@ class Map():
                         if player_rect.colliderect(rect):
                             return True
         return False
+    
+    def map_npc_define(self):
+        if self.map_number == 0:
+            self.npc = npcs.Traveler()

@@ -1,5 +1,6 @@
 import pygame
 import map
+import npcs
 
 class Room():
     def __init__(self) -> None:
@@ -8,6 +9,7 @@ class Room():
         self.import_maps(7, self.my_maps)
         self.first_time_in_room(7, self.is_first_time)
         self.current_map_position = 0
+        self.current_room().map_npc_define()
 
     def import_maps(self, number_of_maps: int, maps_vector= []) -> None:
         """Acessa a pasta Tiled e guarda os mapas (arquivos tmx) em um vetor de mapas
@@ -38,10 +40,18 @@ class Room():
         
         """
         self.current_map_position += 1
+        self.current_room().map_number = self.current_map_position
 
     def return_room(self) -> None:
         """Diminui o índice do vetor de mapas
         
         """
         self.current_map_position -= 1
+        self.current_room().map_number = self.current_map_position
+
+    def current_room_npc(self):
+        if self.current_map_position == 0:
+            return self.current_room().npc
+        else:
+            return None
 
