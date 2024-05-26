@@ -1,4 +1,4 @@
-import pygame, sys
+import pygame
 import player
 import enemy
 import camera
@@ -8,6 +8,7 @@ class Game():
     def __init__(self) -> None:
         self.clock = pygame.time.Clock()
 
+        pygame.font.init()
         pygame.mixer.init()
         pygame.mixer.music.load("assets/Before It Ends.mp3")
         #pygame.mixer.music.play()
@@ -28,7 +29,6 @@ class Game():
         self.myRoom = room.Room()
         self.my_camera = camera.Camera(self.myRoom.current_room(), self.player_character, self.screen)
         self.my_camera_off_set = {}
-        self.player_y_correction = 0
 
     def game_run(self):
 
@@ -41,17 +41,15 @@ class Game():
             #Testa se o player está avançando para a nova sala, e se estiver
             # atualiza o mapa no vetor de mapas e reinicializa a posição do player e da câmera
             if self.player_character.is_advancing_room(self.myRoom.current_room()):
+                #Armazena o quanto a câmera se deslocou, para a reinicialização dessa quando retornando para a sala
                 self.player_character.pos_x_returning_room = self.my_camera.off_set_x
                 self.player_character.pos_y_returning_room = self.my_camera.off_set_y
                 self.my_camera_off_set[self.myRoom.current_map_position] = [self.my_camera.off_set_x, self.my_camera.off_set_y]
+
                 self.myRoom.advance_room()
-                if (self.myRoom.is_first_time[self.myRoom.current_map_position]):
-                    self.player_y_correction = 250
-                elif not(self.myRoom.is_first_time[self.myRoom.current_map_position]):
-                    self.player_y_correction = 0
                 self.my_camera = camera.Camera(self.myRoom.current_room(), self.player_character, self.screen)
-                self.player_character.reinitialize_position_advancing(self.myRoom.current_room(), self.player_y_correction)
-                self.myRoom.is_first_time[self.myRoom.current_map_position] = False
+                self.my_camera.off_set_map(0, self.my_camera_off_set[self.myRoom.current_map_position-1][1])
+                self.player_character.reinitialize_position_advancing(self.myRoom.current_room())
 
             #Testa se o player está voltando para a sala anterior, e se estiver
             #atualiza o mapa no vetor de mapas e reinicializa a posição do player e da câmera
@@ -135,6 +133,12 @@ class Game():
             self.my_camera.keep_enemy_pos(self.screen, self.enemies)
             self.enemies.update_enemies_sprites()
             self.enemies.draw_collisions_rects(self.screen)
+
+            if self.myRoom.current_room_npc() != None:
+                self.my_camera.keep_npc_pos(self.screen, self.myRoom.current_room_npc())
+                self.myRoom.current_room_npc().talk_to_player(self.player_character, self.screen)
+                self.myRoom.current_room_npc().animate()
+                self.myRoom.current_room_npc().update()
 
             self.moving_sprites.draw(self.screen)
             self.moving_sprites.update()

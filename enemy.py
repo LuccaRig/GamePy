@@ -20,6 +20,10 @@ class Enemy(pygame.sprite.Sprite):
             sprites_vector.append(sprite)
 
     def update_position(self, delta_x, delta_y):
+        if delta_x != 0: self.walking = True
+        else: self.walking = False
+
+        
         self.rect.x += delta_x
         self.rect.y += delta_y
         self.rect_down.topleft = [self.rect.x +85, self.rect.y +70]

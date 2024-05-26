@@ -18,7 +18,7 @@ class Camera():
         self.bounded_map.off_set_x = self.off_set_x
         self.off_set_y += off_set_y
         self.bounded_map.off_set_y = self.off_set_y
-        self.bounded_map.render_visible_layers(self.boundede_screen)
+        self.bounded_map.render_visible_layers(self.boundede_screen, self.off_set_x, self.off_set_y)
 
     def follow_player(self) -> None:
         """ Garante o posicionamento da camera proximo ao player, movendo a camera sempre que o player permanecer em posicoes especiais
@@ -49,3 +49,7 @@ class Camera():
     def keep_enemy_pos(self, screen , enemies : enemy.Enemy_Group):
         enemies.draw_enemies(screen, self.off_set_x, self.off_set_y)
         enemies.define_pos_group(self.off_set_x, self.off_set_y)
+
+    def keep_npc_pos(self, screen, npc):
+        npc.draw_npc(screen,  self.off_set_x, self.off_set_y)
+        npc.draw_interact_rect(screen,  self.off_set_x, self.off_set_y)

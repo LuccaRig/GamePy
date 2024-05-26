@@ -101,14 +101,14 @@ Typical usage example:
             sprite = pygame.transform.scale(sprite, (int(sprite.get_width() * scale), int(sprite.get_height() * scale)))
             sprites_vector.append(sprite)
 
-    def reinitialize_position_advancing(self, map: map, off_set_y: int) -> None:
+    def reinitialize_position_advancing(self, map: map) -> None:
         """Ajusta a posição do player para a nova sala
 
         Args:
             map: objeto que contém os blocos de colisão para ajuste do player
         """
         self.pos_x = map.pos_x_previous_room - 40
-        self.pos_y = map.pos_y_previous_room + 110 + off_set_y
+        self.pos_y = map.pos_y_previous_room + 110
 
     def reinitialize_position_returning(self, map: map, off_set_x: int) -> None:
         """Ajusta a posição do player para a sala anterior
