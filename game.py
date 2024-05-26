@@ -127,7 +127,6 @@ class Game():
             self.my_camera.follow_player()
             self.player_character.draw_collision_rect(self.screen)
 
-
             self.moving_sprites.draw(self.screen)
             self.moving_sprites.update()
 
@@ -136,7 +135,6 @@ class Game():
             self.my_camera.keep_enemy_pos(self.screen, self.enemies)
             self.enemies.update_enemies_sprites()
             self.enemies.draw_collisions_rects(self.screen)
-
 
             self.moving_sprites.draw(self.screen)
             self.moving_sprites.update()
