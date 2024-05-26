@@ -125,7 +125,6 @@ class Game():
             self.my_camera.follow_player()
             self.player_character.draw_collision_rect(self.screen)
 
-
             self.moving_sprites.draw(self.screen)
             self.moving_sprites.update()
 
@@ -140,7 +139,6 @@ class Game():
                 self.myRoom.current_room_npc().talk_to_player(self.player_character, self.screen)
                 self.myRoom.current_room_npc().animate()
                 self.myRoom.current_room_npc().update()
-
 
             self.moving_sprites.draw(self.screen)
             self.moving_sprites.update()

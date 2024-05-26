@@ -99,7 +99,8 @@ class Shooter(Enemy):
         self.height = 65
         self.rect = pygame.Rect(self.pos_x, self.pos_y,  self.width, self.height)
         self.rect.topleft = [self.pos_x, self.pos_y]
-        self.rect_down = pygame.Rect(self.pos_x+85, self.pos_y+10,  30, 10)
+        self.rect_down = pygame.Rect(self.pos_x+85, self.pos_y-25, 50, 100)
+        #self.rect_down.topleft = []
         self.speed = 1
         self.actual_pos = 0
 
@@ -171,7 +172,7 @@ class Enemy_Group(Enemy):
 
         if enemy_group_number == 0:
             little_spider = Little_Spider([400, 500])
-            enemy2 = Shooter([250, 360])
+            enemy2 = Shooter([250, 328])
             self.enemy_vector = [little_spider, enemy2]
 
     def update_enemies_sprites(self):
@@ -208,7 +209,8 @@ class Enemy_Group(Enemy):
         for enemy in self.enemy_vector:
             new_pos_x = enemy.rect.x + delta_x
             new_pos_y = enemy.rect.y - delta_y
-            enemy.rect_down.topleft = [new_pos_x + 35, new_pos_y + 55]
+            #if enemy.
+            enemy.rect_down.topleft = [new_pos_x + 35, new_pos_y + 30]
     
     def set_move_sets(self):
         for enemy in self.enemy_vector:
