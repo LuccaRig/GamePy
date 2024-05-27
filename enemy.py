@@ -12,6 +12,11 @@ class Enemy(pygame.sprite.Sprite):
         self.is_animating = False
         self.walking = False
         self.direction = "left"
+        self.is_alive = True
+        self.dying = False
+
+        self.current_sprite = 0
+        self.current_death_sprite = 0
 
     def import_sprites(self, number_of_sprites=0, arquive='0', sprites_vector= [], scale=4) -> None:
         for i in range(number_of_sprites):
@@ -23,8 +28,6 @@ class Enemy(pygame.sprite.Sprite):
     def update_position(self, delta_x, delta_y):
         if delta_x != 0: self.walking = True
         else: self.walking = False
-
-        
         self.rect.x += delta_x
         self.rect.y += delta_y
         self.hitbox_rect.topleft = [self.rect.x +85, self.rect.y +70]
@@ -80,13 +83,13 @@ class Shooter(Enemy):
         self.sprites_idle_left = []
         self.sprites_moving_right = []
         self.sprites_moving_left = []
+        self.sprites_dying = []
 
         self.import_sprites(1,'CharacterSprites/shooter/idlePNGright', self.sprites_idle_right)
         self.import_sprites(1,'CharacterSprites/shooter/idlePNGleft', self.sprites_idle_left)
         self.import_sprites(5,'CharacterSprites/shooter/wakePNGright', self.sprites_moving_right)
         self.import_sprites(5,'CharacterSprites/shooter/wakePNGleft', self.sprites_moving_left)
 
-        self.current_sprite = 0
         self.image = self.sprites_idle_right[self.current_sprite]
 
         # Default Position and movement
@@ -109,13 +112,25 @@ class Shooter(Enemy):
     def move_set(self):
         """  Garante uma movimentacao fixa do objeto Little_Spider
         """
-
         self.update_position(0, 0)
 
     def move_hitbox_rect_topleft(self, new_pos_x: int, new_pos_y: int) -> None:
         """Posiciona o topo do rect de hitbox de acordo com a nova posição do inimigo
         """
-        self.hitbox_rect.topleft = [new_pos_x+48, new_pos_y+32]
+        if self.is_alive:
+            self.hitbox_rect.topleft = [new_pos_x+48, new_pos_y+32]
+
+    def animate_death(self):
+        # animation_speed = 0.3
+        # self.current_death_sprite += animation_speed
+        # if self.direction == "left":
+        #     if self.current_death_sprite >= len(self.sprites_dying):
+        #         self.current_death_sprite = 0
+        #         self.is_animating = False
+        #         self.landing = False
+        #     else:
+        #         self.image = self.sprites_dying[int(self.current_death_sprite)]
+        self.is_alive = False
 
 
 class Little_Spider(Enemy):
@@ -134,7 +149,6 @@ class Little_Spider(Enemy):
         self.import_sprites(6,'CharacterSprites/little_spider/movementPNGright', self.sprites_moving_right)
         self.import_sprites(6,'CharacterSprites/little_spider/movementPNGleft', self.sprites_moving_left)
 
-        self.current_sprite = 0
         self.image = self.sprites_idle_right[self.current_sprite]
 
         # Default Position and movement
@@ -173,6 +187,9 @@ class Little_Spider(Enemy):
         """
         self.hitbox_rect.topleft = [new_pos_x + 35, new_pos_y+55]
 
+    def animate_death(self):
+        self.is_alive = False
+
 
 class Enemy_Group(Enemy):
     """
@@ -187,13 +204,14 @@ class Enemy_Group(Enemy):
         if enemy_group_number == 0:
             little_spider = Little_Spider([400, 500])
             enemy2 = Shooter([250, 328])
-            enemy3 = Shooter([350, 328])
+            enemy3 = Shooter([290, 328])
             self.enemy_vector = numpy.array([little_spider, enemy2, enemy3])
 
     def update_enemies_sprites(self):
         for enemy in self.enemy_vector:
-            enemy.animate()
-            enemy.update()
+            if enemy.is_alive:
+                enemy.animate()
+                enemy.update()
 
     def draw_enemies(self, screen, off_set_x, off_set_y):
         """
@@ -206,12 +224,14 @@ class Enemy_Group(Enemy):
         """
 
         for enemy in self.enemy_vector:
-            screen.blit(enemy.image, (enemy.rect.x + off_set_x, enemy.rect.y - off_set_y))
+            if enemy.is_alive:
+                screen.blit(enemy.image, (enemy.rect.x + off_set_x, enemy.rect.y - off_set_y))
 
     def draw_collisions_rects(self, screen):
         green = (0, 255, 0)
         for enemy in self.enemy_vector:
-            pygame.draw.rect(screen, green, enemy.hitbox_rect, 1)
+            if enemy.is_alive:
+                pygame.draw.rect(screen, green, enemy.hitbox_rect, 1)
     
     def define_pos_group(self, delta_x, delta_y):
         """
@@ -222,10 +242,34 @@ class Enemy_Group(Enemy):
             delta_y: idem para a posicao em y
         """
         for enemy in self.enemy_vector:
-            new_pos_x = enemy.rect.x + delta_x
-            new_pos_y = enemy.rect.y - delta_y
-            enemy.move_hitbox_rect_topleft(new_pos_x, new_pos_y)
+            if enemy.is_alive:
+                new_pos_x = enemy.rect.x + delta_x
+                new_pos_y = enemy.rect.y - delta_y
+                enemy.move_hitbox_rect_topleft(new_pos_x, new_pos_y)
 
     def set_move_sets(self):
         for enemy in self.enemy_vector:
-            enemy.move_set()
+            if enemy.is_alive:
+                enemy.move_set()
+
+    def check_deaths(self):
+        """Verifica se algum inimigo morreu e toma as ações necessárias
+
+        Se algum inimigo estiver morto, seu rect de hitbox é apagado e ele entra em estado de morte
+        e é permitido que sua animação de morte seja chamada na classe game
+        """
+        for enemy in self.enemy_vector:
+            if enemy.hp <= 0 and enemy.is_alive:
+                enemy.dying = True
+                enemy.is_alive = False
+                enemy.hitbox_rect = None
+
+    def animate_deaths(self):
+        for enemy in self.enemy_vector:
+            if enemy.dying:
+                enemy.animate_death()
+
+    def destruct_dead_enemies(self):
+        for i, enemy in numpy.ndenumerate(self.enemy_vector):
+            if not enemy.is_alive and not enemy.dying:
+                numpy.delete(self.enemy_vector, i)

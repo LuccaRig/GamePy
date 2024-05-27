@@ -89,8 +89,8 @@ Typical usage example:
         self.y_limit_reached = False
 
         # Stats
-        self.attack_dmg = 5
-        self.hp = 50
+        self.attack_dmg = 10
+        self.hp = 100
 
         self.last_hit_time = 0
         self.last_landed_attack_time = 0
@@ -129,7 +129,7 @@ Typical usage example:
         self.pos_y = map.pos_y_new_room + 110
 
     def update_position(self, new_pos_x: int, new_pos_y: int) -> None:
-        """ Muda a posição do Rect do player e a posição do rect_down
+        """ Muda a posição do Rect do player e a posição dos seu rects direcionais
 
         Args:
             new_pos_x:
@@ -175,13 +175,15 @@ Typical usage example:
             self.update_position(0, -self.delta_pos_y)
 
     def correct_ground_intersection(self, map: map):
+        """Coloca o player precisamente acima do chão após uma queda
+
+        Args:
+            map: objeto capaz de retornar a interseção entre o rect inferior do player e o rect do chão
+        """
         intersection_rect = map.return_ground_intersection(self.rect_down)
         if intersection_rect.height > 1:
             #print("corrigindo pulo: ", intersection_rect.height)
             self.update_position(0, -intersection_rect.height+1)
-
-    def get_jumping_speed(self):
-        return self.jumping_speed
     
     def is_colliding(self, map: map, direction: str) -> bool:
         """Retorna True se o player estiver colidindo na direção enviada

@@ -84,14 +84,18 @@ class Game():
                     self.player_character.walking = False
                     self.player_character.attacking = True
                     #testa se o ataque pode tirar vida de um inimigo e, se sim, o faz
+                    hit_was_successfull = False
                     for enemy in self.enemies.enemy_vector:
-                        if (self.player_character.right_attack_rect.colliderect(enemy.hitbox_rect) and (self.player_character.direction == "right") or \
-                            self.player_character.left_attack_rect.colliderect(enemy.hitbox_rect) and (self.player_character.direction == "left")):
-                            if current_time - self.player_character.last_landed_attack_time > 0.5:
-                                enemy.hp -= self.player_character.attack_dmg
-                                self.player_character.last_landed_attack_time = time.time()
-                                print("HP do inimigo: ", enemy.hp)
-                
+                        if enemy.is_alive:
+                            if (self.player_character.right_attack_rect.colliderect(enemy.hitbox_rect) and (self.player_character.direction == "right") or \
+                             self.player_character.left_attack_rect.colliderect(enemy.hitbox_rect) and (self.player_character.direction == "left")):
+                                if current_time - self.player_character.last_landed_attack_time > 0.48:
+                                    enemy.hp -= self.player_character.attack_dmg
+                                    hit_was_successfull = True
+                                    print("HP do inimigo: ", enemy.hp)
+                    if hit_was_successfull:
+                        self.player_character.last_landed_attack_time = time.time()
+                                     
                 else:
                     self.player_character.animate_land()
                     self.player_character.jumping = False
@@ -134,12 +138,13 @@ class Game():
 
             #checa se o jogador deve receber dano de contato
             for enemy in self.enemies.enemy_vector:
-                if self.player_character.hitbox_rect.colliderect(enemy.hitbox_rect):
-                    if current_time - self.player_character.last_hit_time > 2:
-                        self.player_character.hp -= enemy.contact_dmg
-                        self.player_character.last_hit_time = time.time()
-                        print("HP do jogador:", self.player_character.hp)
-                        break
+                if enemy.is_alive:
+                    if self.player_character.hitbox_rect.colliderect(enemy.hitbox_rect):
+                        if current_time - self.player_character.last_hit_time > 2:
+                            self.player_character.hp -= enemy.contact_dmg
+                            self.player_character.last_hit_time = time.time()
+                            print("HP do jogador:", self.player_character.hp)
+                            break
 
             self.screen.fill((128, 128, 128))
 
@@ -154,6 +159,10 @@ class Game():
             self.my_camera.keep_enemy_pos(self.screen, self.enemies)
             self.enemies.update_enemies_sprites()
             self.enemies.draw_collisions_rects(self.screen)
+            self.enemies.check_deaths()
+            self.enemies.animate_deaths()
+            self.enemies.destruct_dead_enemies()
+            
 
             if self.myRoom.current_room_npc() != None:
                 self.my_camera.keep_npc_pos(self.screen, self.myRoom.current_room_npc())
