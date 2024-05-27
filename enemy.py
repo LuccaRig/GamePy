@@ -1,11 +1,12 @@
 import pygame
+import numpy
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self) -> None:
         super().__init__()
         # Atributos dos inimigos
-        hp = 0
-        attack = 0
+        self.hp = 0
+        self.damage = 0
 
         # Default Boolean and Character States
         self.is_animating = False
@@ -26,7 +27,7 @@ class Enemy(pygame.sprite.Sprite):
         
         self.rect.x += delta_x
         self.rect.y += delta_y
-        self.rect_down.topleft = [self.rect.x +85, self.rect.y +70]
+        self.hitbox_rect.topleft = [self.rect.x +85, self.rect.y +70]
 
     def is_grounded(self, Map) -> None:
         return Map.check_collision(self.rect)
@@ -43,7 +44,6 @@ class Enemy(pygame.sprite.Sprite):
 
         if  self.is_animating:
             self.current_sprite += animation_speed
-
 
             if(self.direction == "right"):
                 if self.walking:
@@ -76,10 +76,8 @@ class Shooter(Enemy):
         super().__init__()
         #Sprites and animation
         #TODO: Change walking to waking
-        
         self.sprites_idle_right = []
         self.sprites_idle_left = []
-
         self.sprites_moving_right = []
         self.sprites_moving_left = []
 
@@ -91,7 +89,6 @@ class Shooter(Enemy):
         self.current_sprite = 0
         self.image = self.sprites_idle_right[self.current_sprite]
 
-
         # Default Position and movement
         self.pos_x = inital_pos[0]
         self.pos_y = inital_pos[1]
@@ -99,19 +96,28 @@ class Shooter(Enemy):
         self.height = 65
         self.rect = pygame.Rect(self.pos_x, self.pos_y,  self.width, self.height)
         self.rect.topleft = [self.pos_x, self.pos_y]
-        self.rect_down = pygame.Rect(self.pos_x+85, self.pos_y-25, 50, 100)
-        #self.rect_down.topleft = []
+        self.hitbox_rect = pygame.Rect(self.pos_x+85, self.pos_y-50, 45, 68)
+        self.hitbox_rect.topleft = [self.pos_x, self.pos_y]
         self.speed = 1
         self.actual_pos = 0
 
+        # Stats
+        self.contact_dmg = 3
+        self.attack_dmg = 5
+        self.hp = 25
+
     def move_set(self):
-        """ 
-        Garante uma movimentacao fixa do objeto Little_Spider
+        """  Garante uma movimentacao fixa do objeto Little_Spider
         """
 
         self.update_position(0, 0)
 
-    
+    def move_hitbox_rect_topleft(self, new_pos_x: int, new_pos_y: int) -> None:
+        """Posiciona o topo do rect de hitbox de acordo com a nova posição do inimigo
+        """
+        self.hitbox_rect.topleft = [new_pos_x+48, new_pos_y+32]
+
+
 class Little_Spider(Enemy):
     def __init__(self, inital_pos : list) -> None:
         super().__init__()
@@ -138,11 +144,15 @@ class Little_Spider(Enemy):
         self.height = 65
         self.rect = pygame.Rect(self.pos_x, self.pos_y,  self.width, self.height)
         self.rect.topleft = [self.pos_x, self.pos_y]
-        self.rect_down = pygame.Rect(self.pos_x+85, self.pos_y+10,  30, 10)
+        self.hitbox_rect = pygame.Rect(self.pos_x+85, self.pos_y+10,  30, 10)
         self.speed = 1
         self.actual_pos = 0
 
-    def move_set(self):
+        # Stats
+        self.contact_dmg = 3
+        self.hp = 12
+
+    def move_set(self) -> None:
         """ 
         Garante uma movimentacao fixa do objeto Little_Spider
         """
@@ -158,12 +168,16 @@ class Little_Spider(Enemy):
 
         self.update_position(self.speed, 0)
 
+    def move_hitbox_rect_topleft(self, new_pos_x: int, new_pos_y: int) -> None:
+        """Posiciona o topo do rect de hitbox de acordo com a nova posição do inimigo
+        """
+        self.hitbox_rect.topleft = [new_pos_x + 35, new_pos_y+55]
+
 
 class Enemy_Group(Enemy):
     """
     Essa classe agrupa os inimigos criados em um vetor, e seus metodos chamam metodos de cada entidade 
-    dentro desse vetor, um exemplo eh atualizar a animacao de todos os inimigos ao mesmo tempo
-
+    dentro desse vetor. Por exemplo, atualiza-se a animacao de todos os inimigos ao mesmo tempo
     """
     def __init__(self, enemy_group_number : int) -> None:
         super().__init__()
@@ -173,7 +187,8 @@ class Enemy_Group(Enemy):
         if enemy_group_number == 0:
             little_spider = Little_Spider([400, 500])
             enemy2 = Shooter([250, 328])
-            self.enemy_vector = [little_spider, enemy2]
+            enemy3 = Shooter([350, 328])
+            self.enemy_vector = numpy.array([little_spider, enemy2, enemy3])
 
     def update_enemies_sprites(self):
         for enemy in self.enemy_vector:
@@ -196,7 +211,7 @@ class Enemy_Group(Enemy):
     def draw_collisions_rects(self, screen):
         green = (0, 255, 0)
         for enemy in self.enemy_vector:
-            pygame.draw.rect(screen, green, enemy.rect_down, 1)
+            pygame.draw.rect(screen, green, enemy.hitbox_rect, 1)
     
     def define_pos_group(self, delta_x, delta_y):
         """
@@ -209,9 +224,8 @@ class Enemy_Group(Enemy):
         for enemy in self.enemy_vector:
             new_pos_x = enemy.rect.x + delta_x
             new_pos_y = enemy.rect.y - delta_y
-            #if enemy.
-            enemy.rect_down.topleft = [new_pos_x + 35, new_pos_y + 30]
-    
+            enemy.move_hitbox_rect_topleft(new_pos_x, new_pos_y)
+
     def set_move_sets(self):
         for enemy in self.enemy_vector:
             enemy.move_set()

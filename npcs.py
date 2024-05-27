@@ -64,7 +64,7 @@ class Traveler(Npc):
     def talk_to_player(self, player, screen):
         if(self.check_player_interaction(player) and self.talk_number == 0):
             text_pos = (50, 50)
-            text = "Ola jogador"
+            text = "Olá, jogador"
             text_render = self.dialogue_font.render(text, True, self.text_color)
             screen.blit(text_render, text_pos)
         else: 
