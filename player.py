@@ -77,7 +77,10 @@ Typical usage example:
         self.rect_down = pygame.Rect(self.pos_x+85, self.pos_y+47,  30, 30)
         self.rect_up = pygame.Rect(self.pos_x+85, self.pos_y,  30, 10)
         self.rect_right = pygame.Rect(self.pos_x+121, self.pos_y, 2, 75)  
-        self.rect_left = pygame.Rect(self.pos_x+77, self.pos_y, 2, 75)  
+        self.rect_left = pygame.Rect(self.pos_x+77, self.pos_y, 2, 75)
+        self.hitbox_rect = pygame.Rect(self.pos_x, self.pos_y, 45, self.height-5) 
+        self.right_attack_rect = pygame.Rect(self.pos_x+45, self.pos_y, 65, self.height-5)  
+        self.left_attack_rect = pygame.Rect(self.pos_x-45, self.pos_y, 65, self.height-5) 
         self.rect = pygame.Rect(self.pos_x, self.pos_y,  self.width, self.height)
         self.rect.topleft = [self.pos_x, self.pos_y]
         self.speed = [0.0, 0.0]
@@ -85,8 +88,14 @@ Typical usage example:
         self.x_limit_reached = False
         self.y_limit_reached = False
 
-    #TODO: fazer docstring
-    def _import_sprites(self, number_of_sprites: int, arquive: str, sprites_vector= []) -> None:
+        # Stats
+        self.attack_dmg = 5
+        self.hp = 50
+
+        self.last_hit_time = 0
+        self.last_landed_attack_time = 0
+
+    def _import_sprites(self, number_of_sprites: int, arquive: str, sprites_vector) -> None:
         """ Acessa a pasta selecionada {arquive} e guarda os PNG em um vetores de PNG {sprites_vector}
 
         Args:
@@ -143,6 +152,9 @@ Typical usage example:
             self.rect_up.topleft = [self.pos_x+85, self.pos_y]
             self.rect_right.topleft = [self.pos_x+121, self.pos_y]
             self.rect_left.topleft = [self.pos_x+77, self.pos_y]
+            self.hitbox_rect.topleft = [self.pos_x+77, self.pos_y]
+            self.right_attack_rect.topleft = [self.pos_x+110, self.pos_y]
+            self.left_attack_rect.topleft = [self.pos_x+25, self.pos_y]
     
 
     def apply_delta_gravity_effect(self, delta_t: float, map: map) -> None:
@@ -338,11 +350,15 @@ Typical usage example:
     def draw_collision_rect(self, screen: pygame.display) -> None:
         # Desenha um retângulo vermelho em torno do retângulo do jogador
         green = (0, 255, 0)
-        yellow = (255, 255, 0)
+        red = (255, 0, 0)
         white = (255, 255, 255)
         black = (0,0,0)
         #pygame.draw.rect(screen, yellow, self.rect, 1)
         pygame.draw.rect(screen, black, self.rect_down, 1)
+        pygame.draw.rect(screen, white, self.hitbox_rect, 1)
+        pygame.draw.rect(screen, red, self.right_attack_rect, 1)
+        pygame.draw.rect(screen, red, self.left_attack_rect, 1)
+
         #pygame.draw.rect(screen, invisible, self.rect_up, 1)
         #pygame.draw.rect(screen, white, self.rect_right, 1)
         #pygame.draw.rect(screen, white, self.rect_left, 1)
