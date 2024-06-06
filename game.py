@@ -142,11 +142,14 @@ class Game():
                     if self.player_character.hitbox_rect.colliderect(enemy.hitbox_rect):
                         if current_time - self.player_character.last_hit_time > 2:
                             self.player_character.hp -= enemy.contact_dmg
+                            self.player_character.hp_bar_change()
                             self.player_character.last_hit_time = time.time()
                             print("HP do jogador:", self.player_character.hp)
                             break
 
             self.screen.fill((128, 128, 128))
+            pygame.draw.rect(self.screen, (0, 0, 0), self.player_character.hp_bar_background)
+            pygame.draw.rect(self.screen, (192, 0, 0), self.player_character.hp_bar)
 
             self.my_camera.follow_player()
             self.player_character.draw_collision_rect(self.screen)
