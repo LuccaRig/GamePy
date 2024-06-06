@@ -77,7 +77,10 @@ Typical usage example:
         self.rect_down = pygame.Rect(self.pos_x+85, self.pos_y+47,  30, 30)
         self.rect_up = pygame.Rect(self.pos_x+85, self.pos_y,  30, 10)
         self.rect_right = pygame.Rect(self.pos_x+121, self.pos_y, 2, 75)  
-        self.rect_left = pygame.Rect(self.pos_x+77, self.pos_y, 2, 75)  
+        self.rect_left = pygame.Rect(self.pos_x+77, self.pos_y, 2, 75)
+        self.hitbox_rect = pygame.Rect(self.pos_x, self.pos_y, 45, self.height-5) 
+        self.right_attack_rect = pygame.Rect(self.pos_x+45, self.pos_y, 65, self.height-5)  
+        self.left_attack_rect = pygame.Rect(self.pos_x-45, self.pos_y, 65, self.height-5) 
         self.rect = pygame.Rect(self.pos_x, self.pos_y,  self.width, self.height)
         self.rect.topleft = [self.pos_x, self.pos_y]
         self.speed = [0.0, 0.0]
@@ -85,8 +88,14 @@ Typical usage example:
         self.x_limit_reached = False
         self.y_limit_reached = False
 
-    #TODO: fazer docstring
-    def _import_sprites(self, number_of_sprites: int, arquive: str, sprites_vector= []) -> None:
+        # Stats
+        self.attack_dmg = 10
+        self.hp = 100
+
+        self.last_hit_time = 0
+        self.last_landed_attack_time = 0
+
+    def _import_sprites(self, number_of_sprites: int, arquive: str, sprites_vector) -> None:
         """ Acessa a pasta selecionada {arquive} e guarda os PNG em um vetores de PNG {sprites_vector}
 
         Args:
@@ -120,7 +129,7 @@ Typical usage example:
         self.pos_y = map.pos_y_new_room + 110
 
     def update_position(self, new_pos_x: int, new_pos_y: int) -> None:
-        """ Muda a posição do Rect do player e a posição do rect_down
+        """ Muda a posição do Rect do player e a posição dos seu rects direcionais
 
         Args:
             new_pos_x:
@@ -143,6 +152,9 @@ Typical usage example:
             self.rect_up.topleft = [self.pos_x+85, self.pos_y]
             self.rect_right.topleft = [self.pos_x+121, self.pos_y]
             self.rect_left.topleft = [self.pos_x+77, self.pos_y]
+            self.hitbox_rect.topleft = [self.pos_x+77, self.pos_y]
+            self.right_attack_rect.topleft = [self.pos_x+110, self.pos_y]
+            self.left_attack_rect.topleft = [self.pos_x+25, self.pos_y]
     
 
     def apply_delta_gravity_effect(self, delta_t: float, map: map) -> None:
@@ -163,13 +175,15 @@ Typical usage example:
             self.update_position(0, -self.delta_pos_y)
 
     def correct_ground_intersection(self, map: map):
+        """Coloca o player precisamente acima do chão após uma queda
+
+        Args:
+            map: objeto capaz de retornar a interseção entre o rect inferior do player e o rect do chão
+        """
         intersection_rect = map.return_ground_intersection(self.rect_down)
         if intersection_rect.height > 1:
             #print("corrigindo pulo: ", intersection_rect.height)
             self.update_position(0, -intersection_rect.height+1)
-
-    def get_jumping_speed(self):
-        return self.jumping_speed
     
     def is_colliding(self, map: map, direction: str) -> bool:
         """Retorna True se o player estiver colidindo na direção enviada
@@ -338,11 +352,15 @@ Typical usage example:
     def draw_collision_rect(self, screen: pygame.display) -> None:
         # Desenha um retângulo vermelho em torno do retângulo do jogador
         green = (0, 255, 0)
-        yellow = (255, 255, 0)
+        red = (255, 0, 0)
         white = (255, 255, 255)
         black = (0,0,0)
         #pygame.draw.rect(screen, yellow, self.rect, 1)
         pygame.draw.rect(screen, black, self.rect_down, 1)
+        pygame.draw.rect(screen, white, self.hitbox_rect, 1)
+        pygame.draw.rect(screen, red, self.right_attack_rect, 1)
+        pygame.draw.rect(screen, red, self.left_attack_rect, 1)
+
         #pygame.draw.rect(screen, invisible, self.rect_up, 1)
         #pygame.draw.rect(screen, white, self.rect_right, 1)
         #pygame.draw.rect(screen, white, self.rect_left, 1)

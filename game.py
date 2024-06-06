@@ -3,6 +3,7 @@ import player
 import enemy
 import camera
 import room
+import time
 
 class Game():
     def __init__(self) -> None:
@@ -30,6 +31,7 @@ class Game():
         self.my_camera = camera.Camera(self.myRoom.current_room(), self.player_character, self.screen)
         self.my_camera_off_set = {}
 
+
     def game_run(self):
 
         while self.running:
@@ -37,6 +39,7 @@ class Game():
             #print(self.player_character.pos_x, self.player_character.pos_y)
             #print(self.my_camera_off_set)
             #print(self.myRoom.is_first_time)
+            current_time = time.time()
             
             #Testa se o player está avançando para a nova sala, e se estiver
             # atualiza o mapa no vetor de mapas e reinicializa a posição do player e da câmera
@@ -80,6 +83,19 @@ class Game():
                 if not (self.player_character.landing) or not(self.player_character.is_colliding(self.myRoom.current_room(), "down")):
                     self.player_character.walking = False
                     self.player_character.attacking = True
+                    #testa se o ataque pode tirar vida de um inimigo e, se sim, o faz
+                    hit_was_successfull = False
+                    for enemy in self.enemies.enemy_vector:
+                        if enemy.is_alive:
+                            if (self.player_character.right_attack_rect.colliderect(enemy.hitbox_rect) and (self.player_character.direction == "right") or \
+                             self.player_character.left_attack_rect.colliderect(enemy.hitbox_rect) and (self.player_character.direction == "left")):
+                                if current_time - self.player_character.last_landed_attack_time > 0.48:
+                                    enemy.hp -= self.player_character.attack_dmg
+                                    hit_was_successfull = True
+                                    print("HP do inimigo: ", enemy.hp)
+                    if hit_was_successfull:
+                        self.player_character.last_landed_attack_time = time.time()
+                                     
                 else:
                     self.player_character.animate_land()
                     self.player_character.jumping = False
@@ -120,11 +136,20 @@ class Game():
                     self.player_character.vertical_speed += self.player_character.jumping_speed
                         #y -= vel
 
+            #checa se o jogador deve receber dano de contato
+            for enemy in self.enemies.enemy_vector:
+                if enemy.is_alive:
+                    if self.player_character.hitbox_rect.colliderect(enemy.hitbox_rect):
+                        if current_time - self.player_character.last_hit_time > 2:
+                            self.player_character.hp -= enemy.contact_dmg
+                            self.player_character.last_hit_time = time.time()
+                            print("HP do jogador:", self.player_character.hp)
+                            break
+
             self.screen.fill((128, 128, 128))
 
             self.my_camera.follow_player()
             self.player_character.draw_collision_rect(self.screen)
-
 
             self.moving_sprites.draw(self.screen)
             self.moving_sprites.update()
@@ -134,13 +159,16 @@ class Game():
             self.my_camera.keep_enemy_pos(self.screen, self.enemies)
             self.enemies.update_enemies_sprites()
             self.enemies.draw_collisions_rects(self.screen)
+            self.enemies.check_deaths()
+            self.enemies.animate_deaths()
+            self.enemies.destruct_dead_enemies()
+            
 
             if self.myRoom.current_room_npc() != None:
                 self.my_camera.keep_npc_pos(self.screen, self.myRoom.current_room_npc())
                 self.myRoom.current_room_npc().talk_to_player(self.player_character, self.screen)
                 self.myRoom.current_room_npc().animate()
                 self.myRoom.current_room_npc().update()
-
 
             self.moving_sprites.draw(self.screen)
             self.moving_sprites.update()
