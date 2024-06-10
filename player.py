@@ -123,7 +123,7 @@ Typical usage example:
             map: objeto que contém os blocos de colisão para ajuste do player
         """
         self.pos_x = map.pos_x_previous_room - 40
-        self.pos_y = map.pos_y_previous_room + 110
+        self.pos_y = map.pos_y_previous_room + 170
 
     def reinitialize_position_returning(self, map: map, off_set_x: int) -> None:
         """Ajusta a posição do player para a sala anterior
@@ -132,7 +132,7 @@ Typical usage example:
             map: objeto que contém os blocos de colisão para ajuste do player
         """
         self.pos_x = map.pos_x_new_room - 125 + off_set_x
-        self.pos_y = map.pos_y_new_room + 110
+        self.pos_y = map.pos_y_new_room + 170
 
     def update_position(self, new_pos_x: int, new_pos_y: int) -> None:
         """ Muda a posição do Rect do player e a posição dos seu rects direcionais
@@ -213,10 +213,9 @@ Typical usage example:
         Args:
             map: objeto que contém função capaz de checar colisões
         """
-        if(self.direction == "right"):
-            return map.check_new_room(self.rect_right)
-        elif(self.direction == "left"):
-            return map.check_new_room(self.rect_left)
+
+        if self.direction == "right":
+            return map.check_new_room(self.hitbox_rect)
     
     def is_returning_room(self, map: map) -> bool:
         """Retorna True se o player estiver voltando para a sala anterior
@@ -224,10 +223,9 @@ Typical usage example:
         Args:
             map: objeto que contém função capaz de checar colisões
         """
-        if(self.direction == "left"):
-            return map.check_previous_room(self.rect_left)
-        elif(self.direction == "right"):
-            return map.check_previous_room(self.rect_right)
+
+        if self.direction == "left":
+            return map.check_previous_room(self.hitbox_rect)
 
     #TODO: fazer docstring
     def animate_attack(self) -> None:

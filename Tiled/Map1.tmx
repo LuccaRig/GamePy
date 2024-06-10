@@ -39,10 +39,10 @@
  </layer>
  <objectgroup id="5" name="Camada de Objetos 1">
   <object id="10" name="Collision" x="0" y="128" width="512" height="128"/>
-  <object id="13" name="Previous Room" x="0" y="96" width="8" height="32"/>
+  <object id="13" name="Previous Room" x="-8" y="80" width="8" height="48"/>
   <object id="17" name="Collision" x="112" y="96" width="112" height="32"/>
   <object id="18" name="Collision" x="144" y="64" width="48" height="32"/>
-  <object id="19" name="New Room" x="504" y="96" width="8" height="32"/>
+  <object id="19" name="New Room" x="512" y="80" width="8" height="48"/>
  </objectgroup>
  <layer id="3" name="Ground" width="64" height="32">
   <data encoding="csv">
