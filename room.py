@@ -4,8 +4,8 @@ class Room():
     def __init__(self) -> None:
         self.my_maps = []
         self.is_first_time = {}
-        self.import_maps(7, self.my_maps)
-        self.first_time_in_room(7, self.is_first_time)
+        self.import_maps(9, self.my_maps)
+        self.first_time_in_room(9, self.is_first_time)
         self.current_map_position = 0
         self.current_room().map_npc_define()
 
