@@ -87,10 +87,12 @@ Typical usage example:
         self.delta_pos_y = 0
         self.x_limit_reached = False
         self.y_limit_reached = False
+        self.hp_bar_background = pygame.image.load('assets/HUD HP_BAR.png')
+        self.hp_bar = pygame.Rect(28, 16, 200, 40)
 
         # Stats
         self.attack_dmg = 10
-        self.hp = 100
+        self.hp = 50
 
         self.last_hit_time = 0
         self.last_landed_attack_time = 0
@@ -109,6 +111,10 @@ Typical usage example:
             # Scale the sprite
             sprite = pygame.transform.scale(sprite, (int(sprite.get_width() * scale), int(sprite.get_height() * scale)))
             sprites_vector.append(sprite)
+        
+    def hp_bar_change(self) -> None:
+        hp_bar_percent = self.hp*4
+        self.hp_bar = pygame.Rect(28, 16, hp_bar_percent, 40)
 
     def reinitialize_position_advancing(self, map: map) -> None:
         """Ajusta a posição do player para a nova sala
