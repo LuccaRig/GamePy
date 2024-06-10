@@ -77,8 +77,6 @@ class Traveler(Npc):
                 self.last_letter_time = current_time
             
             text_render = self.dialogue_font.render(text[:self.text_index], True, self.text_color)
-            text = "Olá, jogador"
-            text_render = self.dialogue_font.render(text, True, self.text_color)
             screen.blit(text_render, text_pos)
         else: 
             pass
