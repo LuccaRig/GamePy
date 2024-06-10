@@ -122,8 +122,16 @@ Typical usage example:
         Args:
             map: objeto que contém os blocos de colisão para ajuste do player
         """
-        self.pos_x = map.pos_x_previous_room - 40
+        self.pos_x = map.pos_x_previous_room - 50
         self.pos_y = map.pos_y_previous_room + 170
+        self.rect.topleft = [self.pos_x, self.pos_y]
+        self.rect_down.topleft = [self.pos_x+85, self.pos_y+47]
+        self.rect_up.topleft = [self.pos_x+85, self.pos_y]
+        self.rect_right.topleft = [self.pos_x+121, self.pos_y]
+        self.rect_left.topleft = [self.pos_x+77, self.pos_y]
+        self.hitbox_rect.topleft = [self.pos_x+77, self.pos_y]
+        self.right_attack_rect.topleft = [self.pos_x+110, self.pos_y]
+        self.left_attack_rect.topleft = [self.pos_x+25, self.pos_y]
 
     def reinitialize_position_returning(self, map: map, off_set_x: int) -> None:
         """Ajusta a posição do player para a sala anterior
@@ -131,8 +139,16 @@ Typical usage example:
         Args:
             map: objeto que contém os blocos de colisão para ajuste do player
         """
-        self.pos_x = map.pos_x_new_room - 125 + off_set_x
+        self.pos_x = map.pos_x_new_room - 110 + off_set_x
         self.pos_y = map.pos_y_new_room + 170
+        self.rect.topleft = [self.pos_x, self.pos_y]
+        self.rect_down.topleft = [self.pos_x+85, self.pos_y+47]
+        self.rect_up.topleft = [self.pos_x+85, self.pos_y]
+        self.rect_right.topleft = [self.pos_x+121, self.pos_y]
+        self.rect_left.topleft = [self.pos_x+77, self.pos_y]
+        self.hitbox_rect.topleft = [self.pos_x+77, self.pos_y]
+        self.right_attack_rect.topleft = [self.pos_x+110, self.pos_y]
+        self.left_attack_rect.topleft = [self.pos_x+25, self.pos_y]
 
     def update_position(self, new_pos_x: int, new_pos_y: int) -> None:
         """ Muda a posição do Rect do player e a posição dos seu rects direcionais
