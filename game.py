@@ -148,8 +148,6 @@ class Game():
                             break
 
             self.screen.fill((128, 128, 128))
-            pygame.draw.rect(self.screen, (0, 0, 0), self.player_character.hp_bar_background)
-            pygame.draw.rect(self.screen, (192, 0, 0), self.player_character.hp_bar)
 
             self.my_camera.follow_player()
             self.player_character.draw_collision_rect(self.screen)
@@ -175,6 +173,8 @@ class Game():
 
             self.moving_sprites.draw(self.screen)
             self.moving_sprites.update()
+            self.screen.blit(self.player_character.hp_bar_background, (10, 10))
+            pygame.draw.rect(self.screen, (192, 0, 0), self.player_character.hp_bar)
 
             pygame.display.flip()
 
