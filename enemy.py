@@ -18,7 +18,8 @@ class Enemy(pygame.sprite.Sprite):
         self.current_sprite = 0
         self.current_death_sprite = 0
 
-    def import_sprites(self, number_of_sprites=0, arquive='0', sprites_vector= [], scale=4) -> None:
+    def import_sprites(self, number_of_sprites=0, arquive='0', sprites_vector= []) -> None:
+        scale = 4
         for i in range(number_of_sprites):
             sprite = pygame.image.load(f'{arquive}/tile00{i}.png')
             # Scale the sprite
@@ -89,6 +90,7 @@ class Shooter(Enemy):
         self.import_sprites(1,'CharacterSprites/shooter/idlePNGleft', self.sprites_idle_left)
         self.import_sprites(5,'CharacterSprites/shooter/wakePNGright', self.sprites_moving_right)
         self.import_sprites(5,'CharacterSprites/shooter/wakePNGleft', self.sprites_moving_left)
+        self.import_sprites(6,'CharacterSprites/shooter/deathPNGleft', self.sprites_dying)
 
         self.image = self.sprites_idle_right[self.current_sprite]
 
@@ -121,16 +123,16 @@ class Shooter(Enemy):
             self.hitbox_rect.topleft = [new_pos_x+48, new_pos_y+32]
 
     def animate_death(self):
-        # animation_speed = 0.3
-        # self.current_death_sprite += animation_speed
-        # if self.direction == "left":
-        #     if self.current_death_sprite >= len(self.sprites_dying):
-        #         self.current_death_sprite = 0
-        #         self.is_animating = False
-        #         self.landing = False
-        #     else:
-        #         self.image = self.sprites_dying[int(self.current_death_sprite)]
-        self.is_alive = False
+        animation_speed = 0.15
+        self.current_death_sprite += animation_speed
+        if self.direction == "left":
+             if self.current_death_sprite >= len(self.sprites_dying):
+                 self.current_death_sprite = 0
+                 self.is_animating = False
+                 self.dying = False
+                 self.is_alive = False
+             else:
+                 self.image = self.sprites_dying[int(self.current_death_sprite)]
 
 
 class Little_Spider(Enemy):
@@ -204,7 +206,7 @@ class Enemy_Group(Enemy):
         if enemy_group_number == 0:
             little_spider = Little_Spider([400, 500])
             enemy2 = Shooter([250, 328])
-            enemy3 = Shooter([290, 328])
+            enemy3 = Shooter([370, 328])
             self.enemy_vector = numpy.array([little_spider, enemy2, enemy3])
 
     def update_enemies_sprites(self):
@@ -261,8 +263,7 @@ class Enemy_Group(Enemy):
         for enemy in self.enemy_vector:
             if enemy.hp <= 0 and enemy.is_alive:
                 enemy.dying = True
-                enemy.is_alive = False
-                enemy.hitbox_rect = None
+                enemy.hitbox_rect.topleft = [0, 2000]
 
     def animate_deaths(self):
         for enemy in self.enemy_vector:
@@ -272,4 +273,5 @@ class Enemy_Group(Enemy):
     def destruct_dead_enemies(self):
         for i, enemy in numpy.ndenumerate(self.enemy_vector):
             if not enemy.is_alive and not enemy.dying:
+                enemy.hitbox_rect = None
                 numpy.delete(self.enemy_vector, i)
