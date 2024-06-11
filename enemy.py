@@ -17,6 +17,7 @@ class Enemy(pygame.sprite.Sprite):
 
         self.current_sprite = 0
         self.current_death_sprite = 0
+        self.animation_speed = 0
 
     def import_sprites(self, number_of_sprites=0, arquive='0', sprites_vector= []) -> None:
         scale = 4
@@ -38,6 +39,26 @@ class Enemy(pygame.sprite.Sprite):
 
     def animate(self) -> None:
         self.is_animating = True 
+
+    def animate_death(self):
+        self.current_death_sprite += self.animation_speed
+        if self.direction == "left":
+             if self.current_death_sprite >= len(self.sprites_dying_left):
+                 self.current_death_sprite = 0
+                 self.is_animating = False
+                 self.dying = False
+                 self.is_alive = False
+             else:
+                 self.image = self.sprites_dying_left[int(self.current_death_sprite)]
+
+        elif self.direction == "right":
+            if self.current_death_sprite >= len(self.sprites_dying_right):
+                 self.current_death_sprite = 0
+                 self.is_animating = False
+                 self.dying = False
+                 self.is_alive = False
+            else:
+                 self.image = self.sprites_dying_right[int(self.current_death_sprite)]
 
     def update(self) -> None:
         animation_speed = 0.10
@@ -84,13 +105,15 @@ class Shooter(Enemy):
         self.sprites_idle_left = []
         self.sprites_moving_right = []
         self.sprites_moving_left = []
-        self.sprites_dying = []
+        self.sprites_dying_left = []
+        self.sprites_dying_right = []
 
         self.import_sprites(1,'CharacterSprites/shooter/idlePNGright', self.sprites_idle_right)
         self.import_sprites(1,'CharacterSprites/shooter/idlePNGleft', self.sprites_idle_left)
         self.import_sprites(5,'CharacterSprites/shooter/wakePNGright', self.sprites_moving_right)
         self.import_sprites(5,'CharacterSprites/shooter/wakePNGleft', self.sprites_moving_left)
-        self.import_sprites(6,'CharacterSprites/shooter/deathPNGleft', self.sprites_dying)
+        self.import_sprites(6,'CharacterSprites/shooter/deathPNGleft', self.sprites_dying_left)
+        self.import_sprites(6,'CharacterSprites/shooter/deathPNGright', self.sprites_dying_right)
 
         self.image = self.sprites_idle_right[self.current_sprite]
 
@@ -105,6 +128,7 @@ class Shooter(Enemy):
         self.hitbox_rect.topleft = [self.pos_x, self.pos_y]
         self.speed = 1
         self.actual_pos = 0
+        self.animation_speed = 0.15
 
         # Stats
         self.contact_dmg = 3
@@ -121,18 +145,6 @@ class Shooter(Enemy):
         """
         if self.is_alive:
             self.hitbox_rect.topleft = [new_pos_x+48, new_pos_y+32]
-
-    def animate_death(self):
-        animation_speed = 0.15
-        self.current_death_sprite += animation_speed
-        if self.direction == "left":
-             if self.current_death_sprite >= len(self.sprites_dying):
-                 self.current_death_sprite = 0
-                 self.is_animating = False
-                 self.dying = False
-                 self.is_alive = False
-             else:
-                 self.image = self.sprites_dying[int(self.current_death_sprite)]
 
 
 class Little_Spider(Enemy):
@@ -188,9 +200,6 @@ class Little_Spider(Enemy):
         """Posiciona o topo do rect de hitbox de acordo com a nova posição do inimigo
         """
         self.hitbox_rect.topleft = [new_pos_x + 35, new_pos_y+55]
-
-    def animate_death(self):
-        self.is_alive = False
 
 
 class Enemy_Group(Enemy):
