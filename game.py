@@ -23,7 +23,6 @@ class Game():
 
         # Creating Sprites and Groups
         self.player_character = player.Player()
-        self.enemies = enemy.Enemy_Group(0)
         self.moving_sprites = pygame.sprite.Group()
         self.moving_sprites.add(self.player_character)
 
@@ -85,7 +84,7 @@ class Game():
                     self.player_character.attacking = True
                     #testa se o ataque pode tirar vida de um inimigo e, se sim, o faz
                     hit_was_successfull = False
-                    for enemy in self.enemies.enemy_vector:
+                    for enemy in self.myRoom.current_room_enemies().enemy_vector:
                         if enemy.is_alive:
                             if (self.player_character.right_attack_rect.colliderect(enemy.hitbox_rect) and (self.player_character.direction == "right") or \
                              self.player_character.left_attack_rect.colliderect(enemy.hitbox_rect) and (self.player_character.direction == "left")):
@@ -137,15 +136,16 @@ class Game():
                         #y -= vel
 
             #checa se o jogador deve receber dano de contato
-            for enemy in self.enemies.enemy_vector:
-                if enemy.is_alive:
-                    if self.player_character.hitbox_rect.colliderect(enemy.hitbox_rect):
-                        if current_time - self.player_character.last_hit_time > 1.3:
-                            self.player_character.hp -= enemy.contact_dmg
-                            self.player_character.hp_bar_change()
-                            self.player_character.last_hit_time = time.time()
-                            print("HP do jogador:", self.player_character.hp)
-                            break
+            if self.myRoom.current_room_enemies() != None:
+                for enemy in self.myRoom.current_room_enemies().enemy_vector:
+                    if enemy.is_alive:
+                        if self.player_character.hitbox_rect.colliderect(enemy.hitbox_rect):
+                            if current_time - self.player_character.last_hit_time > 1.3:
+                                self.player_character.hp -= enemy.contact_dmg
+                                self.player_character.hp_bar_change()
+                                self.player_character.last_hit_time = time.time()
+                                print("HP do jogador:", self.player_character.hp)
+                                break
 
             self.screen.fill((130, 181, 250))
             #(130, 181, 250)
@@ -157,20 +157,21 @@ class Game():
             self.moving_sprites.update()
 
             self.player_character.animate()
-            self.enemies.set_move_sets()
-            self.my_camera.keep_enemy_pos(self.screen, self.enemies)
-            self.enemies.update_enemies_sprites()
-            self.enemies.draw_collisions_rects(self.screen)
-            self.enemies.check_deaths()
-            self.enemies.animate_deaths()
-            self.enemies.destruct_dead_enemies()
-            
 
             if self.myRoom.current_room_npc() != None:
                 self.my_camera.keep_npc_pos(self.screen, self.myRoom.current_room_npc())
                 self.myRoom.current_room_npc().talk_to_player(self.player_character, self.screen)
                 self.myRoom.current_room_npc().animate()
                 self.myRoom.current_room_npc().update()
+
+            if self.myRoom.current_room_enemies() != None:
+                self.myRoom.current_room_enemies().set_move_sets()
+                self.my_camera.keep_enemy_pos(self.screen, self.myRoom.current_room_enemies())
+                self.myRoom.current_room_enemies().update_enemies_sprites()
+                self.myRoom.current_room_enemies().draw_collisions_rects(self.screen)
+                self.myRoom.current_room_enemies().check_deaths()
+                self.myRoom.current_room_enemies().animate_deaths()
+                self.myRoom.current_room_enemies().destruct_dead_enemies()
 
             self.moving_sprites.draw(self.screen)
             self.moving_sprites.update()

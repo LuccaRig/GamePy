@@ -17,7 +17,7 @@ class Room():
             maps_vector: vetor que vai armazenar os mapas
         """
         for i in range(number_of_maps):
-            current_map = map.Map(f"Tiled/Map{i}.tmx")
+            current_map = map.Map(f"Tiled/Map{i}.tmx", i)
             maps_vector.append(current_map) 
 
     def first_time_in_room(self, number_of_maps: int, first_time_dictionary= {}) -> None:
@@ -38,14 +38,12 @@ class Room():
         
         """
         self.current_map_position += 1
-        self.current_room().map_number = self.current_map_position
 
     def return_room(self) -> None:
         """Diminui o índice do vetor de mapas
         
         """
         self.current_map_position -= 1
-        self.current_room().map_number = self.current_map_position
 
     def current_room_npc(self):
         if self.current_map_position == 0:
@@ -53,3 +51,6 @@ class Room():
         else:
             return None
 
+    def current_room_enemies(self):
+        if self.current_room().enemy_map_group != None:
+            return self.current_room().enemy_map_group

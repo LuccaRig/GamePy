@@ -1,9 +1,10 @@
 import pygame
 import pytmx
 import npcs
+import enemy
 
 class Map():
-    def __init__(self, map_folder) -> None:
+    def __init__(self, map_folder , group) -> None:
         self.tmx_map = pytmx.load_pygame(map_folder)
         self.tile_width = self.tmx_map.tilewidth
         self.tile_height = self.tmx_map.tileheight
@@ -18,7 +19,8 @@ class Map():
         self.pos_x_previous_room = 0
         self.pos_y_previous_room = 0
 
-        self.map_number = 0
+        self.map_number = group
+        self.map_enemy_define()
 
     def render_visible_layers(self, screen: pygame.display, off_set_x: float, off_set_y: float) -> None:
         """Itera sobre a matriz do mapa para renderizar os tiles do mapas, assim como os objetos de colisão e de mudança de sala
@@ -141,3 +143,10 @@ class Map():
     def map_npc_define(self):
         if self.map_number == 0:
             self.npc = npcs.Traveler()
+
+    def map_enemy_define(self):
+        if self.map_number == 0:
+            self.enemy_map_group = enemy.Enemy_Group(0)
+
+        elif self.map_number == 1:
+            self.enemy_map_group = enemy.Enemy_Group(1)

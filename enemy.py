@@ -336,6 +336,11 @@ class Enemy_Group(Enemy):
             enemy4 = Flower([450, 300])
             self.enemy_vector = numpy.array([little_spider, enemy2, enemy3, enemy4])
 
+        if enemy_group_number == 1:
+            little_spider = Little_Spider([100, 500])
+            enemy3 = Shooter([200, 100])
+            self.enemy_vector = numpy.array([little_spider, enemy3])
+
     def update_enemies_sprites(self):
         for enemy in self.enemy_vector:
             if enemy.is_alive:
