@@ -175,7 +175,7 @@ class Ghoul(Enemy):
         self.height = 65
         self.rect = pygame.Rect(self.pos_x, self.pos_y,  self.width, self.height)
         self.rect.topleft = [self.pos_x, self.pos_y]
-        self.hitbox_rect = pygame.Rect(self.pos_x+85, self.pos_y-50, 45, 68)
+        self.hitbox_rect = pygame.Rect(self.pos_x+85, self.pos_y-50, 30, 93)
         self.hitbox_rect.topleft = [self.pos_x, self.pos_y]
         self.speed = 1
         self.actual_pos = 0
@@ -194,7 +194,7 @@ class Ghoul(Enemy):
         """Posiciona o topo do rect de hitbox de acordo com a nova posição do inimigo
         """
         if self.is_alive:
-            self.hitbox_rect.topleft = [new_pos_x+48, new_pos_y+32]
+            self.hitbox_rect.topleft = [new_pos_x+107, new_pos_y+36]
 
     def animate_death(self):
         animation_speed = 0.15
@@ -277,7 +277,7 @@ class Enemy_Group(Enemy):
         if enemy_group_number == 0:
             little_spider = Little_Spider([400, 500])
             enemy2 = Shooter([250, 328])
-            enemy3 = Ghoul([300, 328])
+            enemy3 = Ghoul([300, 300])
             self.enemy_vector = numpy.array([little_spider, enemy2, enemy3])
 
     def update_enemies_sprites(self):
