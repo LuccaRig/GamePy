@@ -4,8 +4,7 @@ class Npc():
     def __init__(self) -> None:
         self.is_animating = False
         self.current_sprite = 0
-        self.sprites = []
-                
+        self.sprites = []      
         
     def import_sprites(self, number_of_sprites : int, arquive : str, sprites_vector : list, scale=4) -> None:
         for i in range(number_of_sprites):
