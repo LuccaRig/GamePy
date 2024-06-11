@@ -187,7 +187,7 @@ class Ghoul(Enemy):
         self.height = 65
         self.rect = pygame.Rect(self.pos_x, self.pos_y,  self.width, self.height)
         self.rect.topleft = [self.pos_x, self.pos_y]
-        self.hitbox_rect = pygame.Rect(self.pos_x+85, self.pos_y-50, 45, 68)
+        self.hitbox_rect = pygame.Rect(self.pos_x+85, self.pos_y-50, 30, 93)
         self.hitbox_rect.topleft = [self.pos_x, self.pos_y]
         self.speed = 1
         self.actual_pos = 0
@@ -207,7 +207,7 @@ class Ghoul(Enemy):
         """Posiciona o topo do rect de hitbox de acordo com a nova posição do inimigo
         """
         if self.is_alive:
-            self.hitbox_rect.topleft = [new_pos_x+48, new_pos_y+32]
+            self.hitbox_rect.topleft = [new_pos_x+107, new_pos_y+36]
 
 class Flower(Enemy):
     def __init__(self, inital_pos : list) -> None:
