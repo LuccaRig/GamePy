@@ -135,6 +135,68 @@ class Shooter(Enemy):
                  self.image = self.sprites_dying[int(self.current_death_sprite)]
 
 
+class Ghoul(Enemy):
+    def __init__(self, inital_pos : list) -> None:
+        super().__init__()
+        #Sprites and animation
+        #TODO: Change walking to waking
+        self.sprites_idle_right = []
+        self.sprites_idle_left = []
+        self.sprites_moving_right = []
+        self.sprites_moving_left = []
+        self.sprites_dying_right = []
+        self.sprites_dying_left = []
+
+        self.import_sprites(1,'CharacterSprites/Ghoul/staticPNGright', self.sprites_idle_right)
+        self.import_sprites(1,'CharacterSprites/Ghoul/staticPNGleft', self.sprites_idle_left)
+        self.import_sprites(9,'CharacterSprites/Ghoul/movementPNGright', self.sprites_moving_right)
+        self.import_sprites(9,'CharacterSprites/Ghoul/movementPNGleft', self.sprites_moving_left)
+        self.import_sprites(8,'CharacterSprites/Ghoul/deathPNGright', self.sprites_dying_right)
+        self.import_sprites(8,'CharacterSprites/Ghoul/deathPNGleft', self.sprites_dying_left)
+
+        self.image = self.sprites_idle_right[self.current_sprite]
+
+        # Default Position and movement
+        self.pos_x = inital_pos[0]
+        self.pos_y = inital_pos[1]
+        self.width = 55
+        self.height = 65
+        self.rect = pygame.Rect(self.pos_x, self.pos_y,  self.width, self.height)
+        self.rect.topleft = [self.pos_x, self.pos_y]
+        self.hitbox_rect = pygame.Rect(self.pos_x+85, self.pos_y-50, 45, 68)
+        self.hitbox_rect.topleft = [self.pos_x, self.pos_y]
+        self.speed = 1
+        self.actual_pos = 0
+
+        # Stats
+        self.contact_dmg = 3
+        self.attack_dmg = 5
+        self.hp = 25
+
+    def move_set(self):
+        """  Garante uma movimentacao fixa do objeto Little_Spider
+        """
+        self.update_position(0, 0)
+
+    def move_hitbox_rect_topleft(self, new_pos_x: int, new_pos_y: int) -> None:
+        """Posiciona o topo do rect de hitbox de acordo com a nova posição do inimigo
+        """
+        if self.is_alive:
+            self.hitbox_rect.topleft = [new_pos_x+48, new_pos_y+32]
+
+    def animate_death(self):
+        animation_speed = 0.15
+        self.current_death_sprite += animation_speed
+        if self.direction == "left":
+             if self.current_death_sprite >= len(self.sprites_dying_left):
+                 self.current_death_sprite = 0
+                 self.is_animating = False
+                 self.dying = False
+                 self.is_alive = False
+             else:
+                 self.image = self.sprites_dying_left[int(self.current_death_sprite)]
+
+
 class Little_Spider(Enemy):
     def __init__(self, inital_pos : list) -> None:
         super().__init__()
@@ -206,7 +268,7 @@ class Enemy_Group(Enemy):
         if enemy_group_number == 0:
             little_spider = Little_Spider([400, 500])
             enemy2 = Shooter([250, 328])
-            enemy3 = Shooter([370, 328])
+            enemy3 = Ghoul([300, 328])
             self.enemy_vector = numpy.array([little_spider, enemy2, enemy3])
 
     def update_enemies_sprites(self):
