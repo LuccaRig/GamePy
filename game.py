@@ -172,6 +172,12 @@ class Game():
             self.moving_sprites.update()
 
             self.player_character.animate()
+            if self.player_character.hp <= 0:
+                self.player_character.dying = True
+                self.player_character.is_alive = False
+                self.player_character.is_animating = False
+            
+            self.player_character.animate_death()
 
             if self.myRoom.current_room_npc() != None:
                 self.my_camera.keep_npc_pos(self.screen, self.myRoom.current_room_npc())

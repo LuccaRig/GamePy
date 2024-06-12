@@ -1,4 +1,4 @@
-import pygame
+import pygame, sys
 import map
 import time
 
@@ -25,6 +25,9 @@ Typical usage example:
         self.sprites_moving_right = []
         self.sprites_moving_left = []
 
+        self.sprites_hit_right = []
+        self.sprites_hit_left = []
+
         self.sprites_attacking_right = []
         self.sprites_attacking_left = []
 
@@ -36,6 +39,9 @@ Typical usage example:
 
         self.sprites_landing_right = []
         self.sprites_landing_left = []
+
+        self.sprites_dying_right = []
+        self.sprites_dying_left = []
 
         # Load All Sprites
         self._import_sprites(9,'CharacterSprites/assassin/idlePNGright', self.sprites_idle_right)
@@ -50,20 +56,25 @@ Typical usage example:
         self._import_sprites(4, 'CharacterSprites/assassin/fallPNGleft', self.sprites_falling_left)
         self._import_sprites(4, 'CharacterSprites/assassin/landPNGright', self.sprites_landing_right)
         self._import_sprites(4, 'CharacterSprites/assassin/landPNGleft', self.sprites_landing_left)
+        self._import_sprites(4, 'CharacterSprites/assassin/deathPNGright', self.sprites_dying_right)
+        self._import_sprites(4, 'CharacterSprites/assassin/deathPNGleft', self.sprites_dying_left)
 
         # Default Boolean and Character States
         self.is_animating = False
+        self.is_alive = True
         self.attacking = False
         self.walking = False
         self.grounded = False
         self.jumping = False
         self.landing = False
         self.falling = False
+        self.dying = False
         self.direction = "right"
         self.current_sprite = 0
         self.current_sprite_attack = 0
         self.current_sprite_jump = 0
         self.current_sprite_land = 0
+        self.current_sprite_death = 0
         self.image = self.sprites_idle_right[self.current_sprite]     
 
         # Default Position and movement
@@ -288,6 +299,31 @@ Typical usage example:
                 else:
                     self.image = self.sprites_landing_left[int(self.current_sprite_land)]
 
+    def animate_death(self) -> None:
+        """
+        """
+        if self.dying:    
+            animation_speed = 0.05
+            self.current_sprite_death += animation_speed
+            if self.direction == "right":
+                if self.current_sprite_death >= len(self.sprites_dying_right):
+                    self.current_sprite_death = 0
+                    self.dying = False
+                    pygame.quit()
+                    sys.exit()
+                else:
+                    self.image = self.sprites_dying_right[int(self.current_sprite_death)]
+
+            elif self.direction == "left":
+                if self.current_sprite_death >= len(self.sprites_dying_left):
+                    self.current_sprite_death = 0
+                    self.dying = False
+                    pygame.quit()
+                    sys.exit()
+                else:
+                    self.image = self.sprites_dying_left[int(self.current_sprite_death)]
+
+
     #sugestão: tratar is_animating como atributo público e apagar essa função 
     def animate(self) -> None:
         self.is_animating = True
@@ -296,76 +332,77 @@ Typical usage example:
     def update(self) -> None:
         """
         """
-        animation_speed = 0
-        if self.walking:
-            animation_speed = 0.10
-        if not self.walking:
-            animation_speed = 0.20 
+        if self.is_alive:
+            animation_speed = 0
+            if self.walking:
+                animation_speed = 0.10
+            if not self.walking:
+                animation_speed = 0.20 
 
-        if  self.is_animating:
-            self.current_sprite += animation_speed
+            if  self.is_animating:
+                self.current_sprite += animation_speed
 
-            if self.vertical_speed < 0:
-                self.falling = True
-
-
-            if(self.direction == "right"):
-                
-                if self.attacking:
-                    self.animate_attack()
-
-                elif self.falling and not self.attacking:
-                    if self.current_sprite >= len(self.sprites_falling_right):
-                        self.current_sprite = 0
-                        self.is_animating = False
-                    self.image = self.sprites_falling_right[int(self.current_sprite)]
-                
-                elif self.jumping:
-                    if self.current_sprite >= len(self.sprites_jumping_right):
-                        self.current_sprite = 0
-                        self.is_animating = False
-                    self.image = self.sprites_jumping_right[int(self.current_sprite)]
-
-                elif self.walking and not self.landing:
-                    if self.current_sprite >= len(self.sprites_moving_right):
-                        self.current_sprite = 0
-                        self.is_animating = False
-                    self.image = self.sprites_moving_right[int(self.current_sprite)]
-
-                elif not self.walking and not self.landing:
-                    if self.current_sprite >= len(self.sprites_idle_right):
-                        self.current_sprite = 0
-                        self.is_animating = False
-                    self.image = self.sprites_idle_right[int(self.current_sprite)]
+                if self.vertical_speed < 0:
+                    self.falling = True
 
 
-            if(self.direction == "left"):
-                if self.attacking:
-                    self.animate_attack()
+                if(self.direction == "right"):
+                    
+                    if self.attacking:
+                        self.animate_attack()
 
-                elif self.falling and not self.attacking:
-                    if self.current_sprite >= len(self.sprites_falling_left):
-                        self.current_sprite = 0
-                        self.is_animating = False
-                    self.image = self.sprites_falling_left[int(self.current_sprite)]
+                    elif self.falling and not self.attacking:
+                        if self.current_sprite >= len(self.sprites_falling_right):
+                            self.current_sprite = 0
+                            self.is_animating = False
+                        self.image = self.sprites_falling_right[int(self.current_sprite)]
+                    
+                    elif self.jumping:
+                        if self.current_sprite >= len(self.sprites_jumping_right):
+                            self.current_sprite = 0
+                            self.is_animating = False
+                        self.image = self.sprites_jumping_right[int(self.current_sprite)]
 
-                elif self.jumping:
-                    if self.current_sprite >= len(self.sprites_jumping_left):
-                        self.current_sprite = 0
-                        self.is_animating = False
-                    self.image = self.sprites_jumping_left[int(self.current_sprite)]
+                    elif self.walking and not self.landing:
+                        if self.current_sprite >= len(self.sprites_moving_right):
+                            self.current_sprite = 0
+                            self.is_animating = False
+                        self.image = self.sprites_moving_right[int(self.current_sprite)]
 
-                elif self.walking and not self.landing:
-                    if self.current_sprite >= len(self.sprites_moving_left):
-                        self.current_sprite = 0
-                        self.is_animating = False
-                    self.image = self.sprites_moving_left[int(self.current_sprite)]
+                    elif not self.walking and not self.landing:
+                        if self.current_sprite >= len(self.sprites_idle_right):
+                            self.current_sprite = 0
+                            self.is_animating = False
+                        self.image = self.sprites_idle_right[int(self.current_sprite)]
 
-                elif not self.walking and not self.landing:
-                    if self.current_sprite >= len(self.sprites_idle_left):
-                        self.current_sprite = 0
-                        self.is_animating = False
-                    self.image = self.sprites_idle_left[int(self.current_sprite)]
+
+                if(self.direction == "left"):
+                    if self.attacking:
+                        self.animate_attack()
+
+                    elif self.falling and not self.attacking:
+                        if self.current_sprite >= len(self.sprites_falling_left):
+                            self.current_sprite = 0
+                            self.is_animating = False
+                        self.image = self.sprites_falling_left[int(self.current_sprite)]
+
+                    elif self.jumping:
+                        if self.current_sprite >= len(self.sprites_jumping_left):
+                            self.current_sprite = 0
+                            self.is_animating = False
+                        self.image = self.sprites_jumping_left[int(self.current_sprite)]
+
+                    elif self.walking and not self.landing:
+                        if self.current_sprite >= len(self.sprites_moving_left):
+                            self.current_sprite = 0
+                            self.is_animating = False
+                        self.image = self.sprites_moving_left[int(self.current_sprite)]
+
+                    elif not self.walking and not self.landing:
+                        if self.current_sprite >= len(self.sprites_idle_left):
+                            self.current_sprite = 0
+                            self.is_animating = False
+                        self.image = self.sprites_idle_left[int(self.current_sprite)]
                 
 
     #TODO: fazer a docstring
