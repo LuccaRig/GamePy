@@ -152,3 +152,4 @@ class Map():
             self.enemy_map_group = enemy.Enemy_Group(1)
 
         else: self.enemy_map_group = None
+

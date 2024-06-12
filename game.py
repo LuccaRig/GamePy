@@ -29,6 +29,8 @@ class Game():
         self.myRoom = room.Room()
         self.my_camera = camera.Camera(self.myRoom.current_room(), self.player_character, self.screen)
         self.my_camera_off_set = {}
+        self.i = 0
+        self.time_passed = 0
 
 
     def game_run(self):
@@ -148,7 +150,14 @@ class Game():
                                 print("HP do jogador:", self.player_character.hp)
                                 break
 
-            self.screen.fill((130, 181, 250))
+            time_has_passed = False
+            if current_time - self.time_passed >= 1:
+                self.screen.fill((130+self.i, 181-self.i, 250-self.i))
+                if self.i <= 120:
+                    self.i += 25
+                time_has_passed = True
+            if time_has_passed:
+                self.time_passed = time.time()
             #(130, 181, 250)
 
             self.my_camera.follow_player()
