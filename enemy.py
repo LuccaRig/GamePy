@@ -31,7 +31,8 @@ class Enemy(pygame.sprite.Sprite):
         self.current_sprite = 0
         self.current_death_sprite = 0
         self.current_hit_sprite = 0
-        self.animation_speed = 0.15
+        self.death_animation_speed = 0.12
+        self.idle_animation_speed = 0.15
 
     def import_sprites(self, number_of_sprites: int, arquive: str, sprites_vector) -> None:
         scale = 4
@@ -59,7 +60,7 @@ class Enemy(pygame.sprite.Sprite):
     def animate_hit(self):
         """Coloca a animação de hit do inimigo em display
         """
-        self.current_hit_sprite += self.animation_speed
+        self.current_hit_sprite += self.idle_animation_speed
         if self.direction == "left":
              if self.current_hit_sprite >= len(self.sprites_hit_left):
                  self.current_hit_sprite = 0
@@ -80,7 +81,7 @@ class Enemy(pygame.sprite.Sprite):
 
         No final da animação, o inimigo é considerado morto
         """
-        self.current_death_sprite += self.animation_speed
+        self.current_death_sprite += self.death_animation_speed
         if self.direction == "left":
              if self.current_death_sprite >= len(self.sprites_dying_left):
                  self.current_death_sprite = 0
@@ -158,8 +159,8 @@ class Shooter(Enemy):
         self.import_sprites(5,'CharacterSprites/shooter/wakePNGleft', self.sprites_moving_left)
         self.import_sprites(6,'CharacterSprites/shooter/deathPNGleft', self.sprites_dying_left)
         self.import_sprites(6,'CharacterSprites/shooter/deathPNGright', self.sprites_dying_right)
-        self.import_sprites(2,'CharacterSprites/shooter/deathPNGright', self.sprites_hit_right)
-        self.import_sprites(2,'CharacterSprites/shooter/deathPNGleft', self.sprites_hit_left)
+        self.import_sprites(2,'CharacterSprites/shooter/hitPNGright', self.sprites_hit_right)
+        self.import_sprites(2,'CharacterSprites/shooter/hitPNGright', self.sprites_hit_left)
 
         self.image = self.sprites_idle_right[self.current_sprite]
 
@@ -174,7 +175,7 @@ class Shooter(Enemy):
         self.hitbox_rect.topleft = [self.pos_x, self.pos_y]
         self.speed = 1
         self.actual_pos = 0
-        self.animation_speed = 0.15
+        self.death_animation_speed = 0.12
 
         # Stats
         self.contact_dmg = 3
@@ -211,8 +212,8 @@ class Ghoul(Enemy):
         self.import_sprites(9,'CharacterSprites/Ghoul/movementPNGleft', self.sprites_moving_left)
         self.import_sprites(8,'CharacterSprites/Ghoul/deathPNGright', self.sprites_dying_right)
         self.import_sprites(8,'CharacterSprites/Ghoul/deathPNGleft', self.sprites_dying_left)
-        self.import_sprites(2,'CharacterSprites/Ghoul/hitPNGright', self.sprites_hit_right)
-        self.import_sprites(2,'CharacterSprites/Ghoul/hitPNGleft', self.sprites_hit_left)
+        self.import_sprites(4,'CharacterSprites/Ghoul/hitPNGright', self.sprites_hit_right)
+        self.import_sprites(4,'CharacterSprites/Ghoul/hitPNGleft', self.sprites_hit_left)
 
         self.image = self.sprites_idle_right[self.current_sprite]
 
