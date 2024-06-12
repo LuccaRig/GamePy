@@ -33,6 +33,7 @@ class Enemy(pygame.sprite.Sprite):
         self.current_hit_sprite = 0
         self.death_animation_speed = 0.12
         self.idle_animation_speed = 0.15
+        self.walking_animation_speed = 0.10
 
     def import_sprites(self, number_of_sprites: int, arquive: str, sprites_vector) -> None:
         scale = 4
@@ -102,10 +103,6 @@ class Enemy(pygame.sprite.Sprite):
 
     def update(self) -> None:
         animation_speed = 0.10
-        if self.walking:
-            animation_speed = 0.10
-        if not self.walking:
-            animation_speed = 0.20 
         if self.is_attacking:
             self.current_sprite += animation_speed
             if(self.direction == "right"):
@@ -120,14 +117,15 @@ class Enemy(pygame.sprite.Sprite):
                         self.is_animating = False
                     self.image = self.sprites_idle_right[int(self.current_sprite)]
         elif self.is_animating:
-            self.current_sprite += animation_speed
             if(self.direction == "right"):
                 if self.walking:
+                    self.current_sprite += self.walking_animation_speed
                     if self.current_sprite >= len(self.sprites_moving_right):
                         self.current_sprite = 0
                         self.is_animating = False
                     self.image = self.sprites_moving_right[int(self.current_sprite)]
                 else:
+                    self.current_sprite += self.idle_animation_speed
                     if self.current_sprite >= len(self.sprites_idle_right):
                         self.current_sprite = 0
                         self.is_animating = False
@@ -135,11 +133,13 @@ class Enemy(pygame.sprite.Sprite):
 
             if(self.direction == "left"):
                 if self.walking:
+                    self.current_sprite += self.walking_animation_speed
                     if self.current_sprite >= len(self.sprites_moving_left):
                         self.current_sprite = 0
                         self.is_animating = False
                     self.image = self.sprites_moving_left[int(self.current_sprite)]
                 else:
+                    self.current_sprite += self.idle_animation_speed
                     if self.current_sprite >= len(self.sprites_idle_left):
                         self.current_sprite = 0
                         self.is_animating = False
@@ -176,6 +176,7 @@ class Shooter(Enemy):
         self.speed = 1
         self.actual_pos = 0
         self.death_animation_speed = 0.12
+        self.idle_animation_speed = 0.10
 
         # Stats
         self.contact_dmg = 3
@@ -253,8 +254,8 @@ class Flower(Enemy):
         #Sprites and animation
         #TODO: Change walking to waking
 
-        self.import_sprites(5,'CharacterSprites/flower/idlePNGright', self.sprites_idle_right)
-        self.import_sprites(5,'CharacterSprites/flower/idlePNGleft', self.sprites_idle_left)
+        self.import_sprites(12,'CharacterSprites/flower/attackPNGright', self.sprites_idle_right)
+        self.import_sprites(12,'CharacterSprites/flower/attackPNGleft', self.sprites_idle_left)
         self.import_sprites(12,'CharacterSprites/flower/attackPNGright', self.sprites_attack_right)
         self.import_sprites(12,'CharacterSprites/flower/attackPNGleft', self.sprites_attack_left)
         self.import_sprites(4,'CharacterSprites/flower/deathPNGright', self.sprites_dying_right)
@@ -435,7 +436,7 @@ class Enemy_Group(Enemy):
 
     def animate_hits(self):
         for enemy in self.enemy_vector:
-            if enemy.was_hit:
+            if enemy.was_hit and not enemy.dying:
                 enemy.animate_hit()
 
     def destruct_dead_enemies(self):
