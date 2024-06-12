@@ -31,6 +31,7 @@ class Game():
         self.my_camera_off_set = {}
         self.i = 0
         self.time_passed = 0
+        self.background_color = [130, 181, 250]
 
 
     def game_run(self):
@@ -152,12 +153,13 @@ class Game():
 
             time_has_passed = False
             if current_time - self.time_passed >= 1:
-                self.screen.fill((130+self.i, 181-self.i, 250-self.i))
-                if self.i <= 120:
-                    self.i += 25
+                if self.i <= 124:
+                    self.i += 5
+                self.background_color = [130+self.i, 181-self.i, 250-self.i]
                 time_has_passed = True
             if time_has_passed:
                 self.time_passed = time.time()
+            self.screen.fill(self.background_color)
             #(130, 181, 250)
 
             self.my_camera.follow_player()
