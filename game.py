@@ -154,13 +154,15 @@ class Game():
                                 break
 
             is_it_dusk = False
-            if current_time - self.time_passed_in_dusk >= 1:
+            if (current_time - self.time_passed_in_dusk >= 1) and (self.myRoom.current_map_position <= 7):
                 if self.rb_dusk <= 124:
                     self.rb_dusk += 1
                 if self.g_dusk <= 180:
                     self.g_dusk +=1
                 self.background_color = [130+self.rb_dusk, 181-self.g_dusk, 250-2*self.rb_dusk]
                 is_it_dusk = True
+            elif self.myRoom.current_map_position == 8:
+                self.background_color = [64, 64, 64]
             if is_it_dusk:
                 self.time_passed_in_dusk = time.time()
             self.screen.fill(self.background_color)
