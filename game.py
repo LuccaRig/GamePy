@@ -84,7 +84,8 @@ class Game():
                 self.player_character.speed[0] = 0
                 self.player_character.speed[1] = 0 
 
-                if not (self.player_character.landing) or not(self.player_character.is_colliding(self.myRoom.current_room(), "down")):
+                if not (self.player_character.landing) and not self.player_character.was_hit \
+                    or not(self.player_character.is_colliding(self.myRoom.current_room(), "down")):
                     self.player_character.walking = False
                     self.player_character.attacking = True
                     #testa se o ataque pode tirar vida de um inimigo e, se sim, o faz
@@ -116,7 +117,7 @@ class Game():
                     self.player_character.falling = False
                 
             if keys[pygame.K_LEFT]:
-                if not self.player_character.attacking and not keys[pygame.K_RIGHT]\
+                if not self.player_character.attacking and not self.player_character.was_hit and not keys[pygame.K_RIGHT]\
                     and (not self.player_character.landing or not(self.player_character.is_colliding(self.myRoom.current_room(), "down"))) \
                     and not (self.player_character.is_colliding(self.myRoom.current_room(), "left")):
                     self.player_character.walking = True
@@ -124,7 +125,7 @@ class Game():
                     #x -= vel
 
             if keys[pygame.K_RIGHT]:
-                if not self.player_character.attacking and not keys[pygame.K_LEFT]\
+                if not self.player_character.attacking and not self.player_character.was_hit and not keys[pygame.K_LEFT]\
                     and (not self.player_character.landing or not(self.player_character.is_colliding(self.myRoom.current_room(), "down"))) \
                     and not (self.player_character.is_colliding(self.myRoom.current_room(), "right")):
                     self.player_character.walking = True
@@ -132,7 +133,7 @@ class Game():
                     #x += vel
 
             if keys[pygame.K_UP]:
-                if (not self.player_character.attacking) \
+                if not self.player_character.attacking and not self.player_character.was_hit \
                     and (self.player_character.is_colliding(self.myRoom.current_room(), "down")) \
                     and (not self.player_character.landing or not(self.player_character.is_colliding(self.myRoom.current_room(), "down"))):
                     self.player_character.landing = True
@@ -149,6 +150,8 @@ class Game():
                             if current_time - self.player_character.last_hit_time > 1.3:
                                 self.player_character.hp -= enemy.contact_dmg
                                 self.player_character.hp_bar_change()
+                                self.player_character.was_hit = True
+                                self.player_character.hit_flinch = True
                                 self.player_character.last_hit_time = time.time()
                                 print("HP do jogador:", self.player_character.hp)
                                 break
@@ -173,6 +176,7 @@ class Game():
             self.moving_sprites.draw(self.screen)
             self.moving_sprites.update()
 
+            self.player_character.animate_hit()
             self.player_character.animate()
             if self.player_character.hp <= 0:
                 self.player_character.dying = True
