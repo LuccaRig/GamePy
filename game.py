@@ -11,7 +11,7 @@ class Game():
 
         pygame.font.init()
         pygame.mixer.init()
-        pygame.mixer.music.load("assets/Before It Ends.mp3")
+        #pygame.mixer.music.load("assets/Before It Ends.mp3")
         #pygame.mixer.music.play()
 
         # Game Screen
@@ -92,6 +92,7 @@ class Game():
                              self.player_character.left_attack_rect.colliderect(enemy.hitbox_rect) and (self.player_character.direction == "left")):
                                 if current_time - self.player_character.last_landed_attack_time > 0.48:
                                     enemy.hp -= self.player_character.attack_dmg
+                                    enemy.was_hit = True
                                     hit_was_successfull = True
                                     print("HP do inimigo: ", enemy.hp)
                     if hit_was_successfull:
@@ -112,7 +113,7 @@ class Game():
                     self.player_character.falling = False
                 
             if keys[pygame.K_LEFT]:
-                if not self.player_character.attacking \
+                if not self.player_character.attacking and not keys[pygame.K_RIGHT]\
                     and (not self.player_character.landing or not(self.player_character.is_colliding(self.myRoom.current_room(), "down"))) \
                     and not (self.player_character.is_colliding(self.myRoom.current_room(), "left")):
                     self.player_character.walking = True
@@ -120,7 +121,7 @@ class Game():
                     #x -= vel
 
             if keys[pygame.K_RIGHT]:
-                if not self.player_character.attacking \
+                if not self.player_character.attacking and not keys[pygame.K_LEFT]\
                     and (not self.player_character.landing or not(self.player_character.is_colliding(self.myRoom.current_room(), "down"))) \
                     and not (self.player_character.is_colliding(self.myRoom.current_room(), "right")):
                     self.player_character.walking = True
@@ -180,6 +181,7 @@ class Game():
                 self.myRoom.current_room_enemies().draw_collisions_rects(self.screen)
                 self.myRoom.current_room_enemies().check_deaths()
                 self.myRoom.current_room_enemies().animate_deaths()
+                self.myRoom.current_room_enemies().animate_hits()
                 self.myRoom.current_room_enemies().destruct_dead_enemies()
 
             self.moving_sprites.draw(self.screen)

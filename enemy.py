@@ -8,19 +8,36 @@ class Enemy(pygame.sprite.Sprite):
         self.hp = 0
         self.damage = 0
 
+        self.sprites_idle_right = []
+        self.sprites_idle_left = []
+        self.sprites_moving_right = []
+        self.sprites_moving_left = []
+        self.sprites_hit_right = []
+        self.sprites_hit_left = []
+        self.sprites_dying_right = []
+        self.sprites_dying_left = []
+        self.sprites_attack_right = []
+        self.sprites_attack_left = []
+
         # Default Boolean and Character States
         self.is_animating = False
         self.is_attacking = False
         self.walking = False
-        self.direction = "left"
+        self.direction = "right"
         self.is_alive = True
         self.dying = False
+        self.was_hit = False
+        self.has_attack_rect = False
 
         self.current_sprite = 0
         self.current_death_sprite = 0
-        self.animation_speed = 0.15
+        self.current_hit_sprite = 0
+        self.death_animation_speed = 0.12
+        self.idle_animation_speed = 0.15
+        self.walking_animation_speed = 0.10
+        self.hit_animation_speed = 0.15
 
-    def import_sprites(self, number_of_sprites=0, arquive='0', sprites_vector= []) -> None:
+    def import_sprites(self, number_of_sprites: int, arquive: str, sprites_vector) -> None:
         scale = 4
         for i in range(number_of_sprites):
             sprite = pygame.image.load(f'{arquive}/tile00{i}.png')
@@ -36,13 +53,38 @@ class Enemy(pygame.sprite.Sprite):
         self.hitbox_rect.topleft = [self.rect.x +85, self.rect.y +70]
 
     def is_grounded(self, Map) -> None:
+        """
+        """
         return Map.check_collision(self.rect)
 
     def animate(self) -> None:
         self.is_animating = True 
 
+    def animate_hit(self):
+        """Coloca a animação de hit do inimigo em display
+        """
+        self.current_hit_sprite += self.hit_animation_speed
+        if self.direction == "left":
+             if self.current_hit_sprite >= len(self.sprites_hit_left):
+                 self.current_hit_sprite = 0
+                 self.was_hit = False
+             else:
+                 self.image = self.sprites_hit_left[int(self.current_hit_sprite)]
+
+        elif self.direction == "right":
+            if self.current_hit_sprite >= len(self.sprites_hit_right):
+                 self.current_hit_sprite = 0
+                 self.was_hit = False
+            else:
+                 self.image = self.sprites_hit_right[int(self.current_hit_sprite)]
+
+
     def animate_death(self):
-        self.current_death_sprite += self.animation_speed
+        """Coloca a animação de morte do inimigo em display
+
+        No final da animação, o inimigo é considerado morto
+        """
+        self.current_death_sprite += self.death_animation_speed
         if self.direction == "left":
              if self.current_death_sprite >= len(self.sprites_dying_left):
                  self.current_death_sprite = 0
@@ -63,10 +105,6 @@ class Enemy(pygame.sprite.Sprite):
 
     def update(self) -> None:
         animation_speed = 0.10
-        if self.walking:
-            animation_speed = 0.10
-        if not self.walking:
-            animation_speed = 0.20 
         if self.is_attacking:
             self.current_sprite += animation_speed
             if(self.direction == "right"):
@@ -81,14 +119,15 @@ class Enemy(pygame.sprite.Sprite):
                         self.is_animating = False
                     self.image = self.sprites_idle_right[int(self.current_sprite)]
         elif self.is_animating:
-            self.current_sprite += animation_speed
             if(self.direction == "right"):
                 if self.walking:
+                    self.current_sprite += self.walking_animation_speed
                     if self.current_sprite >= len(self.sprites_moving_right):
                         self.current_sprite = 0
                         self.is_animating = False
                     self.image = self.sprites_moving_right[int(self.current_sprite)]
                 else:
+                    self.current_sprite += self.idle_animation_speed
                     if self.current_sprite >= len(self.sprites_idle_right):
                         self.current_sprite = 0
                         self.is_animating = False
@@ -96,11 +135,13 @@ class Enemy(pygame.sprite.Sprite):
 
             if(self.direction == "left"):
                 if self.walking:
+                    self.current_sprite += self.walking_animation_speed
                     if self.current_sprite >= len(self.sprites_moving_left):
                         self.current_sprite = 0
                         self.is_animating = False
                     self.image = self.sprites_moving_left[int(self.current_sprite)]
                 else:
+                    self.current_sprite += self.idle_animation_speed
                     if self.current_sprite >= len(self.sprites_idle_left):
                         self.current_sprite = 0
                         self.is_animating = False
@@ -113,19 +154,15 @@ class Shooter(Enemy):
         super().__init__()
         #Sprites and animation
         #TODO: Change walking to waking
-        self.sprites_idle_right = []
-        self.sprites_idle_left = []
-        self.sprites_moving_right = []
-        self.sprites_moving_left = []
-        self.sprites_dying_left = []
-        self.sprites_dying_right = []
 
-        self.import_sprites(1,'CharacterSprites/shooter/idlePNGright', self.sprites_idle_right)
-        self.import_sprites(1,'CharacterSprites/shooter/idlePNGleft', self.sprites_idle_left)
+        self.import_sprites(5,'CharacterSprites/shooter/wakePNGright', self.sprites_idle_right)
+        self.import_sprites(5,'CharacterSprites/shooter/wakePNGleft', self.sprites_idle_left)
         self.import_sprites(5,'CharacterSprites/shooter/wakePNGright', self.sprites_moving_right)
         self.import_sprites(5,'CharacterSprites/shooter/wakePNGleft', self.sprites_moving_left)
         self.import_sprites(6,'CharacterSprites/shooter/deathPNGleft', self.sprites_dying_left)
         self.import_sprites(6,'CharacterSprites/shooter/deathPNGright', self.sprites_dying_right)
+        self.import_sprites(2,'CharacterSprites/shooter/hitPNGright', self.sprites_hit_right)
+        self.import_sprites(2,'CharacterSprites/shooter/hitPNGright', self.sprites_hit_left)
 
         self.image = self.sprites_idle_right[self.current_sprite]
 
@@ -140,7 +177,8 @@ class Shooter(Enemy):
         self.hitbox_rect.topleft = [self.pos_x, self.pos_y]
         self.speed = 1
         self.actual_pos = 0
-        self.animation_speed = 0.15
+        self.death_animation_speed = 0.12
+        self.idle_animation_speed = 0.10
 
         # Stats
         self.contact_dmg = 3
@@ -148,7 +186,7 @@ class Shooter(Enemy):
         self.hp = 25
 
     def move_set(self):
-        """  Garante uma movimentacao fixa do objeto Little_Spider
+        """  Garante uma movimentação fixa do objeto Little_Spider
         """
         self.update_position(0, 0)
 
@@ -171,12 +209,14 @@ class Ghoul(Enemy):
         self.sprites_dying_right = []
         self.sprites_dying_left = []
 
-        self.import_sprites(1,'CharacterSprites/Ghoul/staticPNGright', self.sprites_idle_right)
-        self.import_sprites(1,'CharacterSprites/Ghoul/staticPNGleft', self.sprites_idle_left)
+        self.import_sprites(6,'CharacterSprites/Ghoul/idlePNGright', self.sprites_idle_right)
+        self.import_sprites(6,'CharacterSprites/Ghoul/idlePNGleft', self.sprites_idle_left)
         self.import_sprites(9,'CharacterSprites/Ghoul/movementPNGright', self.sprites_moving_right)
         self.import_sprites(9,'CharacterSprites/Ghoul/movementPNGleft', self.sprites_moving_left)
         self.import_sprites(8,'CharacterSprites/Ghoul/deathPNGright', self.sprites_dying_right)
         self.import_sprites(8,'CharacterSprites/Ghoul/deathPNGleft', self.sprites_dying_left)
+        self.import_sprites(4,'CharacterSprites/Ghoul/hitPNGright', self.sprites_hit_right)
+        self.import_sprites(4,'CharacterSprites/Ghoul/hitPNGleft', self.sprites_hit_left)
 
         self.image = self.sprites_idle_right[self.current_sprite]
 
@@ -191,12 +231,12 @@ class Ghoul(Enemy):
         self.hitbox_rect.topleft = [self.pos_x, self.pos_y]
         self.speed = 1
         self.actual_pos = 0
-        self.animation_speed = 0.15
+        self.idle_animation_speed = 0.06
 
         # Stats
         self.contact_dmg = 3
         self.attack_dmg = 5
-        self.hp = 25
+        self.hp = 40
 
     def move_set(self):
         """  Garante uma movimentacao fixa do objeto Little_Spider
@@ -209,22 +249,15 @@ class Ghoul(Enemy):
         if self.is_alive:
             self.hitbox_rect.topleft = [new_pos_x+107, new_pos_y+36]
 
+
 class Flower(Enemy):
     def __init__(self, inital_pos : list) -> None:
         super().__init__()
         #Sprites and animation
         #TODO: Change walking to waking
-        self.sprites_idle_right = []
-        self.sprites_idle_left = []
-        self.sprites_hit_right = []
-        self.sprites_hit_left = []
-        self.sprites_dying_right = []
-        self.sprites_dying_left = []
-        self.sprites_attack_right = []
-        self.sprites_attack_left = []
 
-        self.import_sprites(5,'CharacterSprites/flower/idlePNGright', self.sprites_idle_right)
-        self.import_sprites(5,'CharacterSprites/flower/idlePNGleft', self.sprites_idle_left)
+        self.import_sprites(12,'CharacterSprites/flower/attackPNGright', self.sprites_idle_right)
+        self.import_sprites(12,'CharacterSprites/flower/attackPNGleft', self.sprites_idle_left)
         self.import_sprites(12,'CharacterSprites/flower/attackPNGright', self.sprites_attack_right)
         self.import_sprites(12,'CharacterSprites/flower/attackPNGleft', self.sprites_attack_left)
         self.import_sprites(4,'CharacterSprites/flower/deathPNGright', self.sprites_dying_right)
@@ -241,11 +274,13 @@ class Flower(Enemy):
         self.height = 65
         self.rect = pygame.Rect(self.pos_x, self.pos_y,  self.width, self.height)
         self.rect.topleft = [self.pos_x, self.pos_y]
-        self.hitbox_rect = pygame.Rect(self.pos_x+85, self.pos_y-50, 40, 40)
-        self.hitbox_rect.topleft = [self.pos_x, self.pos_y]
+        self.hitbox_rect = pygame.Rect(self.pos_x+83, self.pos_y-50, 40, 40)
+        self.hitbox_rect.topleft = [self.pos_x-5, self.pos_y]
+        self.attack_rect = pygame.Rect(self.pos_x+65, self.pos_y-90, 110, 85)
+        self.attack_rect.topleft = [self.pos_x+15, self.pos_y+45]
         self.speed = 1
         self.actual_pos = 0
-        self.animation_speed = 0.15
+        self.has_attack_rect = True
 
         # Stats
         self.contact_dmg = 3
@@ -262,6 +297,7 @@ class Flower(Enemy):
         """
         if self.is_alive:
             self.hitbox_rect.topleft = [new_pos_x+48, new_pos_y+92]
+            self.attack_rect.topleft = [self.pos_x+15, self.pos_y+45]
 
 
 class Little_Spider(Enemy):
@@ -334,7 +370,8 @@ class Enemy_Group(Enemy):
             enemy2 = Shooter([250, 328])
             enemy3 = Ghoul([320, 300])
             enemy4 = Flower([450, 300])
-            self.enemy_vector = numpy.array([little_spider, enemy2, enemy3, enemy4])
+            enemy5 = Shooter([550, 328])
+            self.enemy_vector = numpy.array([little_spider, enemy2, enemy3, enemy4, enemy5])
 
         if enemy_group_number == 1:
             little_spider = Little_Spider([100, 500])
@@ -363,9 +400,13 @@ class Enemy_Group(Enemy):
 
     def draw_collisions_rects(self, screen):
         green = (0, 255, 0)
+        red = (255, 0, 0)
         for enemy in self.enemy_vector:
             if enemy.is_alive:
                 pygame.draw.rect(screen, green, enemy.hitbox_rect, 1)
+                if enemy.has_attack_rect:
+                    pygame.draw.rect(screen, red, enemy.attack_rect, 1)
+
     
     def define_pos_group(self, delta_x, delta_y):
         """
@@ -401,6 +442,11 @@ class Enemy_Group(Enemy):
         for enemy in self.enemy_vector:
             if enemy.dying:
                 enemy.animate_death()
+
+    def animate_hits(self):
+        for enemy in self.enemy_vector:
+            if enemy.was_hit and not enemy.dying:
+                enemy.animate_hit()
 
     def destruct_dead_enemies(self):
         for i, enemy in numpy.ndenumerate(self.enemy_vector):

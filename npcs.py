@@ -35,17 +35,18 @@ class Npc():
 
 
 class Traveler(Npc):
-    def __init__(self) -> None:
+    def __init__(self, pos : list) -> None:
         super().__init__()
 
         self.import_sprites(10, "CharacterSprites/TravelerNPC", self.sprites)
         self.y_correction = 55
-        self.pos = [750, 300]
+        self.pos = pos
         self.width = 90 
         self.height  = 65
         self.rect = pygame.Rect(self.pos[0], self.pos[1],  self.width, self.height)
         self.rect.topleft = [self.pos[0], self.pos[1]]
         self.image = self.sprites[int(self.current_sprite)]
+        self.text_pos = [pos[0] - 50, pos[1]]
         
         
         self.interact_rect = pygame.Rect(self.pos[0], self.pos[1]+ self.y_correction,  self.width, self.height)
@@ -61,14 +62,13 @@ class Traveler(Npc):
     def draw_interact_rect(self, screen, off_set_x, off_set_y):
         self.interact_rect = pygame.Rect(self.pos[0] + off_set_x, self.pos[1] - off_set_y + self.y_correction,  self.width, self.height)
         pygame.draw.rect(screen, (0,255,0), self.interact_rect, 1)
+        self.text_pos = (self.pos[0] + off_set_x, self.pos[1] - off_set_y)
         
     def talk_to_player(self, player, screen):
         current_time = pygame.time.get_ticks()
         letter_interval = 100
 
         if(self.check_player_interaction(player) and self.talk_number == 0):
-            text_pos = (50, 50)
-            
             text = "Olá, Jogador!"
 
             if self.text_index < len(text) and current_time - self.last_letter_time > letter_interval:
@@ -76,7 +76,7 @@ class Traveler(Npc):
                 self.last_letter_time = current_time
             
             text_render = self.dialogue_font.render(text[:self.text_index], True, self.text_color)
-            screen.blit(text_render, text_pos)
+            screen.blit(text_render, self.text_pos)
         else: 
             pass
         
