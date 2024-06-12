@@ -190,8 +190,8 @@ class Shooter(Enemy):
         """
         self.update_position(0, 0)
 
-    def move_hitbox_rect_topleft(self, new_pos_x: int, new_pos_y: int) -> None:
-        """Posiciona o topo do rect de hitbox de acordo com a nova posição do inimigo
+    def move_rects_toplefts(self, new_pos_x: int, new_pos_y: int) -> None:
+        """Posiciona o topo dos rects do inimigo de acordo com a sua nova posição
         """
         if self.is_alive:
             self.hitbox_rect.topleft = [new_pos_x+48, new_pos_y+32]
@@ -243,7 +243,7 @@ class Ghoul(Enemy):
         """
         self.update_position(0, 0)
 
-    def move_hitbox_rect_topleft(self, new_pos_x: int, new_pos_y: int) -> None:
+    def move_rects_toplefts(self, new_pos_x: int, new_pos_y: int) -> None:
         """Posiciona o topo do rect de hitbox de acordo com a nova posição do inimigo
         """
         if self.is_alive:
@@ -292,12 +292,12 @@ class Flower(Enemy):
         """
         self.update_position(0, 0)
 
-    def move_hitbox_rect_topleft(self, new_pos_x: int, new_pos_y: int) -> None:
+    def move_rects_toplefts(self, new_pos_x: int, new_pos_y: int) -> None:
         """Posiciona o topo do rect de hitbox de acordo com a nova posição do inimigo
         """
         if self.is_alive:
             self.hitbox_rect.topleft = [new_pos_x+48, new_pos_y+92]
-            self.attack_rect.topleft = [self.pos_x+15, self.pos_y+45]
+            self.attack_rect.topleft = [new_pos_x+15, new_pos_y+45]
 
 
 class Little_Spider(Enemy):
@@ -349,7 +349,7 @@ class Little_Spider(Enemy):
 
         self.update_position(self.speed, 0)
 
-    def move_hitbox_rect_topleft(self, new_pos_x: int, new_pos_y: int) -> None:
+    def move_rects_toplefts(self, new_pos_x: int, new_pos_y: int) -> None:
         """Posiciona o topo do rect de hitbox de acordo com a nova posição do inimigo
         """
         self.hitbox_rect.topleft = [new_pos_x + 35, new_pos_y+55]
@@ -420,7 +420,7 @@ class Enemy_Group(Enemy):
             if enemy.is_alive:
                 new_pos_x = enemy.rect.x + delta_x
                 new_pos_y = enemy.rect.y - delta_y
-                enemy.move_hitbox_rect_topleft(new_pos_x, new_pos_y)
+                enemy.move_rects_toplefts(new_pos_x, new_pos_y)
 
     def set_move_sets(self):
         for enemy in self.enemy_vector:
