@@ -150,5 +150,3 @@ class Map():
 
         elif self.map_number == 1:
             self.enemy_map_group = enemy.Enemy_Group(1)
-
-        else: self.enemy_map_group = None 
