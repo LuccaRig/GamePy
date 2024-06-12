@@ -11,7 +11,7 @@ class Game():
 
         pygame.font.init()
         pygame.mixer.init()
-        pygame.mixer.music.load("assets/Before It Ends.mp3")
+        #pygame.mixer.music.load("assets/Before It Ends.mp3")
         #pygame.mixer.music.play()
 
         # Game Screen
