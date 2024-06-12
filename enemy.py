@@ -162,7 +162,7 @@ class Shooter(Enemy):
         self.import_sprites(6,'CharacterSprites/shooter/deathPNGleft', self.sprites_dying_left)
         self.import_sprites(6,'CharacterSprites/shooter/deathPNGright', self.sprites_dying_right)
         self.import_sprites(2,'CharacterSprites/shooter/hitPNGright', self.sprites_hit_right)
-        self.import_sprites(2,'CharacterSprites/shooter/hitPNGright', self.sprites_hit_left)
+        self.import_sprites(2,'CharacterSprites/shooter/hitPNGleft', self.sprites_hit_left)
 
         self.image = self.sprites_idle_right[self.current_sprite]
 
@@ -181,7 +181,7 @@ class Shooter(Enemy):
         self.idle_animation_speed = 0.10
 
         # Stats
-        self.contact_dmg = 3
+        self.contact_dmg = 20
         self.attack_dmg = 5
         self.hp = 25
 
@@ -210,7 +210,7 @@ class Ghoul(Enemy):
         self.sprites_dying_left = []
 
         self.import_sprites(6,'CharacterSprites/Ghoul/idlePNGright', self.sprites_idle_right)
-        self.import_sprites(6,'CharacterSprites/Ghoul/idlePNGleft', self.sprites_idle_left)
+        self.import_sprites(6,'CharacterSprites/Ghoul/idle2PNGleft', self.sprites_idle_left)
         self.import_sprites(9,'CharacterSprites/Ghoul/movementPNGright', self.sprites_moving_right)
         self.import_sprites(9,'CharacterSprites/Ghoul/movementPNGleft', self.sprites_moving_left)
         self.import_sprites(8,'CharacterSprites/Ghoul/deathPNGright', self.sprites_dying_right)
@@ -256,8 +256,8 @@ class Flower(Enemy):
         #Sprites and animation
         #TODO: Change walking to waking
 
-        self.import_sprites(12,'CharacterSprites/flower/attackPNGright', self.sprites_idle_right)
-        self.import_sprites(12,'CharacterSprites/flower/attackPNGleft', self.sprites_idle_left)
+        self.import_sprites(12,'CharacterSprites/flower/idle2PNGright', self.sprites_idle_right)
+        self.import_sprites(12,'CharacterSprites/flower/idle2PNGleft', self.sprites_idle_left)
         self.import_sprites(12,'CharacterSprites/flower/attackPNGright', self.sprites_attack_right)
         self.import_sprites(12,'CharacterSprites/flower/attackPNGleft', self.sprites_attack_left)
         self.import_sprites(4,'CharacterSprites/flower/deathPNGright', self.sprites_dying_right)
