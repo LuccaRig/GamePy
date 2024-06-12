@@ -48,6 +48,8 @@ Typical usage example:
         self._import_sprites(9,'CharacterSprites/assassin/idlePNGleft', self.sprites_idle_left)    
         self._import_sprites(8,'CharacterSprites/assassin/movementPNGright', self.sprites_moving_right)
         self._import_sprites(8,'CharacterSprites/assassin/movementPNGleft', self.sprites_moving_left)
+        self._import_sprites(2,'CharacterSprites/assassin/hitPNGright', self.sprites_hit_right)
+        self._import_sprites(2,'CharacterSprites/assassin/hitPNGleft', self.sprites_hit_left)    
         self._import_sprites(9,'CharacterSprites/assassin/attackPNGright', self.sprites_attacking_right)
         self._import_sprites(9,'CharacterSprites/assassin/attackPNGleft', self.sprites_attacking_left)
         self._import_sprites(4, 'CharacterSprites/assassin/jumpPNGright', self.sprites_jumping_right)
@@ -69,12 +71,16 @@ Typical usage example:
         self.landing = False
         self.falling = False
         self.dying = False
+        self.was_hit = False
+        self.hit_flinch = False
+        self.invincibility = False
         self.direction = "right"
         self.current_sprite = 0
         self.current_sprite_attack = 0
         self.current_sprite_jump = 0
         self.current_sprite_land = 0
         self.current_sprite_death = 0
+        self.current_sprite_hit = 0
         self.image = self.sprites_idle_right[self.current_sprite]     
 
         # Default Position and movement
@@ -165,8 +171,8 @@ Typical usage example:
         """ Muda a posição do Rect do player e a posição dos seu rects direcionais
 
         Args:
-            new_pos_x:
-            new_pos_y:
+            new_pos_x: valor a ser somado à posição da direção horizontal
+            new_pos_y: o mesmo, porém à direção vertical
         """
         self.speed[0] = new_pos_x
         self.speed[1] = new_pos_y
@@ -300,7 +306,7 @@ Typical usage example:
                     self.image = self.sprites_landing_left[int(self.current_sprite_land)]
 
     def animate_death(self) -> None:
-        """
+        """Anima a morte do player e chama o game over
         """
         if self.dying:    
             animation_speed = 0.05
@@ -323,6 +329,35 @@ Typical usage example:
                 else:
                     self.image = self.sprites_dying_left[int(self.current_sprite_death)]
 
+    def animate_hit(self) -> None:
+        """Anima o player tomando um hit e dando um flinch para trás
+        """
+        if self.was_hit:    
+            animation_speed = 0.1
+            self.current_sprite_hit += animation_speed
+            if self.direction == "right":
+                if self.hit_flinch:
+                    self.update_position(-30, 0)
+                    self.update_position(1, 0)
+                    self.hit_flinch = False
+                if self.current_sprite_hit >= len(self.sprites_hit_right):
+                    self.current_sprite_hit = 0
+                    self.was_hit = False
+                else:
+                    self.image = self.sprites_hit_right[int(self.current_sprite_hit)]
+
+            elif self.direction == "left":
+                if self.hit_flinch:
+                    self.update_position(30, 0)
+                    self.update_position(-1, 0)
+                    self.hit_flinch = False
+                if self.current_sprite_hit >= len(self.sprites_hit_left):
+                    self.current_sprite_hit = 0
+                    self.was_hit = False
+                else:
+                    self.image = self.sprites_hit_left[int(self.current_sprite_hit)]
+        
+
 
     #sugestão: tratar is_animating como atributo público e apagar essa função 
     def animate(self) -> None:
@@ -332,22 +367,19 @@ Typical usage example:
     def update(self) -> None:
         """
         """
-        if self.is_alive:
+        if self.is_alive and not self.was_hit:
             animation_speed = 0
             if self.walking:
                 animation_speed = 0.10
             if not self.walking:
-                animation_speed = 0.20 
+                animation_speed = 0.20
 
             if  self.is_animating:
                 self.current_sprite += animation_speed
-
                 if self.vertical_speed < 0:
                     self.falling = True
 
-
                 if(self.direction == "right"):
-                    
                     if self.attacking:
                         self.animate_attack()
 
