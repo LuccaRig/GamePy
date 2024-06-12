@@ -142,7 +142,7 @@ class Map():
     
     def map_npc_define(self):
         if self.map_number == 0:
-            self.npc = npcs.Traveler()
+            self.npc = npcs.Traveler([750, 300])
 
     def map_enemy_define(self):
         if self.map_number == 0:
@@ -150,3 +150,5 @@ class Map():
 
         elif self.map_number == 1:
             self.enemy_map_group = enemy.Enemy_Group(1)
+
+        else: self.enemy_map_group = None
