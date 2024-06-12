@@ -29,8 +29,10 @@ class Game():
         self.myRoom = room.Room()
         self.my_camera = camera.Camera(self.myRoom.current_room(), self.player_character, self.screen)
         self.my_camera_off_set = {}
-        self.i = 0
-        self.time_passed = 0
+
+        self.rb_dusk = 0
+        self.g_dusk = 0
+        self.time_passed_in_dusk = 0
         self.background_color = [130, 181, 250]
 
 
@@ -151,16 +153,17 @@ class Game():
                                 print("HP do jogador:", self.player_character.hp)
                                 break
 
-            time_has_passed = False
-            if current_time - self.time_passed >= 1:
-                if self.i <= 124:
-                    self.i += 5
-                self.background_color = [130+self.i, 181-self.i, 250-self.i]
-                time_has_passed = True
-            if time_has_passed:
-                self.time_passed = time.time()
+            is_it_dusk = False
+            if current_time - self.time_passed_in_dusk >= 1:
+                if self.rb_dusk <= 124:
+                    self.rb_dusk += 1
+                if self.g_dusk <= 180:
+                    self.g_dusk +=1
+                self.background_color = [130+self.rb_dusk, 181-self.g_dusk, 250-2*self.rb_dusk]
+                is_it_dusk = True
+            if is_it_dusk:
+                self.time_passed_in_dusk = time.time()
             self.screen.fill(self.background_color)
-            #(130, 181, 250)
 
             self.my_camera.follow_player()
             self.player_character.draw_collision_rect(self.screen)
