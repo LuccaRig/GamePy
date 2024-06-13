@@ -247,7 +247,7 @@ class Ghoul(Enemy):
         self.coins_value = 500
 
     def move_set(self):
-        """  Garante uma movimentacao fixa do objeto Little_Spider
+        """  Garante uma movimentacao fixa do objeto Ghoul
         """
         self.update_position(0, 0)
 
@@ -264,8 +264,8 @@ class Flower(Enemy):
         #Sprites and animation
         #TODO: Change walking to waking
 
-        self.import_sprites(12,'CharacterSprites/flower/idle2PNGright', self.sprites_idle_right)
-        self.import_sprites(12,'CharacterSprites/flower/idle2PNGleft', self.sprites_idle_left)
+        self.import_sprites(17,'CharacterSprites/flower/idle2PNGright', self.sprites_idle_right)
+        self.import_sprites(17,'CharacterSprites/flower/idle2PNGleft', self.sprites_idle_left)
         self.import_sprites(12,'CharacterSprites/flower/attackPNGright', self.sprites_attack_right)
         self.import_sprites(12,'CharacterSprites/flower/attackPNGleft', self.sprites_attack_left)
         self.import_sprites(4,'CharacterSprites/flower/deathPNGright', self.sprites_dying_right)
@@ -320,10 +320,15 @@ class Little_Spider(Enemy):
         self.sprites_moving_right = []
         self.sprites_moving_left = []
 
+        self.sprites_dying_right = []
+        self.sprites_dying_left = []
+
         self.import_sprites(1,'CharacterSprites/little_spider/idlePNGright', self.sprites_idle_right)
         self.import_sprites(1,'CharacterSprites/little_spider/idlePNGleft', self.sprites_idle_left)
         self.import_sprites(6,'CharacterSprites/little_spider/movementPNGright', self.sprites_moving_right)
         self.import_sprites(6,'CharacterSprites/little_spider/movementPNGleft', self.sprites_moving_left)
+        self.import_sprites(6,'CharacterSprites/little_spider/deathPNGright', self.sprites_dying_right)
+        self.import_sprites(6,'CharacterSprites/little_spider/deathPNGleft', self.sprites_dying_left)
 
         self.image = self.sprites_idle_right[self.current_sprite]
 
@@ -386,11 +391,12 @@ class Enemy_Group(Enemy):
 
         if enemy_group_number == 0:
             little_spider = Little_Spider([400, 500])
-            enemy2 = Shooter([250, 328])
-            enemy3 = Ghoul([320, 300])
-            enemy4 = Flower([450, 300])
-            enemy5 = Shooter([550, 328])
-            self.enemy_vector = numpy.array([little_spider, enemy2, enemy3, enemy4, enemy5])
+            enemy2 = Shooter([350, 328])
+            enemy3 = Ghoul([420, 300])
+            enemy4 = Flower([550, 300])
+            enemy5 = Shooter([650, 328])
+            enemy6 = Little_Spider([250, 360])
+            self.enemy_vector = numpy.array([little_spider, enemy2, enemy3, enemy4, enemy5, enemy6])
 
         elif enemy_group_number == 1:
             enemy2 = Little_Spider([760, 44])
