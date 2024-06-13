@@ -439,13 +439,20 @@ class Enemy_Group(Enemy):
             little_spider = Little_Spider([400, 500])
             self.enemy_vector = numpy.array([little_spider])
 
-    def update_enemies_sprites(self):
+    def update_enemies_sprites(self) -> None:
         for enemy in self.enemy_vector:
             if enemy.is_alive:
                 enemy.animate()
                 enemy.update()
 
-    def draw_enemies(self, screen, off_set_x, off_set_y):
+    def follow_player(self, pos_player_x:int, offset_x:int) -> None:
+        for enemy in self.enemy_vector:
+            if (enemy.pos_x < pos_player_x-offset_x) and (enemy.coins_value != 50):
+                enemy.direction = "right"
+            elif (enemy.pos_x > pos_player_x-offset_x) and (enemy.coins_value != 50):
+                enemy.direction = "left"
+
+    def draw_enemies(self, screen, off_set_x, off_set_y) -> None:
         """
         Desenha os inimigos na tela e muda a posicao com o valor dos off_sets
 
