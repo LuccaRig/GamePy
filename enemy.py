@@ -301,7 +301,7 @@ class Flower(Enemy):
 
 
 class Little_Spider(Enemy):
-    def __init__(self, inital_pos : list) -> None:
+    def __init__(self, inital_pos : list, move_set_number = 0) -> None:
         super().__init__()
         #Sprites and animation
         
@@ -330,6 +330,7 @@ class Little_Spider(Enemy):
         self.actual_pos = 0
 
         # Stats
+        self.move_set_number = move_set_number
         self.contact_dmg = 3
         self.hp = 12
 
@@ -337,8 +338,16 @@ class Little_Spider(Enemy):
         """ 
         Garante uma movimentacao fixa do objeto Little_Spider
         """
-        right_limit = 30
-        left_limit = -30
+        if self.move_set_number == 0:
+            right_limit = 90
+            left_limit = -30
+        elif self.move_set_number == 1:
+            right_limit = 120
+            left_limit = -60  
+        elif self.move_set_number == 2:
+            right_limit = 75
+            left_limit = -50
+
         self.actual_pos = self.actual_pos + self.speed
         if self.actual_pos >= right_limit:
             self.speed = -1
@@ -373,10 +382,52 @@ class Enemy_Group(Enemy):
             enemy5 = Shooter([550, 328])
             self.enemy_vector = numpy.array([little_spider, enemy2, enemy3, enemy4, enemy5])
 
-        if enemy_group_number == 1:
-            little_spider = Little_Spider([100, 500])
-            enemy3 = Shooter([200, 100])
-            self.enemy_vector = numpy.array([little_spider, enemy3])
+        elif enemy_group_number == 1:
+            enemy2 = Little_Spider([760, 44])
+            enemy3 = Little_Spider([1500, 362])
+            enemy4 = Flower([2000, 300])
+            enemy5 = Flower([1800, 300])
+            enemy6 = Little_Spider([2300, 362])
+            self.enemy_vector = numpy.array([ enemy2, enemy3, enemy4, enemy5, enemy6])
+
+        elif enemy_group_number == 2:
+            enemy0 = Little_Spider([400, 363], 1)
+            enemy1 = Little_Spider([300, 363])
+            enemy2 = Little_Spider([1700, 680], 2)
+            enemy3 = Little_Spider([1800, 680], 1)
+            enemy4 = Little_Spider([1900, 680])
+            enemy5 = Flower([1900, 780])
+            enemy6 = Flower([1750, 780])
+            enemy7 = Flower([1350, 780])
+            self.enemy_vector = numpy.array([enemy0, enemy1, enemy2, enemy3, enemy4, enemy5, enemy6, enemy7])
+        
+        elif enemy_group_number == 3:
+            enemy0 = Shooter([1040, 808])
+            enemy1 = Shooter([1220, 648])
+            enemy2 = Shooter([1380, 490])
+            enemy3 = Flower([2200, -20])
+            enemy4 = Flower([1950, -20])
+            self.enemy_vector = numpy.array([enemy0, enemy1, enemy2, enemy3, enemy4])
+
+        elif enemy_group_number == 4:
+            little_spider = Little_Spider([400, 500])
+            self.enemy_vector = numpy.array([little_spider])
+
+        elif enemy_group_number == 5:
+            little_spider = Little_Spider([400, 500])
+            self.enemy_vector = numpy.array([little_spider])
+        
+        elif enemy_group_number == 6:
+            little_spider = Little_Spider([400, 500])
+            self.enemy_vector = numpy.array([little_spider])
+        
+        elif enemy_group_number == 7:
+            little_spider = Little_Spider([400, 500])
+            self.enemy_vector = numpy.array([little_spider])
+        
+        elif enemy_group_number == 8:
+            little_spider = Little_Spider([400, 500])
+            self.enemy_vector = numpy.array([little_spider])
 
     def update_enemies_sprites(self):
         for enemy in self.enemy_vector:
@@ -401,11 +452,11 @@ class Enemy_Group(Enemy):
     def draw_collisions_rects(self, screen):
         green = (0, 255, 0)
         red = (255, 0, 0)
-        for enemy in self.enemy_vector:
-            if enemy.is_alive:
-                pygame.draw.rect(screen, green, enemy.hitbox_rect, 1)
-                if enemy.has_attack_rect:
-                    pygame.draw.rect(screen, red, enemy.attack_rect, 1)
+        #for enemy in self.enemy_vector:
+            #if enemy.is_alive:
+                #pygame.draw.rect(screen, green, enemy.hitbox_rect, 1)
+                #if enemy.has_attack_rect:
+                    #pygame.draw.rect(screen, red, enemy.attack_rect, 1)
 
     
     def define_pos_group(self, delta_x, delta_y):

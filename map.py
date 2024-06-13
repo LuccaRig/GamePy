@@ -22,6 +22,8 @@ class Map():
         self.map_number = group
         self.map_enemy_define()
 
+        self.map_npc_define()
+
     def render_visible_layers(self, screen: pygame.display, off_set_x: float, off_set_y: float) -> None:
         """Itera sobre a matriz do mapa para renderizar os tiles do mapas, assim como os objetos de colisão e de mudança de sala
         
@@ -142,7 +144,10 @@ class Map():
     
     def map_npc_define(self):
         if self.map_number == 0:
-            self.npc = npcs.Traveler([750, 300])
+            self.npc = npcs.Traveler([750, 300], 0)
+
+        if self.map_number == 2:
+            self.npc = npcs.Traveler([750, 300], 1)
 
     def map_enemy_define(self):
         if self.map_number == 0:
@@ -150,6 +155,27 @@ class Map():
 
         elif self.map_number == 1:
             self.enemy_map_group = enemy.Enemy_Group(1)
+        
+        elif self.map_number == 2:
+            self.enemy_map_group = enemy.Enemy_Group(2)
+        
+        elif self.map_number == 3:
+            self.enemy_map_group = enemy.Enemy_Group(3)
+        
+        elif self.map_number == 4:
+            self.enemy_map_group = enemy.Enemy_Group(4)
+        
+        elif self.map_number == 5:
+            self.enemy_map_group = enemy.Enemy_Group(5)
+        
+        elif self.map_number == 6:
+            self.enemy_map_group = enemy.Enemy_Group(6)
+
+        elif self.map_number == 7:
+            self.enemy_map_group = enemy.Enemy_Group(7)
+
+        elif self.map_number == 8:
+            self.enemy_map_group = enemy.Enemy_Group(8)
 
         else: self.enemy_map_group = None
 

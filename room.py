@@ -7,7 +7,6 @@ class Room():
         self.import_maps(9, self.my_maps)
         self.first_time_in_room(9, self.is_first_time)
         self.current_map_position = 0
-        self.current_room().map_npc_define()
 
     def import_maps(self, number_of_maps: int, maps_vector= []) -> None:
         """Acessa a pasta Tiled e guarda os mapas (arquivos tmx) em um vetor de mapas
@@ -47,6 +46,9 @@ class Room():
 
     def current_room_npc(self):
         if self.current_map_position == 0:
+            return self.current_room().npc
+        
+        elif self.current_map_position == 2:
             return self.current_room().npc
         else:
             return None
