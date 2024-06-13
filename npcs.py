@@ -4,7 +4,7 @@ class Npc():
     def __init__(self) -> None:
         self.is_animating = False
         self.current_sprite = 0
-        self.sprites = []      
+        self.sprites = []  
         
     def import_sprites(self, number_of_sprites : int, arquive : str, sprites_vector : list, scale=4) -> None:
         for i in range(number_of_sprites):
@@ -35,7 +35,7 @@ class Npc():
 
 
 class Traveler(Npc):
-    def __init__(self, pos : list) -> None:
+    def __init__(self, pos : list, talk_number : int) -> None:
         super().__init__()
 
         self.import_sprites(10, "CharacterSprites/TravelerNPC", self.sprites)
@@ -50,12 +50,12 @@ class Traveler(Npc):
         
         
         self.interact_rect = pygame.Rect(self.pos[0], self.pos[1]+ self.y_correction,  self.width, self.height)
-        self.talk_number = 0
         self.text_color = (255, 255, 255)
         self.font_size = 36
         self.dialogue_font = pygame.font.Font(None, self.font_size)
         self.text_index = 0
         self.last_letter_time = 0
+        self.talk_number = talk_number  
 
 
 
@@ -68,8 +68,13 @@ class Traveler(Npc):
         current_time = pygame.time.get_ticks()
         letter_interval = 100
 
-        if(self.check_player_interaction(player) and self.talk_number == 0):
+        if self.talk_number == 0:
             text = "Olá, Jogador!"
+
+        if self.talk_number == 1:
+            text = "Insira um texto legal aqui"
+
+        if(self.check_player_interaction(player)):
 
             if self.text_index < len(text) and current_time - self.last_letter_time > letter_interval:
                 self.text_index += 1

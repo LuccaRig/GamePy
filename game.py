@@ -1,6 +1,5 @@
 import pygame
 import player
-import enemy
 import camera
 import room
 import time
