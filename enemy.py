@@ -7,6 +7,7 @@ class Enemy(pygame.sprite.Sprite):
         # Atributos dos inimigos
         self.hp = 0
         self.damage = 0
+        self.coins_value = 0
 
         self.sprites_idle_right = []
         self.sprites_idle_left = []
@@ -51,6 +52,11 @@ class Enemy(pygame.sprite.Sprite):
         self.rect.x += delta_x
         self.rect.y += delta_y
         self.hitbox_rect.topleft = [self.rect.x +85, self.rect.y +70]
+
+    def is_dead(self) -> bool:
+        if self.hp <= 0:
+            return True
+        return False
 
     def is_grounded(self, Map) -> None:
         """
@@ -184,6 +190,7 @@ class Shooter(Enemy):
         self.contact_dmg = 20
         self.attack_dmg = 5
         self.hp = 25
+        self.coins_value = 1000
 
     def move_set(self):
         """  Garante uma movimentação fixa do objeto Little_Spider
@@ -237,6 +244,7 @@ class Ghoul(Enemy):
         self.contact_dmg = 3
         self.attack_dmg = 5
         self.hp = 40
+        self.coins_value = 500
 
     def move_set(self):
         """  Garante uma movimentacao fixa do objeto Little_Spider
@@ -286,6 +294,7 @@ class Flower(Enemy):
         self.contact_dmg = 3
         self.attack_dmg = 5
         self.hp = 35
+        self.coins_value = 100
 
     def move_set(self):
         """  Garante uma movimentacao fixa do objeto Little_Spider
@@ -333,6 +342,7 @@ class Little_Spider(Enemy):
         self.move_set_number = move_set_number
         self.contact_dmg = 3
         self.hp = 12
+        self.coins_value = 50
 
     def move_set(self) -> None:
         """ 

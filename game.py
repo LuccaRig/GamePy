@@ -37,9 +37,9 @@ class Game():
 
         # Texts of icons
         self.text_coin = ""
-        self.text_coin_pos = [1180, 15]
+        self.text_coin_pos = [1200, 16]
         self.texts_color = (255, 255, 255)
-        self.font_size = 24
+        self.font_size = 18
         self.text_font = pygame.font.Font('assets/font.ttf', self.font_size)
 
         self.is_healing_time = 0
@@ -109,6 +109,8 @@ class Game():
                                 if current_time - self.player_character.last_landed_attack_time > 0.48:
                                     enemy.hp -= self.player_character.attack_dmg
                                     enemy.was_hit = True
+                                    if enemy.is_dead():
+                                        self.player_character.coins += enemy.coins_value
                                     hit_was_successfull = True
                                     print("HP do inimigo: ", enemy.hp)
                     if hit_was_successfull:
@@ -230,7 +232,7 @@ class Game():
             self.screen.blit(self.player_character.hp_bar_background, (10, 10))
             for heal in range(self.player_character.number_of_heals):
                 self.screen.blit(self.player_character.heal_icon, (30+heal*20, 65))
-            self.screen.blit(self.player_character.coin_icon, (1240, 10))
+            self.screen.blit(self.player_character.coin_icon, (1165, 10))
             self.screen.blit(text_coin_render, self.text_coin_pos)
             pygame.draw.rect(self.screen, (192, 0, 0), self.player_character.hp_bar)
 
