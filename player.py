@@ -104,15 +104,25 @@ Typical usage example:
         self.delta_pos_y = 0
         self.x_limit_reached = False
         self.y_limit_reached = False
-        self.hp_bar_background = pygame.image.load('assets/HUD HP_BAR.png')
         self.hp_bar = pygame.Rect(28, 16, 200, 40)
+        self.hp_bar_background = pygame.image.load('assets/HUD HP_BAR.png')
+        self.heal_icon = pygame.image.load('assets/Heal_Icon.png')
+        self.heal_icon = pygame.transform.scale(self.heal_icon, 
+                                                (int(self.heal_icon.get_width() * 4), int(self.heal_icon.get_height() * 4)))
+        self.coin_icon = pygame.image.load('assets/Coin_Icon.png')
+        self.coin_icon = pygame.transform.scale(self.coin_icon, 
+                                                (int(self.coin_icon.get_width() * 3), int(self.coin_icon.get_height() * 3)))
 
         # Stats
         self.attack_dmg = 10
+        self.max_hp = 50
         self.hp = 50
+        self.number_of_heals = 3
+        self.coins = 0
 
         self.last_hit_time = 0
         self.last_landed_attack_time = 0
+        self.is_healing = False
 
     def _import_sprites(self, number_of_sprites: int, arquive: str, sprites_vector) -> None:
         """ Acessa a pasta selecionada {arquive} e guarda os PNG em um vetores de PNG {sprites_vector}
@@ -130,8 +140,13 @@ Typical usage example:
             sprites_vector.append(sprite)
         
     def hp_bar_change(self) -> None:
-        hp_bar_percent = self.hp*4
-        self.hp_bar = pygame.Rect(28, 16, hp_bar_percent, 40)
+        hp_bar_lost = self.max_hp - self.hp
+        self.hp_bar = pygame.Rect(28, 16, (self.max_hp-hp_bar_lost)*4, 40)
+
+    def heal(self) -> None:
+        self.hp += self.max_hp*0.6
+        if self.max_hp <= self.hp:
+            self.hp = self.max_hp
 
     def reinitialize_position_advancing(self, map: map) -> None:
         """Ajusta a posição do player para a nova sala
