@@ -55,6 +55,7 @@ class Game():
             current_time = time.time()
             self.text_coin = str(self.player_character.coins)
             text_coin_render = self.text_font.render(self.text_coin, True, self.texts_color)
+            #print(current_time, self.is_healing_time)
             
             #Testa se o player está avançando para a nova sala, e se estiver
             # atualiza o mapa no vetor de mapas e reinicializa a posição do player e da câmera
@@ -128,13 +129,13 @@ class Game():
                     self.player_character.falling = False
 
             if keys[pygame.K_c]:
-                if not self.player_character.is_healing:
+                if not self.player_character.is_healing and (current_time - self.is_healing_time >= 0.2):
                     self.player_character.is_healing = True
                     self.player_character.number_of_heals -= 1
                     if self.player_character.number_of_heals >= 0:
                         self.player_character.heal()
                         self.player_character.hp_bar_change()
-                if current_time - self.is_healing_time >= 1:
+                if current_time - self.is_healing_time >= 0.2:
                     self.player_character.is_healing = False
                 if not self.player_character.is_healing:
                     self.is_healing_time = time.time()
