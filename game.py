@@ -218,6 +218,7 @@ class Game():
                 self.myRoom.current_room_npc().update()
 
             if self.myRoom.current_room_enemies() != None:
+                self.myRoom.current_room_enemies().follow_player(self.player_character.pos_x, self.my_camera.off_set_x)
                 self.myRoom.current_room_enemies().set_move_sets()
                 self.my_camera.keep_enemy_pos(self.screen, self.myRoom.current_room_enemies())
                 self.myRoom.current_room_enemies().update_enemies_sprites()
