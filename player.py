@@ -191,7 +191,7 @@ Typical usage example:
         """
         self.speed[0] = new_pos_x
         self.speed[1] = new_pos_y
-        if self.walking or self.jumping or not self.grounded :
+        if self.walking or self.jumping or not self.grounded:
             #print(self.x_limit_reached)
             if(new_pos_x < 0 ):
                 self.direction = "left"

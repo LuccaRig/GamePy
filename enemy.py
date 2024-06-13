@@ -46,22 +46,20 @@ class Enemy(pygame.sprite.Sprite):
             sprite = pygame.transform.scale(sprite, (int(sprite.get_width() * scale), int(sprite.get_height() * scale)))
             sprites_vector.append(sprite)
 
-    def update_position(self, delta_x, delta_y):
+    def update_position(self, delta_x: int, delta_y: int) -> None:
         if delta_x != 0: self.walking = True
         else: self.walking = False
         self.rect.x += delta_x
         self.rect.y += delta_y
         self.hitbox_rect.topleft = [self.rect.x +85, self.rect.y +70]
 
-    def is_dead(self) -> bool:
-        if self.hp <= 0:
-            return True
-        return False
-
-    def is_grounded(self, Map) -> None:
+    def is_grounded(self, Map) -> bool:
         """
         """
         return Map.check_collision(self.rect)
+    
+    def is_atk(self) -> bool:
+        return False
 
     def animate(self) -> None:
         self.is_animating = True 
@@ -171,6 +169,7 @@ class Shooter(Enemy):
         self.import_sprites(2,'CharacterSprites/shooter/hitPNGleft', self.sprites_hit_left)
 
         self.image = self.sprites_idle_right[self.current_sprite]
+        self.type = "Shooter"
 
         # Default Position and movement
         self.pos_x = inital_pos[0]
@@ -187,13 +186,13 @@ class Shooter(Enemy):
         self.idle_animation_speed = 0.10
 
         # Stats
-        self.contact_dmg = 20
+        self.contact_dmg = 10
         self.attack_dmg = 5
         self.hp = 25
         self.coins_value = 1000
 
     def move_set(self):
-        """  Garante uma movimentação fixa do objeto Little_Spider
+        """  Garante uma movimentação fixa do objeto Shooter
         """
         self.update_position(0, 0)
 
@@ -226,6 +225,7 @@ class Ghoul(Enemy):
         self.import_sprites(4,'CharacterSprites/Ghoul/hitPNGleft', self.sprites_hit_left)
 
         self.image = self.sprites_idle_right[self.current_sprite]
+        self.type = "Ghoul"
 
         # Default Position and movement
         self.pos_x = inital_pos[0]
@@ -274,6 +274,7 @@ class Flower(Enemy):
         self.import_sprites(2,'CharacterSprites/flower/hitPNGleft', self.sprites_hit_left)
 
         self.image = self.sprites_idle_left[self.current_sprite]
+        self.type = "Flower"
 
         # Default Position and movement
         self.pos_x = inital_pos[0]
@@ -284,7 +285,7 @@ class Flower(Enemy):
         self.rect.topleft = [self.pos_x, self.pos_y]
         self.hitbox_rect = pygame.Rect(self.pos_x+83, self.pos_y-50, 40, 40)
         self.hitbox_rect.topleft = [self.pos_x-5, self.pos_y]
-        self.attack_rect = pygame.Rect(self.pos_x+65, self.pos_y-90, 110, 85)
+        self.attack_rect = pygame.Rect(self.pos_x+65, self.pos_y-90, 120, 85)
         self.attack_rect.topleft = [self.pos_x+15, self.pos_y+45]
         self.speed = 1
         self.actual_pos = 0
@@ -292,9 +293,14 @@ class Flower(Enemy):
 
         # Stats
         self.contact_dmg = 3
-        self.attack_dmg = 5
+        self.attack_dmg = 15
         self.hp = 35
         self.coins_value = 100
+        
+    def is_atk(self) -> bool:
+        if 1 <= self.current_sprite <= 7:
+            return True
+        return False
 
     def move_set(self):
         """  Garante uma movimentacao fixa do objeto Little_Spider
@@ -306,7 +312,7 @@ class Flower(Enemy):
         """
         if self.is_alive:
             self.hitbox_rect.topleft = [new_pos_x+48, new_pos_y+92]
-            self.attack_rect.topleft = [new_pos_x+15, new_pos_y+45]
+            self.attack_rect.topleft = [new_pos_x+5, new_pos_y+45]
 
 
 class Little_Spider(Enemy):
@@ -331,6 +337,7 @@ class Little_Spider(Enemy):
         self.import_sprites(6,'CharacterSprites/little_spider/deathPNGleft', self.sprites_dying_left)
 
         self.image = self.sprites_idle_right[self.current_sprite]
+        self.type = "Little Spider"
 
         # Default Position and movement
         self.pos_x = inital_pos[0]
@@ -392,11 +399,11 @@ class Enemy_Group(Enemy):
         if enemy_group_number == 0:
             little_spider = Little_Spider([400, 500])
             enemy2 = Shooter([350, 328])
-            enemy3 = Ghoul([420, 300])
+            enemy3 = Ghoul([900, 300])
             enemy4 = Flower([550, 300])
             enemy5 = Shooter([650, 328])
-            enemy6 = Little_Spider([250, 360])
-            self.enemy_vector = numpy.array([little_spider, enemy2, enemy3, enemy4, enemy5, enemy6])
+            #enemy6 = Little_Spider([250, 360])
+            self.enemy_vector = numpy.array([little_spider, enemy2, enemy3, enemy4, enemy5])
 
         elif enemy_group_number == 1:
             enemy2 = Little_Spider([760, 44])
@@ -475,11 +482,11 @@ class Enemy_Group(Enemy):
     def draw_collisions_rects(self, screen):
         green = (0, 255, 0)
         red = (255, 0, 0)
-        #for enemy in self.enemy_vector:
-            #if enemy.is_alive:
-                #pygame.draw.rect(screen, green, enemy.hitbox_rect, 1)
-                #if enemy.has_attack_rect:
-                    #pygame.draw.rect(screen, red, enemy.attack_rect, 1)
+        # for enemy in self.enemy_vector:
+        #     if enemy.is_alive:
+        #         pygame.draw.rect(screen, green, enemy.hitbox_rect, 1)
+        #         if enemy.has_attack_rect:
+        #             pygame.draw.rect(screen, red, enemy.attack_rect, 1)
 
     
     def define_pos_group(self, delta_x, delta_y):

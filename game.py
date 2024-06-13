@@ -109,7 +109,7 @@ class Game():
                                 if current_time - self.player_character.last_landed_attack_time > 0.48:
                                     enemy.hp -= self.player_character.attack_dmg
                                     enemy.was_hit = True
-                                    if enemy.is_dead():
+                                    if enemy.hp <= 0:
                                         self.player_character.coins += enemy.coins_value
                                     hit_was_successfull = True
                                     print("HP do inimigo: ", enemy.hp)
@@ -131,7 +131,7 @@ class Game():
                     self.player_character.falling = False
 
             if keys[pygame.K_c]:
-                if not self.player_character.is_healing and (current_time - self.is_healing_time >= 0.2):
+                if not self.player_character.is_healing and (current_time - self.is_healing_time >= 0.2) and self.player_character.is_alive:
                     self.player_character.is_healing = True
                     self.player_character.number_of_heals -= 1
                     if self.player_character.number_of_heals >= 0:
@@ -145,7 +145,7 @@ class Game():
             if keys[pygame.K_LEFT]:
                 if not self.player_character.attacking and not self.player_character.was_hit and not keys[pygame.K_RIGHT]\
                     and (not self.player_character.landing or not(self.player_character.is_colliding(self.myRoom.current_room(), "down"))) \
-                    and not (self.player_character.is_colliding(self.myRoom.current_room(), "left")):
+                    and not (self.player_character.is_colliding(self.myRoom.current_room(), "left")) and self.player_character.is_alive:
                     self.player_character.walking = True
                     self.player_character.update_position(-6, 0)
                     #x -= vel
@@ -153,13 +153,13 @@ class Game():
             if keys[pygame.K_RIGHT]:
                 if not self.player_character.attacking and not self.player_character.was_hit and not keys[pygame.K_LEFT]\
                     and (not self.player_character.landing or not(self.player_character.is_colliding(self.myRoom.current_room(), "down"))) \
-                    and not (self.player_character.is_colliding(self.myRoom.current_room(), "right")):
+                    and not (self.player_character.is_colliding(self.myRoom.current_room(), "right")) and self.player_character.is_alive:
                     self.player_character.walking = True
                     self.player_character.update_position(6, 0)
                     #x += vel
 
             if keys[pygame.K_UP]:
-                if not self.player_character.attacking and not self.player_character.was_hit \
+                if not self.player_character.attacking and not self.player_character.was_hit and self.player_character.is_alive\
                     and (self.player_character.is_colliding(self.myRoom.current_room(), "down")) \
                     and (not self.player_character.landing or not(self.player_character.is_colliding(self.myRoom.current_room(), "down"))):
                     self.player_character.landing = True
@@ -168,19 +168,27 @@ class Game():
                     self.player_character.vertical_speed += self.player_character.jumping_speed
                         #y -= vel
 
-            #checa se o jogador deve receber dano de contato
+            #checa se o jogador deve receber dano
             if self.myRoom.current_room_enemies() != None:
                 for enemy in self.myRoom.current_room_enemies().enemy_vector:
                     if enemy.is_alive:
+                        rects_intersected = False
                         if self.player_character.hitbox_rect.colliderect(enemy.hitbox_rect):
-                            if current_time - self.player_character.last_hit_time > 1.3:
-                                self.player_character.hp -= enemy.contact_dmg
-                                self.player_character.hp_bar_change()
-                                self.player_character.was_hit = True
-                                self.player_character.hit_flinch = True
-                                self.player_character.last_hit_time = time.time()
-                                print("HP do jogador:", self.player_character.hp)
-                                break
+                            damage_received = enemy.contact_dmg
+                            rects_intersected = True
+                        if enemy.has_attack_rect and enemy.is_atk():
+                            if self.player_character.hitbox_rect.colliderect(enemy.attack_rect):
+                                damage_received = enemy.attack_dmg
+                                rects_intersected = True
+                        
+                        if current_time - self.player_character.last_hit_time > 1.3 and rects_intersected:
+                            self.player_character.hp -= damage_received
+                            self.player_character.hp_bar_change()
+                            self.player_character.was_hit = True
+                            self.player_character.hit_flinch = True
+                            self.player_character.last_hit_time = time.time()
+                            print("HP do jogador:", self.player_character.hp)
+                            break
 
             is_it_dusk = False
             if (current_time - self.time_passed_in_dusk >= 1) and (self.myRoom.current_map_position <= 7):
