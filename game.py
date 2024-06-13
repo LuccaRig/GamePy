@@ -30,10 +30,20 @@ class Game():
         self.my_camera = camera.Camera(self.myRoom.current_room(), self.player_character, self.screen)
         self.my_camera_off_set = {}
 
+        # Color of background
         self.rb_dusk = 0
         self.g_dusk = 0
         self.time_passed_in_dusk = 0
         self.background_color = [130, 181, 250]
+
+        # Texts of icons
+        self.text_coin = ""
+        self.text_coin_pos = [1180, 15]
+        self.texts_color = (255, 255, 255)
+        self.font_size = 24
+        self.text_font = pygame.font.Font('assets/font.ttf', self.font_size)
+
+        self.is_healing_time = 0
 
 
     def game_run(self):
@@ -44,6 +54,8 @@ class Game():
             #print(self.my_camera_off_set)
             #print(self.myRoom.is_first_time)
             current_time = time.time()
+            self.text_coin = str(self.player_character.coins)
+            text_coin_render = self.text_font.render(self.text_coin, True, self.texts_color)
             
             #Testa se o player está avançando para a nova sala, e se estiver
             # atualiza o mapa no vetor de mapas e reinicializa a posição do player e da câmera
@@ -115,6 +127,18 @@ class Game():
                     self.player_character.animate_land()
                     self.player_character.jumping = False
                     self.player_character.falling = False
+
+            if keys[pygame.K_c]:
+                if not self.player_character.is_healing:
+                    self.player_character.is_healing = True
+                    self.player_character.number_of_heals -= 1
+                    if self.player_character.number_of_heals >= 0:
+                        self.player_character.heal()
+                        self.player_character.hp_bar_change()
+                if current_time - self.is_healing_time >= 1:
+                    self.player_character.is_healing = False
+                if not self.player_character.is_healing:
+                    self.is_healing_time = time.time()
                 
             if keys[pygame.K_LEFT]:
                 if not self.player_character.attacking and not self.player_character.was_hit and not keys[pygame.K_RIGHT]\
@@ -204,6 +228,10 @@ class Game():
             self.moving_sprites.draw(self.screen)
             self.moving_sprites.update()
             self.screen.blit(self.player_character.hp_bar_background, (10, 10))
+            for heal in range(self.player_character.number_of_heals):
+                self.screen.blit(self.player_character.heal_icon, (30+heal*20, 65))
+            self.screen.blit(self.player_character.coin_icon, (1240, 10))
+            self.screen.blit(text_coin_render, self.text_coin_pos)
             pygame.draw.rect(self.screen, (192, 0, 0), self.player_character.hp_bar)
 
             pygame.display.flip()
