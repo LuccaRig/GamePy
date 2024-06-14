@@ -466,10 +466,11 @@ class Enemy_Group(Enemy):
 
     def follow_player(self, pos_player_x:int, offset_x:int) -> None:
         for enemy in self.enemy_vector:
-            if (enemy.pos_x < pos_player_x-offset_x) and (enemy.coins_value != 50):
-                enemy.direction = "right"
-            elif (enemy.pos_x > pos_player_x-offset_x) and (enemy.coins_value != 50):
-                enemy.direction = "left"
+            if (not enemy.type == "Little Spider") and (not enemy.dying):
+                if (enemy.pos_x < pos_player_x-offset_x):
+                    enemy.direction = "right"
+                elif (enemy.pos_x > pos_player_x-offset_x):
+                    enemy.direction = "left"
 
     def draw_enemies(self, screen, off_set_x, off_set_y) -> None:
         """
