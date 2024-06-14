@@ -73,7 +73,7 @@ Typical usage example:
         self.dying = False
         self.was_hit = False
         self.hit_flinch = False
-        self.invincibility = False
+        self.is_invisible_by_invincibility = False
         self.direction = "right"
         self.current_sprite = 0
         self.current_sprite_attack = 0
@@ -371,10 +371,7 @@ Typical usage example:
                     self.was_hit = False
                 else:
                     self.image = self.sprites_hit_left[int(self.current_sprite_hit)]
-        
-
-
-    #sugestão: tratar is_animating como atributo público e apagar essa função 
+         
     def animate(self) -> None:
         self.is_animating = True
     

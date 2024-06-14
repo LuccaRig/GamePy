@@ -181,7 +181,7 @@ class Game():
                                 damage_received = enemy.attack_dmg
                                 rects_intersected = True
                         
-                        if current_time - self.player_character.last_hit_time > 1.3 and rects_intersected:
+                        if current_time - self.player_character.last_hit_time > 1.4 and rects_intersected:
                             self.player_character.hp -= damage_received
                             self.player_character.hp_bar_change()
                             self.player_character.was_hit = True
@@ -189,6 +189,15 @@ class Game():
                             self.player_character.last_hit_time = time.time()
                             print("HP do jogador:", self.player_character.hp)
                             break
+
+            #permite que o player "pisque" após ter tomado dano, indicando período de invincibilidade
+            invincibility_time = current_time - self.player_character.last_hit_time
+            if (0 <= invincibility_time <= 0.2) or (0.4 <= invincibility_time <= 0.6) or (0.8 <= invincibility_time <= 1) \
+                or 1.2 <= invincibility_time < 1.4:
+                self.player_character.is_invisible_by_invincibility = True
+            else:
+                self.player_character.is_invisible_by_invincibility = False
+
 
             is_it_dusk = False
             if (current_time - self.time_passed_in_dusk >= 1) and (self.myRoom.current_map_position <= 7):
@@ -207,7 +216,8 @@ class Game():
             self.my_camera.follow_player()
             self.player_character.draw_collision_rect(self.screen)
 
-            self.moving_sprites.draw(self.screen)
+            if not self.player_character.is_invisible_by_invincibility:
+                self.moving_sprites.draw(self.screen)
             self.moving_sprites.update()
 
             self.player_character.animate_hit()
@@ -236,8 +246,10 @@ class Game():
                 self.myRoom.current_room_enemies().animate_hits()
                 self.myRoom.current_room_enemies().destruct_dead_enemies()
 
-            self.moving_sprites.draw(self.screen)
+            if not self.player_character.is_invisible_by_invincibility:
+                self.moving_sprites.draw(self.screen)
             self.moving_sprites.update()
+            
             self.screen.blit(self.player_character.hp_bar_background, (10, 10))
             for heal in range(self.player_character.number_of_heals):
                 self.screen.blit(self.player_character.heal_icon, (30+heal*20, 65))
