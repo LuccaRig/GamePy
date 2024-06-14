@@ -47,11 +47,12 @@ class Enemy(pygame.sprite.Sprite):
             sprites_vector.append(sprite)
 
     def update_position(self, delta_x: int, delta_y: int) -> None:
-        if delta_x != 0: self.walking = True
-        else: self.walking = False
-        self.rect.x += delta_x
-        self.rect.y += delta_y
-        self.hitbox_rect.topleft = [self.rect.x +85, self.rect.y +70]
+        if not self.dying:
+            if delta_x != 0: self.walking = True
+            else: self.walking = False
+            self.rect.x += delta_x
+            self.rect.y += delta_y
+            self.hitbox_rect.topleft = [self.rect.x +85, self.rect.y +70]
 
     def is_grounded(self, Map) -> bool:
         """
@@ -329,12 +330,17 @@ class Little_Spider(Enemy):
         self.sprites_dying_right = []
         self.sprites_dying_left = []
 
+        self.sprites_hit_right = []
+        self.sprites_hit_left = []
+
         self.import_sprites(1,'CharacterSprites/little_spider/idlePNGright', self.sprites_idle_right)
         self.import_sprites(1,'CharacterSprites/little_spider/idlePNGleft', self.sprites_idle_left)
         self.import_sprites(6,'CharacterSprites/little_spider/movementPNGright', self.sprites_moving_right)
         self.import_sprites(6,'CharacterSprites/little_spider/movementPNGleft', self.sprites_moving_left)
         self.import_sprites(6,'CharacterSprites/little_spider/deathPNGright', self.sprites_dying_right)
         self.import_sprites(6,'CharacterSprites/little_spider/deathPNGleft', self.sprites_dying_left)
+        self.import_sprites(2,'CharacterSprites/little_spider/hitPNGright', self.sprites_hit_right)
+        self.import_sprites(2,'CharacterSprites/little_spider/hitPNGleft', self.sprites_hit_left)
 
         self.image = self.sprites_idle_right[self.current_sprite]
         self.type = "Little Spider"
@@ -346,7 +352,7 @@ class Little_Spider(Enemy):
         self.height = 65
         self.rect = pygame.Rect(self.pos_x, self.pos_y,  self.width, self.height)
         self.rect.topleft = [self.pos_x, self.pos_y]
-        self.hitbox_rect = pygame.Rect(self.pos_x+85, self.pos_y+10,  30, 10)
+        self.hitbox_rect = pygame.Rect(self.pos_x+85, self.pos_y+10,  30, 30)
         self.speed = 1
         self.actual_pos = 0
 
@@ -383,7 +389,7 @@ class Little_Spider(Enemy):
     def move_rects_toplefts(self, new_pos_x: int, new_pos_y: int) -> None:
         """Posiciona o topo do rect de hitbox de acordo com a nova posição do inimigo
         """
-        self.hitbox_rect.topleft = [new_pos_x + 35, new_pos_y+55]
+        self.hitbox_rect.topleft = [new_pos_x + 2, new_pos_y + 35]
 
 
 class Enemy_Group(Enemy):
@@ -402,8 +408,8 @@ class Enemy_Group(Enemy):
             enemy3 = Ghoul([900, 300])
             enemy4 = Flower([550, 300])
             enemy5 = Shooter([650, 328])
-            #enemy6 = Little_Spider([250, 360])
-            self.enemy_vector = numpy.array([little_spider, enemy2, enemy3, enemy4, enemy5])
+            enemy6 = Little_Spider([250, 365])
+            self.enemy_vector = numpy.array([little_spider, enemy2, enemy3, enemy4, enemy5, enemy6])
 
         elif enemy_group_number == 1:
             enemy2 = Little_Spider([760, 44])
