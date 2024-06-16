@@ -60,6 +60,10 @@ class Enemy(pygame.sprite.Sprite):
         return Map.check_collision(self.rect)
     
     def is_atk(self) -> bool:
+        """Função que deverá ser implementada nas subclasses caso o inimigo tenha um ataque
+        Deverá determinar em que período de tempo uma interseção de rect de ataque do inimigo com o do player gerará
+        uma perda de hp para o player
+        """
         return False
 
     def animate(self) -> None:
@@ -87,7 +91,7 @@ class Enemy(pygame.sprite.Sprite):
     def animate_death(self):
         """Coloca a animação de morte do inimigo em display
 
-        No final da animação, o inimigo é considerado morto
+        No final da animação, o inimigo é considerado morto (is_alive = False)
         """
         self.current_death_sprite += self.death_animation_speed
         if self.direction == "left":
@@ -187,7 +191,7 @@ class Shooter(Enemy):
         self.idle_animation_speed = 0.10
 
         # Stats
-        self.contact_dmg = 50
+        self.contact_dmg = 10
         self.attack_dmg = 5
         self.hp = 25
         self.coins_value = 1000
@@ -248,7 +252,7 @@ class Ghoul(Enemy):
         self.coins_value = 500
 
     def move_set(self):
-        """  Garante uma movimentacao fixa do objeto Ghoul
+        """  Garante uma movimentação fixa do objeto Ghoul
         """
         self.update_position(0, 0)
 
