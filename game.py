@@ -192,8 +192,7 @@ class Game():
 
             #permite que o player "pisque" após ter tomado dano, indicando período de invincibilidade
             invincibility_time = current_time - self.player_character.last_hit_time
-            if (0 <= invincibility_time <= 0.2) or (0.4 <= invincibility_time <= 0.6) or (0.8 <= invincibility_time <= 1) \
-                or 1.2 <= invincibility_time < 1.4:
+            if (0.2 <= invincibility_time <= 0.4) or (0.6 <= invincibility_time <= 0.8) or (1 <= invincibility_time <= 1.2):
                 self.player_character.is_invisible_by_invincibility = True
             else:
                 self.player_character.is_invisible_by_invincibility = False
@@ -246,10 +245,10 @@ class Game():
                 self.myRoom.current_room_enemies().animate_hits()
                 self.myRoom.current_room_enemies().destruct_dead_enemies()
 
-            if not self.player_character.is_invisible_by_invincibility:
+            if self.player_character.dying or not self.player_character.is_invisible_by_invincibility:
                 self.moving_sprites.draw(self.screen)
             self.moving_sprites.update()
-            
+
             self.screen.blit(self.player_character.hp_bar_background, (10, 10))
             for heal in range(self.player_character.number_of_heals):
                 self.screen.blit(self.player_character.heal_icon, (30+heal*20, 65))
