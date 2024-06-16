@@ -187,7 +187,7 @@ class Shooter(Enemy):
         self.idle_animation_speed = 0.10
 
         # Stats
-        self.contact_dmg = 10
+        self.contact_dmg = 50
         self.attack_dmg = 5
         self.hp = 25
         self.coins_value = 1000
