@@ -114,7 +114,7 @@ Typical usage example:
                                                 (int(self.coin_icon.get_width() * 3), int(self.coin_icon.get_height() * 3)))
 
         # Stats
-        self.attack_dmg = 10
+        self.attack_dmg = 15
         self.max_hp = 50
         self.hp = 50
         self.number_of_heals = 3
