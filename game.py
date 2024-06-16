@@ -248,6 +248,35 @@ class Game():
             self.player_character.correct_ground_intersection(self.myRoom.current_room())
         if (self.player_character.is_colliding(self.myRoom.current_room(), "down")):
             self.player_character.vertical_speed = 0
+
+    def control_rooms_player_position(self) -> None:
+        """Atualiza a posição da câmera e do player ao mudar de sala
+        """
+        #Testa se o player está avançando para a nova sala, e se estiver
+        # atualiza o mapa no vetor de mapas e reinicializa a posição do player e da câmera
+        if self.player_character.is_advancing_room(self.myRoom.current_room()):
+            #Armazena o quanto a câmera se deslocou, para a reinicialização dessa quando retornando para a sala
+            player_pos_y = self.player_character.pos_y
+            self.my_camera_off_set_advancing[self.myRoom.current_map_position] = [self.my_camera.off_set_x, self.my_camera.off_set_y]
+
+            self.myRoom.advance_room()
+            self.my_camera = camera.Camera(self.myRoom.current_room(), self.player_character, self.screen)
+            self.my_camera.off_set_map(0, self.my_camera_off_set_advancing[self.myRoom.current_map_position-1][1])
+            self.player_character.reinitialize_position_advancing(self.myRoom.current_room(), player_pos_y)
+
+        #Testa se o player está voltando para a sala anterior, e se estiver
+        #atualiza o mapa no vetor de mapas e reinicializa a posição do player e da câmera
+        if self.player_character.is_returning_room(self.myRoom.current_room()):
+            player_pos_y = self.player_character.pos_y
+            self.my_camera_off_set_returning[self.myRoom.current_map_position] = [self.my_camera.off_set_x, self.my_camera.off_set_y]
+
+            self.myRoom.return_room()
+            self.my_camera = camera.Camera(self.myRoom.current_room(), self.player_character, self.screen)
+            self.my_camera.off_set_map(self.my_camera_off_set_advancing[self.myRoom.current_map_position][0], 
+                                        self.my_camera_off_set_returning[self.myRoom.current_map_position+1][1])
+            self.player_character.reinitialize_position_returning(self.myRoom.current_room(), 
+                                                                    self.my_camera_off_set_advancing[self.myRoom.current_map_position][0],
+                                                                    player_pos_y)
     
 
     def game_run(self):
@@ -262,31 +291,7 @@ class Game():
             self.text_coin = str(self.player_character.coins)
             text_coin_render = self.text_font.render(self.text_coin, True, self.texts_color)
             
-            #Testa se o player está avançando para a nova sala, e se estiver
-            # atualiza o mapa no vetor de mapas e reinicializa a posição do player e da câmera
-            if self.player_character.is_advancing_room(self.myRoom.current_room()):
-                #Armazena o quanto a câmera se deslocou, para a reinicialização dessa quando retornando para a sala
-                player_pos_y = self.player_character.pos_y
-                self.my_camera_off_set_advancing[self.myRoom.current_map_position] = [self.my_camera.off_set_x, self.my_camera.off_set_y]
-
-                self.myRoom.advance_room()
-                self.my_camera = camera.Camera(self.myRoom.current_room(), self.player_character, self.screen)
-                self.my_camera.off_set_map(0, self.my_camera_off_set_advancing[self.myRoom.current_map_position-1][1])
-                self.player_character.reinitialize_position_advancing(self.myRoom.current_room(), player_pos_y)
-
-            #Testa se o player está voltando para a sala anterior, e se estiver
-            #atualiza o mapa no vetor de mapas e reinicializa a posição do player e da câmera
-            if self.player_character.is_returning_room(self.myRoom.current_room()):
-                player_pos_y = self.player_character.pos_y
-                self.my_camera_off_set_returning[self.myRoom.current_map_position] = [self.my_camera.off_set_x, self.my_camera.off_set_y]
-
-                self.myRoom.return_room()
-                self.my_camera = camera.Camera(self.myRoom.current_room(), self.player_character, self.screen)
-                self.my_camera.off_set_map(self.my_camera_off_set_advancing[self.myRoom.current_map_position][0], 
-                                           self.my_camera_off_set_returning[self.myRoom.current_map_position+1][1])
-                self.player_character.reinitialize_position_returning(self.myRoom.current_room(), 
-                                                                      self.my_camera_off_set_advancing[self.myRoom.current_map_position][0],
-                                                                      player_pos_y)
+            self.control_rooms_player_position()
 
             self.apply_gravity_to_player()
 
