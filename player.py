@@ -148,14 +148,14 @@ Typical usage example:
         if self.max_hp <= self.hp:
             self.hp = self.max_hp
 
-    def reinitialize_position_advancing(self, map: map) -> None:
+    def reinitialize_position_advancing(self, map: map, pos_y: int) -> None:
         """Ajusta a posição do player para a nova sala
 
         Args:
             map: objeto que contém os blocos de colisão para ajuste do player
         """
         self.pos_x = map.pos_x_previous_room - 50
-        self.pos_y = map.pos_y_previous_room + 170
+        self.pos_y = pos_y
         self.rect.topleft = [self.pos_x, self.pos_y]
         self.rect_down.topleft = [self.pos_x+85, self.pos_y+47]
         self.rect_up.topleft = [self.pos_x+85, self.pos_y]
@@ -165,14 +165,14 @@ Typical usage example:
         self.right_attack_rect.topleft = [self.pos_x+110, self.pos_y]
         self.left_attack_rect.topleft = [self.pos_x+25, self.pos_y]
 
-    def reinitialize_position_returning(self, map: map, off_set_x: int) -> None:
+    def reinitialize_position_returning(self, map: map, off_set_x: int, pos_y: int) -> None:
         """Ajusta a posição do player para a sala anterior
 
         Args:
             map: objeto que contém os blocos de colisão para ajuste do player
         """
         self.pos_x = map.pos_x_new_room - 110 + off_set_x
-        self.pos_y = map.pos_y_new_room + 170
+        self.pos_y = pos_y
         self.rect.topleft = [self.pos_x, self.pos_y]
         self.rect_down.topleft = [self.pos_x+85, self.pos_y+47]
         self.rect_up.topleft = [self.pos_x+85, self.pos_y]
