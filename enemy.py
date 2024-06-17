@@ -186,13 +186,18 @@ class Shooter(Enemy):
         self.rect.topleft = [self.pos_x, self.pos_y]
         self.hitbox_rect = pygame.Rect(self.pos_x+85, self.pos_y-50, 45, 68)
         self.hitbox_rect.topleft = [self.pos_x, self.pos_y]
+        self.attack_rect = pygame.Rect(self.pos_x+60, self.pos_y-60, 15, 15)
+        self.attack_rect.topleft = [self.pos_x, self.pos_y]
         self.speed = 1
         self.actual_pos = 0
         self.death_animation_speed = 0.12
         self.idle_animation_speed = 0.10
+        self.bullet_distance = 0
+        self.bullet_direction = "left"
+        self.has_attack_rect = True
 
         # Stats
-        self.contact_dmg = 10
+        self.contact_dmg = 5
         self.attack_dmg = 5
         self.hp = 25
         self.coins_value = 1000
@@ -202,6 +207,20 @@ class Shooter(Enemy):
         """
         if self.is_alive:
             self.hitbox_rect.topleft = [new_pos_x+48, new_pos_y+32]
+        if self.bullet_direction == "left":
+            self.attack_rect.topleft = [new_pos_x+20 - self.bullet_distance, new_pos_y+55]
+        else:
+            self.attack_rect.topleft = [new_pos_x+100 + self.bullet_distance, new_pos_y+55]
+        if self.bullet_distance%900 == 0:
+            self.bullet_distance = 0
+            if self.direction == "left": 
+                self.bullet_direction = "left"
+            else: 
+                self.bullet_direction = "right"
+        self.bullet_distance += 4
+
+    def is_atk(self) -> bool:
+        return True
 
     def move_set(self) -> None:
         """ Garante uma movimentação fixa do objeto.
@@ -292,7 +311,7 @@ class Flower(Enemy):
 
         # Stats
         self.contact_dmg = 3
-        self.attack_dmg = 15
+        self.attack_dmg = 7
         self.hp = 35
         self.coins_value = 100
         
@@ -392,9 +411,9 @@ class Enemy_Group(Enemy):
             little_spider = Little_Spider([400, 500])
             enemy2 = Shooter([350, 328])
             enemy3 = Ghoul([900, 300])
-            enemy4 = Flower([550, 300])
-            enemy5 = Shooter([650, 328])
-            enemy6 = Little_Spider([250, 365])
+            enemy4 = Flower([1550, 300])
+            enemy5 = Shooter([1650, 328])
+            enemy6 = Little_Spider([1400, 365])
             self.enemy_vector = numpy.array([little_spider, enemy2, enemy3, enemy4, enemy5, enemy6])
 
         elif enemy_group_number == 1:
@@ -477,12 +496,16 @@ class Enemy_Group(Enemy):
         Função de uso estrito para testes relacionados aos rects.
         """
         green = (0, 255, 0)
+        white = (200, 200, 200)
         red = (255, 0, 0)
-        # for enemy in self.enemy_vector:
-        #     if enemy.is_alive:
-        #         pygame.draw.rect(screen, green, enemy.hitbox_rect, 1)
-        #         if enemy.has_attack_rect:
-        #             pygame.draw.rect(screen, red, enemy.attack_rect, 1)
+        for enemy in self.enemy_vector:
+            if enemy.type == "Shooter":
+                    pygame.draw.rect(screen, white, enemy.attack_rect, 10)
+                    nada = 0
+            #if enemy.is_alive:
+                 #pygame.draw.rect(screen, green, enemy.hitbox_rect, 1)
+                #if enemy.has_attack_rect:
+                    #pygame.draw.rect(screen, red, enemy.attack_rect, 1)
 
     
     def define_pos_group(self, delta_x: int, delta_y: int) -> None:
