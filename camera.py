@@ -4,7 +4,7 @@ import map
 
 
 class Camera():
-    def __init__(self, map : map, player : player, screen) -> None:
+    def __init__(self, map : map, player : player, screen: map.pygame.display) -> None:
         self.bounded_character = player
         self.bounded_map = map
         self.boundede_screen = screen
@@ -44,10 +44,10 @@ class Camera():
         else:
             self.off_set_map(0, 0)
 
-    def keep_enemy_pos(self, screen, enemies : enemy.Enemy_Group) -> None:
+    def keep_enemy_pos(self, screen: map.pygame.display , enemies : enemy.Enemy_Group) -> None:
         enemies.draw_enemies(screen, self.off_set_x, self.off_set_y)
         enemies.define_pos_group(self.off_set_x, self.off_set_y)
 
-    def keep_npc_pos(self, screen, npc) -> None:
+    def keep_npc_pos(self, screen: map.pygame.display, npc: map.npcs) -> None:
         npc.draw_npc(screen,  self.off_set_x, self.off_set_y)
         npc.draw_interact_rect(screen,  self.off_set_x, self.off_set_y)

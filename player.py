@@ -125,7 +125,7 @@ Typical usage example:
         self.last_landed_attack_time = 0
 
     #TODO: TERMINAR O DOCSTRING
-    def __import_sprites(self, number_of_sprites: int, arquive: str, sprites_vector) -> None:
+    def _import_sprites(self, number_of_sprites: int, arquive: str, sprites_vector: list) -> None:
         """ Acessa a pasta selecionada {arquive} e guarda os PNG em um vetores de PNG {sprites_vector}.
 
         Args:

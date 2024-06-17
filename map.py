@@ -4,7 +4,7 @@ import npcs
 import enemy
 
 class Map():
-    def __init__(self, map_folder , group) -> None:
+    def __init__(self, map_folder: str , group: int) -> None:
         self.tmx_map = pytmx.load_pygame(map_folder)
         self.tile_width = self.tmx_map.tilewidth
         self.tile_height = self.tmx_map.tileheight
@@ -142,14 +142,14 @@ class Map():
                             return True
         return False
     
-    def map_npc_define(self):
+    def map_npc_define(self) -> None:
         if self.map_number == 0:
             self.npc = npcs.Traveler([750, 300], 0)
 
         if self.map_number == 2:
             self.npc = npcs.Traveler([750, 300], 1)
 
-    def map_enemy_define(self):
+    def map_enemy_define(self) -> None:
         if self.map_number == 0:
             self.enemy_map_group = enemy.Enemy_Group(0)
 
