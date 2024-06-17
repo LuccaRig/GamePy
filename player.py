@@ -124,8 +124,9 @@ Typical usage example:
         self.last_landed_attack_time = 0
         self.is_healing = False
 
+    #TODO: TERMINAR O DOCSTRING
     def _import_sprites(self, number_of_sprites: int, arquive: str, sprites_vector) -> None:
-        """ Acessa a pasta selecionada {arquive} e guarda os PNG em um vetores de PNG {sprites_vector}
+        """ Acessa a pasta selecionada {arquive} e guarda os PNG em um vetores de PNG {sprites_vector}.
 
         Args:
             number_of_sprites:
@@ -228,15 +229,14 @@ Typical usage example:
         else:
             self.update_position(0, -self.delta_pos_y)
 
-    def correct_ground_intersection(self, map: map):
-        """Coloca o player precisamente acima do chão após uma queda
+    def correct_ground_intersection(self, map: map) -> None:
+        """Coloca o player precisamente acima do chão após uma queda.
 
         Args:
-            map: objeto capaz de retornar a interseção entre o rect inferior do player e o rect do chão
+            map: objeto capaz de retornar a interseção entre o rect inferior do player e o rect do chão.
         """
         intersection_rect = map.return_ground_intersection(self.rect_down)
         if intersection_rect.height > 1:
-            #print("corrigindo pulo: ", intersection_rect.height)
             self.update_position(0, -intersection_rect.height+1)
     
     def is_colliding(self, map: map, direction: str) -> bool:
@@ -275,9 +275,8 @@ Typical usage example:
         if self.direction == "left":
             return map.check_previous_room(self.hitbox_rect)
 
-    #TODO: fazer docstring
     def animate_attack(self) -> None:
-        """
+        """Anima o ataque do player.
         """
         animation_speed = 0.15
         self.current_sprite_attack += animation_speed
@@ -375,7 +374,7 @@ Typical usage example:
     def animate(self) -> None:
         self.is_animating = True
     
-    #TODO: fazer a docstring
+    #TODO: FAZER A DOCSTRING
     def update(self) -> None:
         """
         """
@@ -448,9 +447,11 @@ Typical usage example:
                             self.is_animating = False
                         self.image = self.sprites_idle_left[int(self.current_sprite)]
                 
-
-    #TODO: fazer a docstring
     def draw_collision_rect(self, screen: pygame.display) -> None:
+        """Desenha os rects do player na tela.
+
+        Função com uso estrito para testes relacionados aos rects do player.
+        """
         # Desenha um retângulo vermelho em torno do retângulo do jogador
         green = (0, 255, 0)
         red = (255, 0, 0)

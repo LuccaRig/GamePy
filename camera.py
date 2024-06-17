@@ -12,7 +12,6 @@ class Camera():
         self.off_set_y = 0 
         self.camera_is_moving = False
 
-
     def off_set_map(self, off_set_x : int, off_set_y : int) -> None:
         self.off_set_x += off_set_x
         self.bounded_map.off_set_x = self.off_set_x
@@ -21,8 +20,7 @@ class Camera():
         self.bounded_map.render_visible_layers(self.boundede_screen, self.off_set_x, self.off_set_y)
 
     def follow_player(self) -> None:
-        """ Garante o posicionamento da camera proximo ao player, movendo a camera sempre que o player permanecer em posicoes especiais
-
+        """ Garante o posicionamento da câmera próximo ao player, movendo a câmera sempre que o player permanecer em posições especiais
         """
         if (self.off_set_x > -4) or (self.off_set_x < -1276):
             self.bounded_character.x_limit_reached = True
@@ -46,10 +44,10 @@ class Camera():
         else:
             self.off_set_map(0, 0)
 
-    def keep_enemy_pos(self, screen , enemies : enemy.Enemy_Group):
+    def keep_enemy_pos(self, screen, enemies : enemy.Enemy_Group) -> None:
         enemies.draw_enemies(screen, self.off_set_x, self.off_set_y)
         enemies.define_pos_group(self.off_set_x, self.off_set_y)
 
-    def keep_npc_pos(self, screen, npc):
+    def keep_npc_pos(self, screen, npc) -> None:
         npc.draw_npc(screen,  self.off_set_x, self.off_set_y)
         npc.draw_interact_rect(screen,  self.off_set_x, self.off_set_y)
