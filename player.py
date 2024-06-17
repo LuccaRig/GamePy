@@ -18,52 +18,53 @@ Typical usage example:
     """
     def __init__(self) -> None:
         super().__init__()
-        # Sprites Vectors
-        self.sprites_idle_right = []
-        self.sprites_idle_left = []
+        # Sprite Vectors
+        self.__sprites_idle_right = []
+        self.__sprites_idle_left = []
 
-        self.sprites_moving_right = []
-        self.sprites_moving_left = []
+        self.__sprites_moving_right = []
+        self.__sprites_moving_left = []
 
-        self.sprites_hit_right = []
-        self.sprites_hit_left = []
+        self.__sprites_hit_right = []
+        self.__sprites_hit_left = []
 
-        self.sprites_attacking_right = []
-        self.sprites_attacking_left = []
+        self.__sprites_attacking_right = []
+        self.__sprites_attacking_left = []
 
-        self.sprites_jumping_right = []
-        self.sprites_jumping_left = []
+        self.__sprites_jumping_right = []
+        self.__sprites_jumping_left = []
 
-        self.sprites_falling_right = []
-        self.sprites_falling_left = []
+        self.__sprites_falling_right = []
+        self.__sprites_falling_left = []
 
-        self.sprites_landing_right = []
-        self.sprites_landing_left = []
+        self.__sprites_landing_right = []
+        self.__sprites_landing_left = []
 
-        self.sprites_dying_right = []
-        self.sprites_dying_left = []
+        self.__sprites_dying_right = []
+        self.__sprites_dying_left = []
 
         # Load All Sprites
-        self._import_sprites(9,'CharacterSprites/assassin/idlePNGright', self.sprites_idle_right)
-        self._import_sprites(9,'CharacterSprites/assassin/idlePNGleft', self.sprites_idle_left)    
-        self._import_sprites(8,'CharacterSprites/assassin/movementPNGright', self.sprites_moving_right)
-        self._import_sprites(8,'CharacterSprites/assassin/movementPNGleft', self.sprites_moving_left)
-        self._import_sprites(2,'CharacterSprites/assassin/hitPNGright', self.sprites_hit_right)
-        self._import_sprites(2,'CharacterSprites/assassin/hitPNGleft', self.sprites_hit_left)    
-        self._import_sprites(9,'CharacterSprites/assassin/attackPNGright', self.sprites_attacking_right)
-        self._import_sprites(9,'CharacterSprites/assassin/attackPNGleft', self.sprites_attacking_left)
-        self._import_sprites(4, 'CharacterSprites/assassin/jumpPNGright', self.sprites_jumping_right)
-        self._import_sprites(4, 'CharacterSprites/assassin/jumpPNGleft', self.sprites_jumping_left)
-        self._import_sprites(4, 'CharacterSprites/assassin/fallPNGright', self.sprites_falling_right)
-        self._import_sprites(4, 'CharacterSprites/assassin/fallPNGleft', self.sprites_falling_left)
-        self._import_sprites(4, 'CharacterSprites/assassin/landPNGright', self.sprites_landing_right)
-        self._import_sprites(4, 'CharacterSprites/assassin/landPNGleft', self.sprites_landing_left)
-        self._import_sprites(4, 'CharacterSprites/assassin/deathPNGright', self.sprites_dying_right)
-        self._import_sprites(4, 'CharacterSprites/assassin/deathPNGleft', self.sprites_dying_left)
+        self.__import_sprites(9,'CharacterSprites/assassin/idlePNGright', self.__sprites_idle_right)
+        self.__import_sprites(9,'CharacterSprites/assassin/idlePNGleft', self.__sprites_idle_left)    
+        self.__import_sprites(8,'CharacterSprites/assassin/movementPNGright', self.__sprites_moving_right)
+        self.__import_sprites(8,'CharacterSprites/assassin/movementPNGleft', self.__sprites_moving_left)
+        self.__import_sprites(2,'CharacterSprites/assassin/hitPNGright', self.__sprites_hit_right)
+        self.__import_sprites(2,'CharacterSprites/assassin/hitPNGleft', self.__sprites_hit_left)    
+        self.__import_sprites(9,'CharacterSprites/assassin/attackPNGright', self.__sprites_attacking_right)
+        self.__import_sprites(9,'CharacterSprites/assassin/attackPNGleft', self.__sprites_attacking_left)
+        self.__import_sprites(4, 'CharacterSprites/assassin/jumpPNGright', self.__sprites_jumping_right)
+        self.__import_sprites(4, 'CharacterSprites/assassin/jumpPNGleft', self.__sprites_jumping_left)
+        self.__import_sprites(4, 'CharacterSprites/assassin/fallPNGright', self.__sprites_falling_right)
+        self.__import_sprites(4, 'CharacterSprites/assassin/fallPNGleft', self.__sprites_falling_left)
+        self.__import_sprites(4, 'CharacterSprites/assassin/landPNGright', self.__sprites_landing_right)
+        self.__import_sprites(4, 'CharacterSprites/assassin/landPNGleft', self.__sprites_landing_left)
+        self.__import_sprites(4, 'CharacterSprites/assassin/deathPNGright', self.__sprites_dying_right)
+        self.__import_sprites(4, 'CharacterSprites/assassin/deathPNGleft', self.__sprites_dying_left)
 
         # Default Boolean and Character States
         self.is_animating = False
         self.is_alive = True
+        self.is_healing = False
         self.attacking = False
         self.walking = False
         self.grounded = False
@@ -81,7 +82,7 @@ Typical usage example:
         self.current_sprite_land = 0
         self.current_sprite_death = 0
         self.current_sprite_hit = 0
-        self.image = self.sprites_idle_right[self.current_sprite]     
+        self.image = self.__sprites_idle_right[self.current_sprite]     
 
         # Default Position and movement
         self.jumping_speed = 2750
@@ -122,7 +123,6 @@ Typical usage example:
 
         self.last_hit_time = 0
         self.last_landed_attack_time = 0
-        self.is_healing = False
 
     #TODO: TERMINAR O DOCSTRING
     def _import_sprites(self, number_of_sprites: int, arquive: str, sprites_vector: list) -> None:
@@ -281,20 +281,20 @@ Typical usage example:
         animation_speed = 0.15
         self.current_sprite_attack += animation_speed
         if self.direction == "right":
-            if self.current_sprite_attack >= len(self.sprites_attacking_right):
+            if self.current_sprite_attack >= len(self.__sprites_attacking_right):
                 self.current_sprite_attack = 0
                 self.is_animating = False
                 self.attacking = False
             else:
-                self.image = self.sprites_attacking_right[int(self.current_sprite_attack)]
+                self.image = self.__sprites_attacking_right[int(self.current_sprite_attack)]
 
         elif self.direction == "left":
-            if self.current_sprite_attack >= len(self.sprites_attacking_left):
+            if self.current_sprite_attack >= len(self.__sprites_attacking_left):
                 self.current_sprite_attack = 0
                 self.is_animating = False
                 self.attacking = False
             else:
-                self.image = self.sprites_attacking_left[int(self.current_sprite_attack)]
+                self.image = self.__sprites_attacking_left[int(self.current_sprite_attack)]
 
     #TODO: fazer docstring
     def animate_land(self) -> None:
@@ -304,20 +304,20 @@ Typical usage example:
             animation_speed = 0.3
             self.current_sprite_land += animation_speed
             if self.direction == "right":
-                if self.current_sprite_land >= len(self.sprites_landing_right):
+                if self.current_sprite_land >= len(self.__sprites_landing_right):
                     self.current_sprite_land = 0
                     self.is_animating = False
                     self.landing = False
                 else:
-                    self.image = self.sprites_landing_right[int(self.current_sprite_land)]
+                    self.image = self.__sprites_landing_right[int(self.current_sprite_land)]
 
             elif self.direction == "left":
-                if self.current_sprite_land >= len(self.sprites_landing_left):
+                if self.current_sprite_land >= len(self.__sprites_landing_left):
                     self.current_sprite_land = 0
                     self.is_animating = False
                     self.landing = False
                 else:
-                    self.image = self.sprites_landing_left[int(self.current_sprite_land)]
+                    self.image = self.__sprites_landing_left[int(self.current_sprite_land)]
 
     def animate_death(self) -> None:
         """Anima a morte do player e chama o game over
@@ -326,22 +326,22 @@ Typical usage example:
             animation_speed = 0.05
             self.current_sprite_death += animation_speed
             if self.direction == "right":
-                if self.current_sprite_death >= len(self.sprites_dying_right):
+                if self.current_sprite_death >= len(self.__sprites_dying_right):
                     self.current_sprite_death = 0
                     self.dying = False
                     pygame.quit()
                     sys.exit()
                 else:
-                    self.image = self.sprites_dying_right[int(self.current_sprite_death)]
+                    self.image = self.__sprites_dying_right[int(self.current_sprite_death)]
 
             elif self.direction == "left":
-                if self.current_sprite_death >= len(self.sprites_dying_left):
+                if self.current_sprite_death >= len(self.__sprites_dying_left):
                     self.current_sprite_death = 0
                     self.dying = False
                     pygame.quit()
                     sys.exit()
                 else:
-                    self.image = self.sprites_dying_left[int(self.current_sprite_death)]
+                    self.image = self.__sprites_dying_left[int(self.current_sprite_death)]
 
     def animate_hit(self) -> None:
         """Anima o player tomando um hit e dando um flinch para trás
@@ -354,22 +354,22 @@ Typical usage example:
                     self.update_position(-30, 0)
                     self.update_position(1, 0)
                     self.hit_flinch = False
-                if self.current_sprite_hit >= len(self.sprites_hit_right):
+                if self.current_sprite_hit >= len(self.__sprites_hit_right):
                     self.current_sprite_hit = 0
                     self.was_hit = False
                 else:
-                    self.image = self.sprites_hit_right[int(self.current_sprite_hit)]
+                    self.image = self.__sprites_hit_right[int(self.current_sprite_hit)]
 
             elif self.direction == "left":
                 if self.hit_flinch:
                     self.update_position(30, 0)
                     self.update_position(-1, 0)
                     self.hit_flinch = False
-                if self.current_sprite_hit >= len(self.sprites_hit_left):
+                if self.current_sprite_hit >= len(self.__sprites_hit_left):
                     self.current_sprite_hit = 0
                     self.was_hit = False
                 else:
-                    self.image = self.sprites_hit_left[int(self.current_sprite_hit)]
+                    self.image = self.__sprites_hit_left[int(self.current_sprite_hit)]
          
     def animate(self) -> None:
         self.is_animating = True
@@ -395,28 +395,28 @@ Typical usage example:
                         self.animate_attack()
 
                     elif self.falling and not self.attacking:
-                        if self.current_sprite >= len(self.sprites_falling_right):
+                        if self.current_sprite >= len(self.__sprites_falling_right):
                             self.current_sprite = 0
                             self.is_animating = False
-                        self.image = self.sprites_falling_right[int(self.current_sprite)]
+                        self.image = self.__sprites_falling_right[int(self.current_sprite)]
                     
                     elif self.jumping:
-                        if self.current_sprite >= len(self.sprites_jumping_right):
+                        if self.current_sprite >= len(self.__sprites_jumping_right):
                             self.current_sprite = 0
                             self.is_animating = False
-                        self.image = self.sprites_jumping_right[int(self.current_sprite)]
+                        self.image = self.__sprites_jumping_right[int(self.current_sprite)]
 
                     elif self.walking and not self.landing:
-                        if self.current_sprite >= len(self.sprites_moving_right):
+                        if self.current_sprite >= len(self.__sprites_moving_right):
                             self.current_sprite = 0
                             self.is_animating = False
-                        self.image = self.sprites_moving_right[int(self.current_sprite)]
+                        self.image = self.__sprites_moving_right[int(self.current_sprite)]
 
                     elif not self.walking and not self.landing:
-                        if self.current_sprite >= len(self.sprites_idle_right):
+                        if self.current_sprite >= len(self.__sprites_idle_right):
                             self.current_sprite = 0
                             self.is_animating = False
-                        self.image = self.sprites_idle_right[int(self.current_sprite)]
+                        self.image = self.__sprites_idle_right[int(self.current_sprite)]
 
 
                 if(self.direction == "left"):
@@ -424,28 +424,28 @@ Typical usage example:
                         self.animate_attack()
 
                     elif self.falling and not self.attacking:
-                        if self.current_sprite >= len(self.sprites_falling_left):
+                        if self.current_sprite >= len(self.__sprites_falling_left):
                             self.current_sprite = 0
                             self.is_animating = False
-                        self.image = self.sprites_falling_left[int(self.current_sprite)]
+                        self.image = self.__sprites_falling_left[int(self.current_sprite)]
 
                     elif self.jumping:
-                        if self.current_sprite >= len(self.sprites_jumping_left):
+                        if self.current_sprite >= len(self.__sprites_jumping_left):
                             self.current_sprite = 0
                             self.is_animating = False
-                        self.image = self.sprites_jumping_left[int(self.current_sprite)]
+                        self.image = self.__sprites_jumping_left[int(self.current_sprite)]
 
                     elif self.walking and not self.landing:
-                        if self.current_sprite >= len(self.sprites_moving_left):
+                        if self.current_sprite >= len(self.__sprites_moving_left):
                             self.current_sprite = 0
                             self.is_animating = False
-                        self.image = self.sprites_moving_left[int(self.current_sprite)]
+                        self.image = self.__sprites_moving_left[int(self.current_sprite)]
 
                     elif not self.walking and not self.landing:
-                        if self.current_sprite >= len(self.sprites_idle_left):
+                        if self.current_sprite >= len(self.__sprites_idle_left):
                             self.current_sprite = 0
                             self.is_animating = False
-                        self.image = self.sprites_idle_left[int(self.current_sprite)]
+                        self.image = self.__sprites_idle_left[int(self.current_sprite)]
                 
     def draw_collision_rect(self, screen: pygame.display) -> None:
         """Desenha os rects do player na tela.
