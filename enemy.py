@@ -213,12 +213,6 @@ class Ghoul(Enemy):
         super().__init__()
         #Sprites and animation
         #TODO: Change walking to waking
-        self.sprites_idle_right = []
-        self.sprites_idle_left = []
-        self.sprites_moving_right = []
-        self.sprites_moving_left = []
-        self.sprites_dying_right = []
-        self.sprites_dying_left = []
 
         self.import_sprites(6,'CharacterSprites/Ghoul/idlePNGright', self.sprites_idle_right)
         self.import_sprites(6,'CharacterSprites/Ghoul/idle2PNGleft', self.sprites_idle_left)
@@ -324,18 +318,6 @@ class Little_Spider(Enemy):
     def __init__(self, inital_pos : list, move_set_number = 0) -> None:
         super().__init__()
         #Sprites and animation
-        
-        self.sprites_idle_right = []
-        self.sprites_idle_left = []
-
-        self.sprites_moving_right = []
-        self.sprites_moving_left = []
-
-        self.sprites_dying_right = []
-        self.sprites_dying_left = []
-
-        self.sprites_hit_right = []
-        self.sprites_hit_left = []
 
         self.import_sprites(1,'CharacterSprites/little_spider/idlePNGright', self.sprites_idle_right)
         self.import_sprites(1,'CharacterSprites/little_spider/idlePNGleft', self.sprites_idle_left)
