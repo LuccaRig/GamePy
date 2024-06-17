@@ -1,5 +1,6 @@
 import pygame
 import numpy
+import map
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self) -> None:
@@ -38,7 +39,7 @@ class Enemy(pygame.sprite.Sprite):
         self.walking_animation_speed = 0.10
         self.hit_animation_speed = 0.15
 
-    def import_sprites(self, number_of_sprites: int, arquive: str, sprites_vector) -> None:
+    def import_sprites(self, number_of_sprites: int, arquive: str, sprites_vector: list) -> None:
         scale = 4
         for i in range(number_of_sprites):
             sprite = pygame.image.load(f'{arquive}/tile00{i}.png')
@@ -54,7 +55,7 @@ class Enemy(pygame.sprite.Sprite):
             self.rect.y += delta_y
             self.hitbox_rect.topleft = [self.rect.x +85, self.rect.y +70]
 
-    def is_grounded(self, Map) -> bool:
+    def is_grounded(self, Map: map) -> bool:
         """
         """
         return Map.check_collision(self.rect)
@@ -69,7 +70,7 @@ class Enemy(pygame.sprite.Sprite):
     def animate(self) -> None:
         self.is_animating = True 
 
-    def animate_hit(self):
+    def animate_hit(self) -> None:
         """Coloca a animação de hit do inimigo em display
         """
         self.current_hit_sprite += self.hit_animation_speed
@@ -88,7 +89,7 @@ class Enemy(pygame.sprite.Sprite):
                  self.image = self.sprites_hit_right[int(self.current_hit_sprite)]
 
 
-    def animate_death(self):
+    def animate_death(self) -> None:
         """Coloca a animação de morte do inimigo em display
 
         No final da animação, o inimigo é considerado morto (is_alive = False)
@@ -196,7 +197,7 @@ class Shooter(Enemy):
         self.hp = 25
         self.coins_value = 1000
 
-    def move_set(self):
+    def move_set(self) -> None:
         """  Garante uma movimentação fixa do objeto Shooter
         """
         self.update_position(0, 0)
@@ -251,7 +252,7 @@ class Ghoul(Enemy):
         self.hp = 40
         self.coins_value = 500
 
-    def move_set(self):
+    def move_set(self) -> None:
         """  Garante uma movimentação fixa do objeto Ghoul
         """
         self.update_position(0, 0)
@@ -307,7 +308,7 @@ class Flower(Enemy):
             return True
         return False
 
-    def move_set(self):
+    def move_set(self) -> None:
         """  Garante uma movimentacao fixa do objeto Little_Spider
         """
         self.update_position(0, 0)
@@ -476,7 +477,7 @@ class Enemy_Group(Enemy):
                 elif (enemy.pos_x > pos_player_x-offset_x):
                     enemy.direction = "left"
 
-    def draw_enemies(self, screen, off_set_x, off_set_y) -> None:
+    def draw_enemies(self, screen: pygame.display, off_set_x: int, off_set_y: int) -> None:
         """
         Desenha os inimigos na tela e muda a posicao com o valor dos off_sets
 
@@ -490,7 +491,7 @@ class Enemy_Group(Enemy):
             if enemy.is_alive:
                 screen.blit(enemy.image, (enemy.rect.x + off_set_x, enemy.rect.y - off_set_y))
 
-    def draw_collisions_rects(self, screen):
+    def draw_collisions_rects(self, screen: pygame.display) -> None:
         green = (0, 255, 0)
         red = (255, 0, 0)
         # for enemy in self.enemy_vector:
@@ -500,7 +501,7 @@ class Enemy_Group(Enemy):
         #             pygame.draw.rect(screen, red, enemy.attack_rect, 1)
 
     
-    def define_pos_group(self, delta_x, delta_y):
+    def define_pos_group(self, delta_x: int, delta_y: int) -> None:
         """
         Atualiza a posicao do conjunto de inimigos 
 
@@ -514,12 +515,12 @@ class Enemy_Group(Enemy):
                 new_pos_y = enemy.rect.y - delta_y
                 enemy.move_rects_toplefts(new_pos_x, new_pos_y)
 
-    def set_move_sets(self):
+    def set_move_sets(self) -> None:
         for enemy in self.enemy_vector:
             if enemy.is_alive:
                 enemy.move_set()
 
-    def check_deaths(self):
+    def check_deaths(self) -> None:
         """Verifica se algum inimigo morreu e toma as ações necessárias
 
         Se algum inimigo estiver morto, seu rect de hitbox é apagado e ele entra em estado de morte
@@ -530,17 +531,17 @@ class Enemy_Group(Enemy):
                 enemy.dying = True
                 enemy.hitbox_rect.topleft = [0, 2000]
 
-    def animate_deaths(self):
+    def animate_deaths(self) -> None:
         for enemy in self.enemy_vector:
             if enemy.dying:
                 enemy.animate_death()
 
-    def animate_hits(self):
+    def animate_hits(self) -> None:
         for enemy in self.enemy_vector:
             if enemy.was_hit and not enemy.dying:
                 enemy.animate_hit()
 
-    def destruct_dead_enemies(self):
+    def destruct_dead_enemies(self) -> None:
         for i, enemy in numpy.ndenumerate(self.enemy_vector):
             if not enemy.is_alive and not enemy.dying:
                 enemy.hitbox_rect = None

@@ -1,4 +1,5 @@
 import pygame
+import player
 
 class Npc():
     def __init__(self) -> None:
@@ -27,10 +28,10 @@ class Npc():
             self.is_animating = False
         self.image = self.sprites[int(self.current_sprite)]
 
-    def draw_npc(self, screen, off_set_x, off_set_y):
+    def draw_npc(self, screen: pygame.display, off_set_x: int, off_set_y: int) -> None:
         screen.blit(self.image, (self.rect.x + off_set_x, self.rect.y - off_set_y))
 
-    def check_player_interaction(self, player):
+    def check_player_interaction(self, player: player) -> bool:
         return self.interact_rect.colliderect(player.rect_down)
 
 
@@ -59,12 +60,12 @@ class Traveler(Npc):
 
 
 
-    def draw_interact_rect(self, screen, off_set_x, off_set_y):
+    def draw_interact_rect(self, screen: pygame.display, off_set_x: int, off_set_y: int) -> None:
         self.interact_rect = pygame.Rect(self.pos[0] + off_set_x, self.pos[1] - off_set_y + self.y_correction,  self.width, self.height)
         pygame.draw.rect(screen, (0,255,0), self.interact_rect, 1)
         self.text_pos = (self.pos[0] + off_set_x, self.pos[1] - off_set_y)
         
-    def talk_to_player(self, player, screen):
+    def talk_to_player(self, player: player, screen: pygame.display) -> None:
         current_time = pygame.time.get_ticks()
         letter_interval = 100
 
