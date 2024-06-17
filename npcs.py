@@ -27,10 +27,10 @@ class Npc():
             self.is_animating = False
         self.image = self.sprites[int(self.current_sprite)]
 
-    def draw_npc(self, screen, off_set_x, off_set_y):
+    def draw_npc(self, screen, off_set_x, off_set_y) -> None:
         screen.blit(self.image, (self.rect.x + off_set_x, self.rect.y - off_set_y))
 
-    def check_player_interaction(self, player):
+    def check_player_interaction(self, player) -> None:
         return self.interact_rect.colliderect(player.rect_down)
 
 
@@ -48,7 +48,6 @@ class Traveler(Npc):
         self.image = self.sprites[int(self.current_sprite)]
         self.text_pos = [pos[0] - 50, pos[1]]
         
-        
         self.interact_rect = pygame.Rect(self.pos[0], self.pos[1]+ self.y_correction,  self.width, self.height)
         self.text_color = (255, 255, 255)
         self.font_size = 36
@@ -59,12 +58,12 @@ class Traveler(Npc):
 
 
 
-    def draw_interact_rect(self, screen, off_set_x, off_set_y):
+    def draw_interact_rect(self, screen, off_set_x, off_set_y) -> None:
         self.interact_rect = pygame.Rect(self.pos[0] + off_set_x, self.pos[1] - off_set_y + self.y_correction,  self.width, self.height)
         pygame.draw.rect(screen, (0,255,0), self.interact_rect, 1)
         self.text_pos = (self.pos[0] + off_set_x, self.pos[1] - off_set_y)
         
-    def talk_to_player(self, player, screen):
+    def talk_to_player(self, player, screen) -> None:
         current_time = pygame.time.get_ticks()
         letter_interval = 100
 
