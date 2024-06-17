@@ -49,7 +49,6 @@ class Traveler(Npc):
         self.image = self.sprites[int(self.current_sprite)]
         self.text_pos = [pos[0] - 50, pos[1]]
         
-        
         self.interact_rect = pygame.Rect(self.pos[0], self.pos[1]+ self.y_correction,  self.width, self.height)
         self.text_color = (255, 255, 255)
         self.font_size = 36

@@ -197,16 +197,16 @@ class Shooter(Enemy):
         self.hp = 25
         self.coins_value = 1000
 
-    def move_set(self) -> None:
-        """  Garante uma movimentação fixa do objeto Shooter
-        """
-        self.update_position(0, 0)
-
     def move_rects_toplefts(self, new_pos_x: int, new_pos_y: int) -> None:
         """Posiciona o topo dos rects do inimigo de acordo com a sua nova posição
         """
         if self.is_alive:
             self.hitbox_rect.topleft = [new_pos_x+48, new_pos_y+32]
+
+    def move_set(self) -> None:
+        """ Garante uma movimentação fixa do objeto.
+        """
+        nada = 0
 
 
 class Ghoul(Enemy):
@@ -252,17 +252,16 @@ class Ghoul(Enemy):
         self.hp = 40
         self.coins_value = 500
 
-    def move_set(self) -> None:
-        """  Garante uma movimentação fixa do objeto Ghoul
-        """
-        self.update_position(0, 0)
-
     def move_rects_toplefts(self, new_pos_x: int, new_pos_y: int) -> None:
         """Posiciona o topo do rect de hitbox de acordo com a nova posição do inimigo
         """
         if self.is_alive:
             self.hitbox_rect.topleft = [new_pos_x+107, new_pos_y+36]
 
+    def move_set(self) -> None:
+        """ Garante uma movimentação fixa do objeto.
+        """
+        nada = 0
 
 class Flower(Enemy):
     def __init__(self, inital_pos : list) -> None:
@@ -304,14 +303,11 @@ class Flower(Enemy):
         self.coins_value = 100
         
     def is_atk(self) -> bool:
+        """Retorna verdadeiro caso o objeto esteja na parte de ataque da animação.
+        """
         if 1 <= self.current_sprite <= 7:
             return True
         return False
-
-    def move_set(self) -> None:
-        """  Garante uma movimentacao fixa do objeto Little_Spider
-        """
-        self.update_position(0, 0)
 
     def move_rects_toplefts(self, new_pos_x: int, new_pos_y: int) -> None:
         """Posiciona o topo do rect de hitbox de acordo com a nova posição do inimigo
@@ -320,6 +316,10 @@ class Flower(Enemy):
             self.hitbox_rect.topleft = [new_pos_x+48, new_pos_y+92]
             self.attack_rect.topleft = [new_pos_x+5, new_pos_y+45]
 
+    def move_set(self) -> None:
+        """ Garante uma movimentação fixa do objeto.
+        """
+        nada = 0
 
 class Little_Spider(Enemy):
     def __init__(self, inital_pos : list, move_set_number = 0) -> None:
@@ -368,8 +368,7 @@ class Little_Spider(Enemy):
         self.coins_value = 50
 
     def move_set(self) -> None:
-        """ 
-        Garante uma movimentacao fixa do objeto Little_Spider
+        """ Garante uma movimentação fixa do objeto.
         """
         if self.move_set_number == 0:
             right_limit = 90
@@ -399,8 +398,8 @@ class Little_Spider(Enemy):
 
 class Enemy_Group(Enemy):
     """
-    Essa classe agrupa os inimigos criados em um vetor, e seus metodos chamam metodos de cada entidade 
-    dentro desse vetor. Por exemplo, atualiza-se a animacao de todos os inimigos ao mesmo tempo
+    Essa classe agrupa os inimigos criados em um vetor, e seus métodos chamam métodos de cada entidade 
+    dentro desse vetor. Por exemplo, atualiza-se a animação de todos os inimigos ao mesmo tempo.
     """
     def __init__(self, enemy_group_number : int) -> None:
         super().__init__()
@@ -478,13 +477,12 @@ class Enemy_Group(Enemy):
                     enemy.direction = "left"
 
     def draw_enemies(self, screen: pygame.display, off_set_x: int, off_set_y: int) -> None:
-        """
-        Desenha os inimigos na tela e muda a posicao com o valor dos off_sets
+        """Desenha os inimigos na tela e muda a posicao com o valor dos off_sets.
 
         Args:
-            off_set_x : Modifica a posicao do desenho do inimigo no eixo x (Obs: esse valor preferencialmente deve ser
+            off_set_x : Modifica a posição do desenho do inimigo no eixo x (Obs: esse valor preferencialmente deve ser
             o off_set_x do mapa, para que o desenho do inimigo sempre esteja alinhado com as imagens do mapa)
-            off_set_y : idem para a posicao y, segue a mesma observacao 
+            off_set_y : idem para a posição y, segue a mesma observação 
         """
 
         for enemy in self.enemy_vector:
@@ -492,6 +490,10 @@ class Enemy_Group(Enemy):
                 screen.blit(enemy.image, (enemy.rect.x + off_set_x, enemy.rect.y - off_set_y))
 
     def draw_collisions_rects(self, screen: pygame.display) -> None:
+        """Desenha os rects dos inimigos na tela.
+
+        Função de uso estrito para testes relacionados aos rects.
+        """
         green = (0, 255, 0)
         red = (255, 0, 0)
         # for enemy in self.enemy_vector:
@@ -502,12 +504,11 @@ class Enemy_Group(Enemy):
 
     
     def define_pos_group(self, delta_x: int, delta_y: int) -> None:
-        """
-        Atualiza a posicao do conjunto de inimigos 
+        """Atualiza a posicao do conjunto de inimigos. 
 
         Args:
-            delta_x: O quanto o valor de posicao em x vai se modificar
-            delta_y: idem para a posicao em y
+            delta_x: O quanto o valor de posição em x vai se modificar
+            delta_y: idem para a posição em y
         """
         for enemy in self.enemy_vector:
             if enemy.is_alive:
@@ -521,27 +522,35 @@ class Enemy_Group(Enemy):
                 enemy.move_set()
 
     def check_deaths(self) -> None:
-        """Verifica se algum inimigo morreu e toma as ações necessárias
+        """Verifica se algum inimigo morreu e toma as ações necessárias.
 
-        Se algum inimigo estiver morto, seu rect de hitbox é apagado e ele entra em estado de morte
-        e é permitido que sua animação de morte seja chamada na classe game
+        Se algum inimigo estiver morto, seu rect de hitbox e de ataque é reposicionado para não afetar o player, ele entra em estado de morte
+        e é permitido que sua animação de morte seja chamada na classe game.
         """
         for enemy in self.enemy_vector:
             if enemy.hp <= 0 and enemy.is_alive:
                 enemy.dying = True
                 enemy.hitbox_rect.topleft = [0, 2000]
+                if enemy.has_attack_rect:
+                    enemy.attack_rect.topleft = [0, 2000]
 
     def animate_deaths(self) -> None:
+        """Anima as mortes de cada inimigo do vetor caso ele esteja morrendo.
+        """
         for enemy in self.enemy_vector:
             if enemy.dying:
                 enemy.animate_death()
 
     def animate_hits(self) -> None:
+        """Faz a animação de hit de cada inimigo do vetor caso ele tenha sido acertado por um ataque.
+        """
         for enemy in self.enemy_vector:
             if enemy.was_hit and not enemy.dying:
                 enemy.animate_hit()
 
     def destruct_dead_enemies(self) -> None:
+        """Apaga do vetor os inimigos que já passaram pela animação de morte.
+        """
         for i, enemy in numpy.ndenumerate(self.enemy_vector):
             if not enemy.is_alive and not enemy.dying:
                 enemy.hitbox_rect = None
