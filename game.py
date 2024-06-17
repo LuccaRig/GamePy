@@ -277,6 +277,14 @@ class Game():
             self.player_character.reinitialize_position_returning(self.myRoom.current_room(), 
                                                                     self.my_camera_off_set_advancing[self.myRoom.current_map_position][0],
                                                                     player_pos_y)
+
+    def draw_hp_bar_and_coins(self, text_coin_render):
+        self.screen.blit(self.player_character.hp_bar_background, (10, 10))
+        for heal in range(self.player_character.number_of_heals):
+            self.screen.blit(self.player_character.heal_icon, (30+heal*20, 65))
+        self.screen.blit(self.player_character.coin_icon, (1165, 10))
+        self.screen.blit(text_coin_render, self.text_coin_pos)
+        pygame.draw.rect(self.screen, (192, 0, 0), self.player_character.hp_bar)
     
 
     def game_run(self):
@@ -307,17 +315,12 @@ class Game():
 
             self.control_npc()
 
+            self.draw_hp_bar_and_coins(text_coin_render)
+
             #não apagar de forma alguma, está repetido mas por algum motivo é necessário para o jogo não travar
             if self.player_character.dying or not self.player_character.is_invisible_by_invincibility:
                 self.moving_sprites.draw(self.screen)
             self.moving_sprites.update()
-
-            self.screen.blit(self.player_character.hp_bar_background, (10, 10))
-            for heal in range(self.player_character.number_of_heals):
-                self.screen.blit(self.player_character.heal_icon, (30+heal*20, 65))
-            self.screen.blit(self.player_character.coin_icon, (1165, 10))
-            self.screen.blit(text_coin_render, self.text_coin_pos)
-            pygame.draw.rect(self.screen, (192, 0, 0), self.player_character.hp_bar)
 
             pygame.display.flip()
 
