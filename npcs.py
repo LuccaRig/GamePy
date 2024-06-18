@@ -1,7 +1,8 @@
+from Interfaces.npcsinterface import NpcInterface
 import pygame
 import player
 
-class Npc():
+class Npc(NpcInterface):
     def __init__(self) -> None:
         self.is_animating = False
         self.current_sprite = 0

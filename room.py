@@ -1,6 +1,9 @@
+from Interfaces.roominterface import RoomInterface
 import map
+import npcs
+import enemy
 
-class Room():
+class Room(RoomInterface):
     def __init__(self) -> None:
         self.my_maps = []
         self.is_first_time = {}
@@ -44,7 +47,7 @@ class Room():
         """
         self.current_map_position -= 1
 
-    def current_room_npc(self) -> map.npcs:
+    def current_room_npc(self) -> npcs:
         if self.current_map_position == 0:
             return self.current_room().npc
         
@@ -53,6 +56,6 @@ class Room():
         else:
             return None
 
-    def current_room_enemies(self) -> map.enemy.Enemy_Group:
+    def current_room_enemies(self) -> enemy.Enemy_Group:
         if self.current_room().enemy_map_group != None:
             return self.current_room().enemy_map_group

@@ -1,9 +1,10 @@
+from Interfaces.playerinterface import PlayerInterface
 import pygame, sys
 import map
 import time
 
 #TODO: fazer docstring da classe
-class Player(pygame.sprite.Sprite):
+class Player(PlayerInterface, pygame.sprite.Sprite):
     """A one-line summary of the module or program, terminated by a period.
 
 Leave one blank line.  The rest of this docstring should contain an

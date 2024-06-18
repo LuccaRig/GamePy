@@ -1,9 +1,10 @@
+from Interfaces.mapinterface import MapInterface
 import pygame
 import pytmx
-import npcs
 import enemy
+import npcs
 
-class Map():
+class Map(MapInterface):
     def __init__(self, map_folder: str , group: int) -> None:
         self.tmx_map = pytmx.load_pygame(map_folder)
         self.tile_width = self.tmx_map.tilewidth
