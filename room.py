@@ -1,6 +1,9 @@
+from Interfaces.roominterface import RoomInterface
 import map
+import npcs
+import enemy
 
-class Room():
+class Room(RoomInterface):
     def __init__(self) -> None:
         self.my_maps = []
         self.is_first_time = {}
@@ -8,7 +11,7 @@ class Room():
         self.first_time_in_room(9, self.is_first_time)
         self.current_map_position = 0
 
-    def import_maps(self, number_of_maps: int, maps_vector= []) -> None:
+    def import_maps(self, number_of_maps: int, maps_vector: list) -> None:
         """Acessa a pasta Tiled e guarda os mapas (arquivos tmx) em um vetor de mapas
 
         Args:
@@ -19,7 +22,7 @@ class Room():
             current_map = map.Map(f"Tiled/Map{i}.tmx", i)
             maps_vector.append(current_map) 
 
-    def first_time_in_room(self, number_of_maps: int, first_time_dictionary= {}) -> None:
+    def first_time_in_room(self, number_of_maps: int, first_time_dictionary: dict) -> None:
         """Inicializa o dictionary de primeira vez na sala com True
         
         Args:
@@ -44,7 +47,7 @@ class Room():
         """
         self.current_map_position -= 1
 
-    def current_room_npc(self):
+    def current_room_npc(self) -> npcs:
         if self.current_map_position == 0:
             return self.current_room().npc
         
@@ -53,6 +56,6 @@ class Room():
         else:
             return None
 
-    def current_room_enemies(self):
+    def current_room_enemies(self) -> enemy.Enemy_Group:
         if self.current_room().enemy_map_group != None:
             return self.current_room().enemy_map_group

@@ -1,10 +1,12 @@
+from Interfaces.camerainterface import CameraInterface
+import pygame
 import player
 import enemy
 import map
+import npcs
 
-
-class Camera():
-    def __init__(self, map : map, player : player, screen) -> None:
+class Camera(CameraInterface):
+    def __init__(self, map : map, player : player, screen: pygame.display) -> None:
         self.bounded_character = player
         self.bounded_map = map
         self.boundede_screen = screen
@@ -43,10 +45,10 @@ class Camera():
         else:
             self.off_set_map(0, 0)
 
-    def keep_enemy_pos(self, screen, enemies : enemy.Enemy_Group) -> None:
+    def keep_enemy_pos(self, screen: pygame.display, enemies : enemy.Enemy_Group) -> None:
         enemies.draw_enemies(screen, self.off_set_x, self.off_set_y)
         enemies.define_pos_group(self.off_set_x, self.off_set_y)
 
-    def keep_npc_pos(self, screen, npc) -> None:
+    def keep_npc_pos(self, screen: pygame.display, npc: npcs) -> None:
         npc.draw_npc(screen,  self.off_set_x, self.off_set_y)
         npc.draw_interact_rect(screen,  self.off_set_x, self.off_set_y)

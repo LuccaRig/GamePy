@@ -1,7 +1,8 @@
+from Interfaces.npcsinterface import NpcInterface
 import pygame
 import player
 
-class Npc():
+class Npc(NpcInterface):
     def __init__(self) -> None:
         self.is_animating = False
         self.current_sprite = 0
@@ -37,7 +38,7 @@ class Npc():
             self.current_sprite = 0
             self.is_animating = False
         self.image = self.sprites[int(self.current_sprite)]
-
+        
     def draw_npc(self, screen, off_set_x, off_set_y) -> None:
         """Desenha o npc na nela e corrige sua posição de acordo com a movimentação da câmera
         """
@@ -71,7 +72,7 @@ class Traveler(Npc):
         self.last_letter_time = 0
         self.talk_number = talk_number  
 
-    def draw_interact_rect(self, screen, off_set_x, off_set_y) -> None:
+    def draw_interact_rect(self, screen: pygame.display, off_set_x: int, off_set_y: int) -> None:
         self.interact_rect = pygame.Rect(self.pos[0] + off_set_x, self.pos[1] - off_set_y + self.y_correction,  self.width, self.height)
         #pygame.draw.rect(screen, (0,255,0), self.interact_rect, 1)
         self.text_pos = (self.pos[0] + off_set_x, self.pos[1] - off_set_y)

@@ -1,6 +1,7 @@
 import pygame
 import numpy
 from abc import abstractmethod, ABC
+import map
 
 class Enemy(pygame.sprite.Sprite, ABC):
     def __init__(self) -> None:
@@ -39,7 +40,7 @@ class Enemy(pygame.sprite.Sprite, ABC):
         self.walking_animation_speed = 0.10
         self.hit_animation_speed = 0.15
 
-    def import_sprites(self, number_of_sprites: int, arquive: str, sprites_vector) -> None:
+    def import_sprites(self, number_of_sprites: int, arquive: str, sprites_vector : list) -> None:
         """Acessa a pasta selecionada {arquive} e guarda os PNG em um vetores de PNG {sprites_vector}.
 
         Args:
@@ -83,7 +84,7 @@ class Enemy(pygame.sprite.Sprite, ABC):
     def animate(self) -> None:
         self.is_animating = True 
 
-    def animate_hit(self):
+    def animate_hit(self) -> None:
         """Coloca a animação de hit do inimigo em display
         """
         self.current_hit_sprite += self.hit_animation_speed
@@ -102,7 +103,7 @@ class Enemy(pygame.sprite.Sprite, ABC):
                  self.image = self.sprites_hit_right[int(self.current_hit_sprite)]
 
 
-    def animate_death(self):
+    def animate_death(self) -> None:
         """Coloca a animação de morte do inimigo em display
 
         No final da animação, o inimigo é considerado morto (is_alive = False)
@@ -479,8 +480,8 @@ class Enemy_Group:
                 elif (enemy.pos_x > pos_player_x-offset_x):
                     enemy.direction = "left"
 
-    def draw_enemies(self, screen, off_set_x, off_set_y) -> None:
-        """Desenha os inimigos na tela e muda a posição com o valor dos off_sets.
+    def draw_enemies(self, screen: pygame.display, off_set_x: int, off_set_y: int) -> None:
+        """Desenha os inimigos na tela e muda a posicao com o valor dos off_sets.
 
         Args:
             off_set_x : Modifica a posição do desenho do inimigo no eixo x (Obs: esse valor preferencialmente deve ser
@@ -492,7 +493,7 @@ class Enemy_Group:
             if enemy.is_alive:
                 screen.blit(enemy.image, (enemy.rect.x + off_set_x, enemy.rect.y - off_set_y))
 
-    def draw_collisions_rects(self, screen):
+    def draw_collisions_rects(self, screen: pygame.display) -> None:
         """Desenha os rects dos inimigos na tela.
 
         Função de uso estrito para testes relacionados aos rects.
@@ -510,8 +511,8 @@ class Enemy_Group:
                     #pygame.draw.rect(screen, red, enemy.attack_rect, 1)
 
     
-    def define_pos_group(self, delta_x, delta_y):
-        """Atualiza a posição do conjunto de inimigos.
+    def define_pos_group(self, delta_x: int, delta_y: int) -> None:
+        """Atualiza a posicao do conjunto de inimigos. 
 
         Args:
             delta_x: O quanto o valor de posição em x vai se modificar
@@ -523,7 +524,7 @@ class Enemy_Group:
                 new_pos_y = enemy.rect.y - delta_y
                 enemy.move_rects_toplefts(new_pos_x, new_pos_y)
 
-    def set_move_sets(self):
+    def set_move_sets(self) -> None:
         for enemy in self.enemy_vector:
             if enemy.is_alive and enemy.type == "Little Spider":
                 enemy.move_set()

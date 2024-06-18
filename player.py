@@ -1,8 +1,10 @@
+from Interfaces.playerinterface import PlayerInterface
 import pygame, sys
 import map
 import time
 
-class Player(pygame.sprite.Sprite):
+#TODO: fazer docstring da classe
+class Player(PlayerInterface, pygame.sprite.Sprite):
     """A one-line summary of the module or program, terminated by a period.
 
 Leave one blank line.  The rest of this docstring should contain an
@@ -122,8 +124,10 @@ Typical usage example:
 
         self.last_hit_time = 0
         self.last_landed_attack_time = 0
+        
+    #TODO: TERMINAR O DOCSTRING
+    def __import_sprites(self, number_of_sprites: int, arquive: str, sprites_vector: list) -> None:
 
-    def __import_sprites(self, number_of_sprites: int, arquive: str, sprites_vector) -> None:
         """ Acessa a pasta selecionada {arquive} e guarda os PNG em um vetores de PNG {sprites_vector}.
 
         Args:
