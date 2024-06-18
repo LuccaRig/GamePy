@@ -3,7 +3,7 @@ import pygame
 import player
 import enemy
 import map
-import npcs
+import Npcs
 
 class Camera(CameraInterface):
     def __init__(self, map : map, player : player, screen: pygame.display) -> None:
@@ -49,6 +49,6 @@ class Camera(CameraInterface):
         enemies.draw_enemies(screen, self.off_set_x, self.off_set_y)
         enemies.define_pos_group(self.off_set_x, self.off_set_y)
 
-    def keep_npc_pos(self, screen: pygame.display, npc: npcs) -> None:
+    def keep_npc_pos(self, screen: pygame.display, npc: Npcs) -> None:
         npc.draw_npc(screen,  self.off_set_x, self.off_set_y)
         npc.draw_interact_rect(screen,  self.off_set_x, self.off_set_y)

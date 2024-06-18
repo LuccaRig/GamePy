@@ -1,6 +1,6 @@
 from Interfaces.roominterface import RoomInterface
 import map
-import npcs
+import Npcs
 import enemy
 
 class Room(RoomInterface):
@@ -47,7 +47,7 @@ class Room(RoomInterface):
         """
         self.current_map_position -= 1
 
-    def current_room_npc(self) -> npcs:
+    def current_room_npc(self) -> Npcs:
         if self.current_map_position == 0:
             return self.current_room().npc
         

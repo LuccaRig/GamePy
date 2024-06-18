@@ -2,7 +2,7 @@ from Interfaces.mapinterface import MapInterface
 import pygame
 import pytmx
 import enemy
-import npcs
+import Npcs
 
 class Map(MapInterface):
     def __init__(self, map_folder: str , group: int) -> None:
@@ -145,10 +145,10 @@ class Map(MapInterface):
     
     def map_npc_define(self) -> None:
         if self.map_number == 0:
-            self.npc = npcs.Traveler([750, 300], 0)
+            self.npc = Npcs.Traveler([750, 300], 0)
 
         if self.map_number == 2:
-            self.npc = npcs.Traveler([750, 300], 1)
+            self.npc = Npcs.Traveler([750, 300], 1)
 
     def map_enemy_define(self) -> None:
         if self.map_number == 0:
