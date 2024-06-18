@@ -6,3 +6,8 @@ __pycache__/game.cpython-310.pyc
 __pycache__/room.cpython-310.pyc
 __pycache__/npcs.cpython-310.pyc
 __pycache__/npcs.cpython-310.pyc
+Interfaces/__pycache__/camerainterface.cpython-310.pyc
+Interfaces/__pycache__/mapinterface.cpython-310.pyc
+Interfaces/__pycache__/npcsinterface.cpython-310.pyc
+Interfaces/__pycache__/playerinterface.cpython-310.pyc
+Interfaces/__pycache__/roominterface.cpython-310.pyc
