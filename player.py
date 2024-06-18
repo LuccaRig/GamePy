@@ -124,15 +124,17 @@ Typical usage example:
 
         self.last_hit_time = 0
         self.last_landed_attack_time = 0
-
+        
     #TODO: TERMINAR O DOCSTRING
     def __import_sprites(self, number_of_sprites: int, arquive: str, sprites_vector: list) -> None:
+
         """ Acessa a pasta selecionada {arquive} e guarda os PNG em um vetores de PNG {sprites_vector}.
 
         Args:
-            number_of_sprites:
-            arquive:
-            sprites_vector:
+            number_of_sprites: número de sprites da animação específica do sprites_vector enviado como parâmetro
+            arquive: nome do arquivo relacionado ao grupo de sprites que será importado para o sprites_vector
+            sprites_vector: vetor de sprites para onde serão importados os sprites
+    
         """
         scale = 4
         for i in range(number_of_sprites):
@@ -297,9 +299,8 @@ Typical usage example:
             else:
                 self.image = self.__sprites_attacking_left[int(self.current_sprite_attack)]
 
-    #TODO: fazer docstring
     def animate_land(self) -> None:
-        """
+        """Atualiza os sprites do player para ele cair no chão com a animação correta
         """
         if self.landing:    
             animation_speed = 0.3
@@ -377,7 +378,7 @@ Typical usage example:
     
     #TODO: FAZER A DOCSTRING
     def update(self) -> None:
-        """
+        """Atualiza 
         """
         if self.is_alive and not self.was_hit:
             animation_speed = 0
