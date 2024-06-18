@@ -32,7 +32,6 @@ class Camera():
         else:
             self.bounded_character.y_limit_reached = False
 
-
         if (self.bounded_character.rect.topleft[0] <= 400 and self.bounded_character.speed[0] < 0) and not(self.off_set_x > -4):
             self.off_set_map(6, 0)
         elif (self.bounded_character.rect.topleft[0] >= 720 and self.bounded_character.speed[0] > 0) and not(self.off_set_x < -1276):

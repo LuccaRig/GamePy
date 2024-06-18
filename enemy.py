@@ -1,7 +1,8 @@
 import pygame
 import numpy
+from abc import abstractmethod, ABC
 
-class Enemy(pygame.sprite.Sprite):
+class Enemy(pygame.sprite.Sprite, ABC):
     def __init__(self) -> None:
         super().__init__()
         # Atributos dos inimigos
@@ -39,6 +40,13 @@ class Enemy(pygame.sprite.Sprite):
         self.hit_animation_speed = 0.15
 
     def import_sprites(self, number_of_sprites: int, arquive: str, sprites_vector) -> None:
+        """Acessa a pasta selecionada {arquive} e guarda os PNG em um vetores de PNG {sprites_vector}.
+
+        Args:
+            number_of_sprites: número de sprites da animação específica do sprites_vector enviado como parâmetro
+            arquive: nome do arquivo relacionado ao grupo de sprites que será importado para o sprites_vector
+            sprites_vector: vetor de sprites para onde serão importados os sprites
+        """
         scale = 4
         for i in range(number_of_sprites):
             sprite = pygame.image.load(f'{arquive}/tile00{i}.png')
@@ -55,16 +63,22 @@ class Enemy(pygame.sprite.Sprite):
             self.hitbox_rect.topleft = [self.rect.x +85, self.rect.y +70]
 
     def is_grounded(self, Map) -> bool:
-        """
+        """Retorna verdadeiro se o rect de pé do player estiver tocando no chão
         """
         return Map.check_collision(self.rect)
     
+    @abstractmethod
     def is_atk(self) -> bool:
         """Função que deverá ser implementada nas subclasses caso o inimigo tenha um ataque
         Deverá determinar em que período de tempo uma interseção de rect de ataque do inimigo com o do player gerará
         uma perda de hp para o player
         """
         return False
+    
+    @abstractmethod
+    def move_rects_toplefts(self, new_pos_x: int, new_pos_y: int) -> None:
+        """Posiciona o topo o topo dos rects de acordo com o comportamento e proporções do inimigo
+        """
 
     def animate(self) -> None:
         self.is_animating = True 
@@ -221,12 +235,6 @@ class Shooter(Enemy):
     def is_atk(self) -> bool:
         return True
 
-    def move_set(self) -> None:
-        """ Garante uma movimentação fixa do objeto.
-        """
-        nada = 0
-
-
 class Ghoul(Enemy):
     def __init__(self, inital_pos : list) -> None:
         super().__init__()
@@ -270,10 +278,9 @@ class Ghoul(Enemy):
         if self.is_alive:
             self.hitbox_rect.topleft = [new_pos_x+107, new_pos_y+36]
 
-    def move_set(self) -> None:
-        """ Garante uma movimentação fixa do objeto.
-        """
-        nada = 0
+    def is_atk(self) -> None:
+        return False
+    
 
 class Flower(Enemy):
     def __init__(self, inital_pos : list) -> None:
@@ -328,10 +335,6 @@ class Flower(Enemy):
             self.hitbox_rect.topleft = [new_pos_x+48, new_pos_y+92]
             self.attack_rect.topleft = [new_pos_x+5, new_pos_y+45]
 
-    def move_set(self) -> None:
-        """ Garante uma movimentação fixa do objeto.
-        """
-        nada = 0
 
 class Little_Spider(Enemy):
     def __init__(self, inital_pos : list, move_set_number = 0) -> None:
@@ -357,7 +360,7 @@ class Little_Spider(Enemy):
         self.height = 65
         self.rect = pygame.Rect(self.pos_x, self.pos_y,  self.width, self.height)
         self.rect.topleft = [self.pos_x, self.pos_y]
-        self.hitbox_rect = pygame.Rect(self.pos_x+85, self.pos_y+10,  30, 30)
+        self.hitbox_rect = pygame.Rect(self.pos_x+85, self.pos_y+10, 30, 30)
         self.speed = 1
         self.actual_pos = 0
 
@@ -391,12 +394,12 @@ class Little_Spider(Enemy):
         self.update_position(self.speed, 0)
 
     def move_rects_toplefts(self, new_pos_x: int, new_pos_y: int) -> None:
-        """Posiciona o topo do rect de hitbox de acordo com a nova posição do inimigo
-        """
         self.hitbox_rect.topleft = [new_pos_x + 2, new_pos_y + 35]
 
+    def is_atk(self) -> None:
+        return False
 
-class Enemy_Group(Enemy):
+class Enemy_Group:
     """
     Essa classe agrupa os inimigos criados em um vetor, e seus métodos chamam métodos de cada entidade 
     dentro desse vetor. Por exemplo, atualiza-se a animação de todos os inimigos ao mesmo tempo.
@@ -407,13 +410,13 @@ class Enemy_Group(Enemy):
         self.enemy_group_number = enemy_group_number
 
         if enemy_group_number == 0:
-            little_spider = Little_Spider([400, 500])
+            #little_spider = Little_Spider([400, 500])
             enemy2 = Shooter([350, 328])
             enemy3 = Ghoul([900, 300])
             enemy4 = Flower([1550, 300])
             enemy5 = Shooter([1650, 328])
             enemy6 = Little_Spider([1400, 365])
-            self.enemy_vector = numpy.array([little_spider, enemy2, enemy3, enemy4, enemy5, enemy6])
+            self.enemy_vector = numpy.array([enemy2, enemy3, enemy4, enemy5, enemy6])
 
         elif enemy_group_number == 1:
             enemy2 = Little_Spider([760, 44])
@@ -522,7 +525,7 @@ class Enemy_Group(Enemy):
 
     def set_move_sets(self):
         for enemy in self.enemy_vector:
-            if enemy.is_alive:
+            if enemy.is_alive and enemy.type == "Little Spider":
                 enemy.move_set()
 
     def check_deaths(self) -> None:
