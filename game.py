@@ -93,19 +93,19 @@ class Game():
                 self.is_healing_time = time.time()
                 
         if keys[pygame.K_LEFT]:
-            if not self.player.attacking and not self.player.was_hit and not keys[pygame.K_RIGHT]\
-                and (not self.player.landing or not(self.player.is_colliding(self.myRoom.current_room(), "down"))) \
-                and not (self.player.is_colliding(self.myRoom.current_room(), "left")) and self.player.is_alive:
-                self.player.walking = True
-                self.player.update_position(-6, 0)
+            if not self.player_character.attacking and not self.player_character.was_hit and not keys[pygame.K_RIGHT]\
+                and (not self.player_character.landing or not(self.player_character.is_colliding(self.myRoom.current_room(), "down"))) \
+                and not (self.player_character.is_colliding(self.myRoom.current_room(), "left")) and self.player_character.is_alive:
+                self.player_character.walking = True
+                self.player_character.update_position(-4, 0)
                 #x -= vel
 
         if keys[pygame.K_RIGHT]:
-            if not self.player.attacking and not self.player.was_hit and not keys[pygame.K_LEFT]\
-                and (not self.player.landing or not(self.player.is_colliding(self.myRoom.current_room(), "down"))) \
-                and not (self.player.is_colliding(self.myRoom.current_room(), "right")) and self.player.is_alive:
-                self.player.walking = True
-                self.player.update_position(6, 0)
+            if not self.player_character.attacking and not self.player_character.was_hit and not keys[pygame.K_LEFT]\
+                and (not self.player_character.landing or not(self.player_character.is_colliding(self.myRoom.current_room(), "down"))) \
+                and not (self.player_character.is_colliding(self.myRoom.current_room(), "right")) and self.player_character.is_alive:
+                self.player_character.walking = True
+                self.player_character.update_position(4, 0)
                 #x += vel
 
         if keys[pygame.K_UP]:
