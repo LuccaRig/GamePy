@@ -221,7 +221,6 @@ Typical usage example:
         Args:
             delta_t: tempo que determina o delta posição 
         """
-        time.sleep(0.01)
         self.delta_pos_y = self.vertical_speed*delta_t - self.gravity_*delta_t*delta_t/2 
         #delta(X) = Vot - g(t^2)/2
         self.vertical_speed -= self.gravity_*delta_t
@@ -267,6 +266,8 @@ Typical usage example:
 
         if self.direction == "right":
             return map.check_new_room(self.hitbox_rect)
+        if (self.direction == "left") and (not self.walking):
+            return map.check_new_room(self.hitbox_rect)
     
     def is_returning_room(self, map: map) -> bool:
         """Retorna True se o player estiver voltando para a sala anterior
@@ -277,6 +278,8 @@ Typical usage example:
 
         if self.direction == "left":
             return map.check_previous_room(self.hitbox_rect)
+        if (self.direction == "right") and (not self.walking):
+            return map.check_new_room(self.hitbox_rect)
 
     def animate_attack(self) -> None:
         """Anima o ataque do player.
