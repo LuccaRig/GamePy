@@ -501,7 +501,7 @@ class Enemy_Group:
         white = (200, 200, 200)
         red = (255, 0, 0)
         for enemy in self.enemy_vector:
-            if enemy.type == "Shooter":
+            if enemy.type == "Shooter" and not enemy.dying:
                     pygame.draw.rect(screen, white, enemy.attack_rect, 10)
                     nada = 0
             #if enemy.is_alive:
