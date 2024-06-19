@@ -5,8 +5,8 @@ class ButtonInterface(ABC):
 	def update(self, screen) -> None:
 		pass	
 	@abstractmethod
-	def checkForInput(self, position) -> bool:
+	def change_color(self, position) -> bool:
 		pass	
 	@abstractmethod
-	def changeColor(self, position) -> None:
+	def check_for_input(self, position) -> None:
 		pass
