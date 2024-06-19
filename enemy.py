@@ -68,11 +68,6 @@ class Enemy(pygame.sprite.Sprite, ABC):
             self.rect.x += delta_x
             self.rect.y += delta_y
             self.hitbox_rect.topleft = [self.rect.x +85, self.rect.y +70]
-
-    def is_grounded(self, Map: map) -> bool:
-        """Retorna verdadeiro se o rect de pé do player estiver tocando no chão
-        """
-        return Map.check_collision(self.rect)
     
     @abstractmethod
     def is_atk(self) -> bool:
