@@ -221,7 +221,7 @@ class Shooter(Enemy):
         self.contact_dmg = 5
         self.attack_dmg = 5
         self.hp = 25
-        self.coins_value = 1000
+        self.coins_value = 500
 
     def move_rects_toplefts(self, new_pos_x: int, new_pos_y: int) -> None:
         if self.is_alive:
@@ -275,7 +275,7 @@ class Ghoul(Enemy):
         self.contact_dmg = 3
         self.attack_dmg = 5
         self.hp = 40
-        self.coins_value = 500
+        self.coins_value = 1000
 
     def move_rects_toplefts(self, new_pos_x: int, new_pos_y: int) -> None:
         if self.is_alive:
@@ -410,13 +410,8 @@ class Enemy_Group:
         self.enemy_group_number = enemy_group_number
 
         if enemy_group_number == 0:
-            #little_spider = Little_Spider([400, 500])
-            enemy2 = Shooter([350, 328])
-            enemy3 = Ghoul([900, 300])
-            enemy4 = Flower([1550, 300])
-            enemy5 = Shooter([1650, 328])
-            enemy6 = Little_Spider([1400, 365])
-            self.enemy_vector = numpy.array([enemy2, enemy3, enemy4, enemy5, enemy6])
+            enemy4 = Flower([0, 2000])
+            self.enemy_vector = numpy.array([enemy4])
 
         elif enemy_group_number == 1:
             enemy2 = Little_Spider([760, 44])
@@ -446,23 +441,28 @@ class Enemy_Group:
             self.enemy_vector = numpy.array([enemy0, enemy1, enemy2, enemy3, enemy4])
 
         elif enemy_group_number == 4:
-            little_spider = Little_Spider([400, 500])
-            self.enemy_vector = numpy.array([little_spider])
+            enemy0 = Little_Spider([250, 45])
+            enemy1 = Shooter([1930, 44])
+            enemy2 = Shooter([1900, 363])
+            enemy3 = Shooter([640, 644])
+            enemy4 = Flower([1500, 780])
+            enemy5 = Ghoul([2300, -100])
+            self.enemy_vector = numpy.array([enemy0, enemy1, enemy2, enemy3, enemy4, enemy5])
 
         elif enemy_group_number == 5:
-            little_spider = Little_Spider([400, 500])
+            little_spider = Little_Spider([0, 2000])
             self.enemy_vector = numpy.array([little_spider])
         
         elif enemy_group_number == 6:
-            little_spider = Little_Spider([400, 500])
+            little_spider = Little_Spider([0, 2000])
             self.enemy_vector = numpy.array([little_spider])
         
         elif enemy_group_number == 7:
-            little_spider = Little_Spider([400, 500])
+            little_spider = Little_Spider([0, 2000])
             self.enemy_vector = numpy.array([little_spider])
         
         elif enemy_group_number == 8:
-            little_spider = Little_Spider([400, 500])
+            little_spider = Little_Spider([0, 2000])
             self.enemy_vector = numpy.array([little_spider])
 
     def update_enemies_sprites(self) -> None:
