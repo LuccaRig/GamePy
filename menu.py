@@ -3,7 +3,7 @@ import pygame, sys
 import game
 
 class Button(ButtonInterface):
-	def __init__(self, image, pos, text_input, font, base_color, hovering_color) -> None:
+	def __init__(self, image : pygame.image, pos : list, text_input : str, font : pygame.font, base_color : str, hovering_color : str) -> None:
 		self.image = image
 		self.x_pos = pos[0]
 		self.y_pos = pos[1]
@@ -16,37 +16,49 @@ class Button(ButtonInterface):
 		self.rect = self.image.get_rect(center=(self.x_pos, self.y_pos))
 		self.text_rect = self.text.get_rect(center=(self.x_pos, self.y_pos))
 
-	def update(self, screen) -> None:
+	def update(self, screen : pygame.display) -> None:
+          # Desenha o botao na tela
 		if self.image is not None:
 			screen.blit(self.image, self.rect)
 		screen.blit(self.text, self.text_rect)
 
-	def checkForInput(self, position) -> bool:
+	def check_for_input(self, position : list) -> bool:
+          # Checa se o botao foi apertado com o clique
 		if position[0] in range(self.rect.left, self.rect.right) and position[1] in range(self.rect.top, self.rect.bottom):
 			return True
 		return False
 
-	def changeColor(self, position) -> None:
+	def change_color(self, position : list) -> None:
+          # Muda a cor do botao quando o mouse passa por cima
 		if position[0] in range(self.rect.left, self.rect.right) and position[1] in range(self.rect.top, self.rect.bottom):
 			self.text = self.font.render(self.text_input, True, self.hovering_color)
 		else:
 			self.text = self.font.render(self.text_input, True, self.base_color)
             
-pygame.init()
 
+# Algumas variaveis globais sao inicializadas aqui
+pygame.init()
 screen = pygame.display.set_mode((1280, 720))
 pygame.display.set_caption("Menu")
-
 background = pygame.image.load("assets/Background.png")
 
-def get_font(size): # Returns Press-Start-2P in the desired size
+def get_font(size) -> pygame.font:
+    """
+    Importa a fonte utilizada no menu
+    """
     return pygame.font.Font("assets/font.ttf", size)
 
-def play():
+def play() -> None:
+    """
+    Roda a funcao principal Game.run()
+    """
     my_game = game.Game()
     my_game.game_run()
     
-def options():
+def options() -> None:
+    """
+    Cria o menu de opcoes, e imprime a frase "esse e o menu de opcoes" ate que o botao voltar seja apertado
+    """
     while True:
         options_pos = pygame.mouse.get_pos()
 
@@ -59,7 +71,7 @@ def options():
         options_back = Button(image=None, pos=(640, 460), 
                             text_input="BACK", font=get_font(75), base_color="Black", hovering_color="Green")
 
-        options_back.changeColor(options_pos)
+        options_back.change_color(options_pos)
         options_back.update(screen)
 
         for event in pygame.event.get():
@@ -67,12 +79,16 @@ def options():
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if options_back.checkForInput(options_pos):
+                if options_back.check_for_input(options_pos):
                     main_menu()
 
         pygame.display.update()
 
 def main_menu():
+    """ 
+    Garante o funcionamento do main_menu, uma especie de main que define se o game vai rodar, para isso ele cria diversos botoes interativos que sao clicaveis
+    
+    """
     while True:
         screen.blit(background, (0, 0))
 
@@ -91,7 +107,7 @@ def main_menu():
         screen.blit(menu_text, menu_rect)
 
         for button in [play_button, options_button, quit_button]:
-            button.changeColor(menu_mouse_pos)
+            button.change_color(menu_mouse_pos)
             button.update(screen)
         
         for event in pygame.event.get():
@@ -99,11 +115,11 @@ def main_menu():
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if play_button.checkForInput(menu_mouse_pos):
+                if play_button.check_for_input(menu_mouse_pos):
                     play()
-                if options_button.checkForInput(menu_mouse_pos):
+                if options_button.check_for_input(menu_mouse_pos):
                     options()
-                if quit_button.checkForInput(menu_mouse_pos):
+                if quit_button.check_for_input(menu_mouse_pos):
                     pygame.quit()
                     sys.exit()
 
