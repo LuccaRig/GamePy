@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 import map
-import npcs
+import Npcs
 import enemy
 
 class RoomInterface(ABC):
@@ -25,7 +25,7 @@ class RoomInterface(ABC):
         pass
 
     @abstractmethod
-    def current_room_npc(self) -> npcs:
+    def current_room_npc(self) -> Npcs:
         pass
 
     @abstractmethod

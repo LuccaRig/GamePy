@@ -1,8 +1,9 @@
+from Interfaces.menuinterface import ButtonInterface
 import pygame, sys
 import game
 
-class Button():
-	def __init__(self, image, pos, text_input, font, base_color, hovering_color):
+class Button(ButtonInterface):
+	def __init__(self, image, pos, text_input, font, base_color, hovering_color) -> None:
 		self.image = image
 		self.x_pos = pos[0]
 		self.y_pos = pos[1]
@@ -20,7 +21,7 @@ class Button():
 			screen.blit(self.image, self.rect)
 		screen.blit(self.text, self.text_rect)
 
-	def checkForInput(self, position) -> None:
+	def checkForInput(self, position) -> bool:
 		if position[0] in range(self.rect.left, self.rect.right) and position[1] in range(self.rect.top, self.rect.bottom):
 			return True
 		return False

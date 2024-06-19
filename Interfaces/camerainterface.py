@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 import pygame
 import enemy
-import npcs
+import Npcs
 
 class CameraInterface(ABC):
     @abstractmethod
@@ -17,5 +17,5 @@ class CameraInterface(ABC):
         pass
 
     @abstractmethod
-    def keep_npc_pos(self, screen: pygame.display, npc: npcs) -> None:
+    def keep_npc_pos(self, screen: pygame.display, npc: Npcs) -> None:
         pass
