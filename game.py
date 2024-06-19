@@ -97,7 +97,7 @@ class Game():
                 and (not self.player.landing or not(self.player.is_colliding(self.myRoom.current_room(), "down"))) \
                 and not (self.player.is_colliding(self.myRoom.current_room(), "left")) and self.player.is_alive:
                 self.player.walking = True
-                self.player.update_position(-4, 0)
+                self.player.update_position(-self.player.max_horizontal_speed, 0)
                 #x -= vel
 
         if keys[pygame.K_RIGHT]:
@@ -105,7 +105,7 @@ class Game():
                 and (not self.player.landing or not(self.player.is_colliding(self.myRoom.current_room(), "down"))) \
                 and not (self.player.is_colliding(self.myRoom.current_room(), "right")) and self.player.is_alive:
                 self.player.walking = True
-                self.player.update_position(4, 0)
+                self.player.update_position(self.player.max_horizontal_speed, 0)
                 #x += vel
 
         if keys[pygame.K_UP]:

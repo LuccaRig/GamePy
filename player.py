@@ -91,6 +91,7 @@ class Player(PlayerInterface, pygame.sprite.Sprite):
         self.rect = pygame.Rect(self.pos_x, self.pos_y,  self.width, self.height)
         self.rect.topleft = [self.pos_x, self.pos_y]
         self.speed = [0.0, 0.0]
+        self.max_horizontal_speed = 8
         self.delta_pos_y = 0
         self.x_limit_reached = False
         self.y_limit_reached = False
