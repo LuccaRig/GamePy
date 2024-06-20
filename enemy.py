@@ -1,7 +1,6 @@
 import pygame
 import numpy
 from abc import abstractmethod, ABC
-import map
 
 class Enemy(pygame.sprite.Sprite, ABC):
     def __init__(self) -> None:

@@ -98,7 +98,6 @@ class Game():
                 and not (self.player.is_colliding(self.myRoom.current_room(), "left")) and self.player.is_alive:
                 self.player.walking = True
                 self.player.update_position(-self.player.max_horizontal_speed, 0)
-                #x -= vel
 
         if keys[pygame.K_RIGHT]:
             if not self.player.attacking and not self.player.was_hit and not keys[pygame.K_LEFT]\
@@ -106,7 +105,6 @@ class Game():
                 and not (self.player.is_colliding(self.myRoom.current_room(), "right")) and self.player.is_alive:
                 self.player.walking = True
                 self.player.update_position(self.player.max_horizontal_speed, 0)
-                #x += vel
 
         if keys[pygame.K_UP]:
             if not self.player.attacking and not self.player.was_hit and self.player.is_alive\
@@ -116,7 +114,6 @@ class Game():
                 self.player.jumping = True
                 self.player.update_position(0, -25)
                 self.player.vertical_speed += self.player.jumping_speed
-                    #y -= vel
 
     def check_dmg_to_player(self, current_time: float) -> None:
         """Checa por dano de contato ou de ataque de um inimigo e aplica o dano válido que for detectado.
@@ -144,7 +141,6 @@ class Game():
                             self.player.was_hit = True
                             self.player.hit_flinch = True
                             self.player.last_hit_time = time.time()
-                            print("HP do jogador:", self.player.hp)
                             break
             
     def check_dmg_to_enemies(self, current_time: float) -> None:
@@ -168,7 +164,6 @@ class Game():
                         if enemy.hp <= 0:
                             self.player.coins += enemy.coins_value
                         hit_was_successfull = True
-                        print("HP do inimigo: ", enemy.hp)
         if hit_was_successfull:
             self.player.last_landed_attack_time = time.time()
 

@@ -22,7 +22,6 @@ class Map(MapInterface):
 
         self.map_number = group
         self.map_enemy_define()
-
         self.map_npc_define()
 
     def render_visible_layers(self, screen: pygame.display, off_set_x: float, off_set_y: float) -> None:
@@ -84,8 +83,9 @@ class Map(MapInterface):
                         # Desenha um retângulo azul para representar a área de colisão, com uma borda de 1 pixel
                         pygame.draw.rect(screen, (0, 0, 255), rect, 2) 
 
-    #TODO: fazer docstring
     def check_collision(self, player_rect: pygame.rect) -> bool:
+        """Detecta se o player está colidindo com algum rect do mapa chamado "Collision"
+        """
         for layer in self.tmx_map.visible_layers:
             if isinstance(layer, pytmx.TiledObjectGroup):
                 for obj in layer:
@@ -98,8 +98,9 @@ class Map(MapInterface):
         #print("Colisão não detectada")
         return False
     
-    #TODO: fazer docstring
     def return_ground_intersection(self, player_down_rect: pygame.rect) -> pygame.rect:
+        """Retorna o rect de interseção entre o rect de pé do player e algum objeto do mapa 
+        """
         for layer in self.tmx_map.visible_layers:
             if isinstance(layer, pytmx.TiledObjectGroup):
                 for obj in layer:
@@ -144,6 +145,8 @@ class Map(MapInterface):
         return False
     
     def map_npc_define(self) -> None:
+        """Define em que mapas haverá npcs 
+        """
         if self.map_number == 0:
             self.npc = Npcs.Traveler([750, 300], 0)
 
@@ -151,6 +154,8 @@ class Map(MapInterface):
             self.npc = Npcs.Traveler([750, 300], 1)
 
     def map_enemy_define(self) -> None:
+        """Define qual grupo de inimigos estará em cada mapa
+        """
         if self.map_number == 0:
             self.enemy_map_group = enemy.Enemy_Group(0)
 
