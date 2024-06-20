@@ -87,7 +87,7 @@ class Traveler(Npc):
             text = "Olá, Jogador!"
 
         if self.talk_number == 1:
-            text = "Boa tarde senhor chupapica"
+            text = "Boa tarde belo senhor"
 
         if(self.check_player_interaction(player)):
 

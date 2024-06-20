@@ -1,0 +1,50 @@
+Classe input:
+
+class Map(MapInterface):
+    def __init__(self, map_folder: str , group: int) -> None:
+        self.tmx_map = pytmx.load_pygame(map_folder)
+        self.tile_width = self.tmx_map.tilewidth
+        self.tile_height = self.tmx_map.tileheight
+        self.scale_factor = 5
+        self.x_correction = 0
+        self.y_correction = 212
+        self.off_set_x = 0
+        self.off_set_y = 0
+
+        self.pos_x_new_room = 0
+        self.pos_y_new_room = 0
+        self.pos_x_previous_room = 0
+        self.pos_y_previous_room = 0
+
+        self.map_number = group
+        self.map_enemy_define()
+
+        self.map_npc_define()
+
+    def render_visible_layers(self, screen: pygame.display, off_set_x: float, off_set_y: float) -> None:
+        pygame.draw.rect(screen, (0, 0, 255), rect, 2) 
+
+
+    def check_collision(self, player_rect: pygame.rect) -> bool:
+        return False
+
+
+Classe Output:
+
+class Map {
++tmx_map: TiledMap
++tile_width: int
++tile_height: int
++scale_factor: int
++x_correction: int
++y_correction: int
++off_set_x: int
++off_set_y: int
++pos_x_new_room: int
++pos_y_new_room: int
++pos_x_previous_room: int
++pos_y_previous_room: int
++map_number: int
+render_visible_layers(screen: pygame.display, off_set_x: float, off_set_y: float) -> None
+check_collision(player_rect: pygame.rect) -> bool
+}

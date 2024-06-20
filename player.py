@@ -1,9 +1,7 @@
 from Interfaces.playerinterface import PlayerInterface
 import pygame, sys
 import map
-import time
 
-#TODO: fazer docstring da classe
 class Player(PlayerInterface, pygame.sprite.Sprite):
     def __init__(self) -> None:
         super().__init__()
@@ -185,7 +183,6 @@ class Player(PlayerInterface, pygame.sprite.Sprite):
         self.speed[0] = new_pos_x
         self.speed[1] = new_pos_y
         if self.walking or self.jumping or not self.grounded:
-            #print(self.x_limit_reached)
             if(new_pos_x < 0 ):
                 self.direction = "left"
             if(new_pos_x > 0):
